@@ -4,6 +4,7 @@ using MazeMath.Questions.Data;
 using MazeMath.Questions.Runtime;
 using MazeMath.UI.Crafting;
 using MazeMath.UI.Question;
+using MazeMath.UI.Puzzles;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,7 @@ namespace MazeMath.Demo
         private Text messageText;
         private QuestionPanelView questionPanel;
         private PatternCraftingView patternPanel;
+        private EnvironmentPuzzleDemoView puzzlePanel;
         private bool built;
 
         public event Action PreviousRequested;
@@ -110,6 +112,17 @@ namespace MazeMath.Demo
             patternPanel = patternObject.AddComponent<PatternCraftingView>();
             patternPanel.EnsureRuntimeUi();
             patternObject.SetActive(false);
+
+            var puzzleObject = new GameObject("EnvironmentPuzzlePanel", typeof(RectTransform));
+            puzzleObject.transform.SetParent(canvas.transform, false);
+            var puzzleRect = puzzleObject.GetComponent<RectTransform>();
+            puzzleRect.anchorMin = new Vector2(0.38f, 0.12f);
+            puzzleRect.anchorMax = new Vector2(0.74f, 0.88f);
+            puzzleRect.offsetMin = Vector2.zero;
+            puzzleRect.offsetMax = Vector2.zero;
+            puzzlePanel = puzzleObject.AddComponent<EnvironmentPuzzleDemoView>();
+            puzzlePanel.EnsureRuntimeUi();
+            puzzleObject.SetActive(false);
         }
 
         public void SetStatus(string text)
@@ -128,6 +141,7 @@ namespace MazeMath.Demo
         {
             EnsureBuilt();
             patternPanel.gameObject.SetActive(false);
+            puzzlePanel.gameObject.SetActive(false);
             questionPanel.gameObject.SetActive(true);
             questionPanel.ShowQuestion(question, session);
         }
@@ -146,6 +160,7 @@ namespace MazeMath.Demo
         {
             EnsureBuilt();
             questionPanel.gameObject.SetActive(false);
+            puzzlePanel.gameObject.SetActive(false);
             patternPanel.gameObject.SetActive(true);
             patternPanel.Configure(service, recipeId, availableItems, result);
         }
@@ -154,6 +169,21 @@ namespace MazeMath.Demo
         {
             if (patternPanel != null)
                 patternPanel.gameObject.SetActive(false);
+        }
+
+        public void ShowEnvironmentPuzzles(Action<string> onSolved)
+        {
+            EnsureBuilt();
+            questionPanel.gameObject.SetActive(false);
+            patternPanel.gameObject.SetActive(false);
+            puzzlePanel.gameObject.SetActive(true);
+            puzzlePanel.Configure(onSolved);
+        }
+
+        public void HideEnvironmentPuzzles()
+        {
+            if (puzzlePanel != null)
+                puzzlePanel.gameObject.SetActive(false);
         }
 
         private static Text CreateText(
