@@ -45,7 +45,7 @@ namespace MazeMath.Maze.Data
 
         public static MazeGenerationSettings Chapter1Defaults()
         {
-            return new MazeGenerationSettings(6, 8, 0, 1, 1);
+            return new MazeGenerationSettings(6, 8, 3, 1, 1);
         }
 
         public MazeGenerationSettings WithOptionalRoomCount(int count)
