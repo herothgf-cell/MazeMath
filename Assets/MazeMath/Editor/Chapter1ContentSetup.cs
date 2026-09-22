@@ -26,6 +26,7 @@ namespace MazeMath.Editor
             var equipment = CreateEquipment();
             var recipes = CreateRecipes();
             var enchants = CreateEnchants();
+            LinkEquipmentEnchants(equipment, enchants);
             var questions = CreateQuestions();
             var chapter = CreateChapter();
 
@@ -186,6 +187,25 @@ namespace MazeMath.Editor
                 Enchant("Enchant_SensorMemory", RobotEnchantIds.SensorMemory, EquipmentSlot.Sensor, 10, "modifier.sensor.memory"),
                 Enchant("Enchant_SensorGuide", RobotEnchantIds.SensorGuide, EquipmentSlot.Sensor, 10, "modifier.sensor.guide")
             };
+        }
+
+        private static void LinkEquipmentEnchants(
+            List<EquipmentDefinition> equipment,
+            List<EnchantDefinition> enchants)
+        {
+            foreach (var definition in equipment)
+            {
+                definition.availableEnchantIds.Clear();
+                foreach (var enchant in enchants)
+                {
+                    if (enchant.compatibleSlot == definition.slot)
+                    {
+                        definition.availableEnchantIds.Add(enchant.enchantId);
+                    }
+                }
+
+                EditorUtility.SetDirty(definition);
+            }
         }
 
         private static List<QuestionTemplateDefinition> CreateQuestions()
