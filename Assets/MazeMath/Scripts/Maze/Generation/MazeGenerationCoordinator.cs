@@ -59,7 +59,7 @@ namespace MazeMath.Maze.Generation
             }
 
             return new MazeGenerationResult(
-                _safeMazeFactory.CreateChapter1SafeLayout(),
+                _safeMazeFactory.CreateSafeLayout(settings),
                 lastSeed,
                 usedSafeLayout: true,
                 attemptCount: MaxAttempts);
