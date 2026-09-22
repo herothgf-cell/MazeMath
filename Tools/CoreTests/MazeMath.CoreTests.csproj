@@ -1,22 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <IsPackable>false</IsPackable>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable>disable</Nullable>
-    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
-  </PropertyGroup>
-
+  <PropertyGroup><TargetFramework>net8.0</TargetFramework><IsPackable>false</IsPackable><ImplicitUsings>disable</ImplicitUsings><Nullable>disable</Nullable></PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="NUnit" Version="3.14.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
   </ItemGroup>
-
   <ItemGroup>
-    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Data/MazeTypes.cs" Link="Runtime/Maze/MazeTypes.cs" />
-    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Generation/MazeGraph.cs" Link="Runtime/Maze/MazeGraph.cs" />
-    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Generation/DeterministicRandom.cs" Link="Runtime/Maze/DeterministicRandom.cs" />
-    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Generation/MazeSeedService.cs" Link="Runtime/Maze/MazeSeedService.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Data/MazeTypes.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Generation/MazeGraph.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Generation/DeterministicRandom.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Generation/MazeSeedService.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Puzzles/**/*.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Boss/**/*.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Questions/Data/QuestionTypes.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Questions/Data/QuestionInstance.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Questions/Runtime/*.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Questions/Generation/ChoiceDistractorBuilder.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Adventure/Domain/**/*.cs" />
   </ItemGroup>
 </Project>
