@@ -25,6 +25,9 @@ namespace MazeMath.Crafting
         public int resultCount = 1;
         public RecipeType type = RecipeType.Guided;
         public List<IngredientRequirement> ingredients = new List<IngredientRequirement>();
+        public List<string> patternItemIds = new List<string>();
+        public bool allowRotation;
+        public bool allowMirror;
         public string requiredWorkshopTag;
         public string unlockConditionId;
     }
