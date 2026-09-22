@@ -6,7 +6,7 @@
 
 **Architecture:** Question generation remains pure C# and seed-driven. UI consumes immutable `QuestionInstance` data. Environment puzzles share a small runtime contract and signal completion through `PuzzleService`, which then calls maze/reward interfaces rather than directly modifying inventory or gate MonoBehaviours.
 
-**Tech Stack:** Unity 6 LTS, C#, Unity Test Framework, ScriptableObjects, project UI stack.
+**Tech Stack:** Unity 2022.3.62f2 LTS, C#, Unity Test Framework, ScriptableObjects, project UI stack.
 
 **Spec:** `Docs/Design/03_PUZZLE_QUESTION_SYSTEM_DESIGN.md`
 
