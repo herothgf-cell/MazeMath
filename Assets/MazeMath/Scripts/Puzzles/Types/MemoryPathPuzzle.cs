@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using MazeMath.Maze.Generation;
+using MazeMath.Puzzles;
 
 namespace MazeMath.Puzzles.Types
 {
