@@ -68,6 +68,10 @@ namespace MazeMath.Maze.Generation
                         $"No critical room template supports floor {floor}.");
                 }
 
+                candidates = AvoidConsecutiveLearningRoom(
+                    candidates,
+                    criticalNodes[criticalNodes.Count - 1].Type);
+
                 var template = PickWeighted(candidates, random);
                 var node = CreateNode(
                     $"critical-{index:00}",
@@ -169,6 +173,22 @@ namespace MazeMath.Maze.Generation
                     EdgeType.Open,
                     isBidirectional: true));
             }
+        }
+
+        private static List<RoomTemplateDefinition> AvoidConsecutiveLearningRoom(
+            List<RoomTemplateDefinition> candidates,
+            RoomType previousType)
+        {
+            if (previousType != RoomType.Question && previousType != RoomType.Puzzle)
+            {
+                return candidates;
+            }
+
+            var alternatives = candidates
+                .Where(room => room.type != previousType)
+                .ToList();
+
+            return alternatives.Count > 0 ? alternatives : candidates;
         }
 
         private static MazeNode CreateNode(
