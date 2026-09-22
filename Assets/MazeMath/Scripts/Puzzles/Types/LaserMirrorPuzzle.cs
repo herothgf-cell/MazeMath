@@ -43,7 +43,7 @@ namespace MazeMath.Puzzles.Types
             initialMirrors = mirrors != null
                 ? new Dictionary<GridPosition, MirrorOrientation>(mirrors)
                 : new Dictionary<GridPosition, MirrorOrientation>();
-            mirrors = new Dictionary<GridPosition, MirrorOrientation>(initialMirrors);
+            this.mirrors = new Dictionary<GridPosition, MirrorOrientation>(initialMirrors);
         }
 
         public void StartPuzzle()
