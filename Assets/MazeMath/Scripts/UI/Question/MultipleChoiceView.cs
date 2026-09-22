@@ -18,7 +18,7 @@ namespace MazeMath.UI.Question
             ClearButtons();
             if (choices == null) return;
 
-            font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            font = MazeMath.UI.RuntimeFontProvider.Get();
 
             var layout = GetComponent<VerticalLayoutGroup>();
             if (layout == null)
