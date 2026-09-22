@@ -1,3 +1,5 @@
+using MazeMath.Core.Save;
+using MazeMath.Input;
 using UnityEngine;
 
 namespace MazeMath.Core
@@ -16,7 +18,19 @@ namespace MazeMath.Core
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            GameServices.Ensure();
+
+            var services = GameServices.Ensure();
+
+            var input = GetComponent<GameInputService>();
+            if (input != null)
+            {
+                services.Register<IGameInput>(input);
+            }
+
+            if (!services.TryGet<SaveService>(out _))
+            {
+                services.Register(new SaveService(new PlayerPrefsSaveStore()));
+            }
         }
     }
 }
