@@ -2,17 +2,17 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Create the minimal Unity 6 project foundation required for MazeMath to build reliably for Web and Android and to host the maze, learning, and progression subsystems behind stable interfaces.
+**Goal:** Create the minimal Unity 2022.3.62f2 project foundation required for MazeMath to build reliably for Web and Android and to host the maze, learning, and progression subsystems behind stable interfaces.
 
 **Architecture:** Use a single Bootstrap scene that constructs long-lived services, a Gameplay scene for the playable world, and pure C# domain logic wherever possible so EditMode tests can exercise systems without scene loading. Runtime services communicate through interfaces and ID-based contracts; UI and subsystem-specific MonoBehaviours do not directly depend on concrete implementations outside their domain.
 
-**Tech Stack:** Unity 6 LTS, C#, Unity Test Framework, uGUI or Unity UI Toolkit only if selected consistently during implementation, Unity Input System, JSON serialization for save payloads.
+**Tech Stack:** Unity 2022.3.62f2 LTS, C#, Unity Test Framework, uGUI or Unity UI Toolkit only if selected consistently during implementation, Unity Input System, JSON serialization for save payloads.
 
 **Spec:** `Docs/Design/01_MAZE_SYSTEM_DESIGN.md`, `Docs/Design/02_CRAFTING_ENCHANT_DESIGN.md`, `Docs/Design/03_PUZZLE_QUESTION_SYSTEM_DESIGN.md`
 
 ## Global Constraints
 
-- Target Unity 6 LTS; pin the exact patch version in `ProjectSettings/ProjectVersion.txt`.
+- Target Unity 2022.3.62f2 LTS; pin the exact patch version in `ProjectSettings/ProjectVersion.txt`.
 - Primary deployment targets are Web and Android.
 - Android product minimum is API 23; store target API follows Google Play policy at release time.
 - All gameplay must remain operable on Android touch without keyboard or hover.
@@ -48,7 +48,7 @@
 - Produces: a compiling Unity project, test assemblies, Bootstrap and Gameplay scenes.
 - Consumes: none.
 
-- [ ] **Step 1: Create the Unity 6 LTS project in the repository root**
+- [ ] **Step 1: Create the Unity 2022.3.62f2 LTS project in the repository root**
 
 Use Unity Hub to create a 2D project directly in the cloned `MazeMath` repository. Keep the generated `Assets/`, `Packages/`, and `ProjectSettings/` folders at the root.
 
