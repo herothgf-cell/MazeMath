@@ -1,5 +1,7 @@
 using System.IO;
+using MazeMath.Content;
 using MazeMath.Core;
+using MazeMath.Demo;
 using MazeMath.Input;
 using MazeMath.UI;
 using UnityEditor;
@@ -24,8 +26,10 @@ namespace MazeMath.Editor
             Directory.CreateDirectory("Assets/MazeMath/Prefabs");
             Directory.CreateDirectory("Assets/MazeMath/ScriptableObjects");
 
+            var catalog = Chapter1ContentSetup.CreateOrUpdate();
+
             CreateBootstrapScene();
-            CreateGameplayScene();
+            CreateGameplayScene(catalog);
 
             EditorBuildSettings.scenes = new[]
             {
@@ -50,7 +54,7 @@ namespace MazeMath.Editor
             EditorSceneManager.SaveScene(scene, BootstrapScenePath);
         }
 
-        private static void CreateGameplayScene()
+        private static void CreateGameplayScene(Chapter1ContentCatalog catalog)
         {
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
@@ -60,6 +64,9 @@ namespace MazeMath.Editor
 
             var gameplayRoot = new GameObject("GameplayRoot");
             gameplayRoot.transform.position = Vector3.zero;
+
+            var verticalSlice = gameplayRoot.AddComponent<Chapter1VerticalSliceController>();
+            verticalSlice.Catalog = catalog;
 
             EditorSceneManager.SaveScene(scene, GameplayScenePath);
         }
