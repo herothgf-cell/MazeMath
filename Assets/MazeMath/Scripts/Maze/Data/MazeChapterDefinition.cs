@@ -62,6 +62,34 @@ namespace MazeMath.Maze.Data
                 errors.Add("A Boss room template is required.");
             }
 
+            var availableCriticalSlots = System.Math.Max(0, requiredRoomCountRange.x - 2);
+            if (requiredRoomTags != null &&
+                requiredRoomTags.Count > availableCriticalSlots)
+            {
+                errors.Add("Required room tags exceed the minimum critical-path capacity.");
+            }
+
+            if (requiredRoomTags != null)
+            {
+                foreach (var tag in requiredRoomTags)
+                {
+                    if (string.IsNullOrWhiteSpace(tag))
+                    {
+                        errors.Add("Required room tag must not be empty.");
+                        continue;
+                    }
+
+                    if (!allowedRooms.Any(room =>
+                        room != null &&
+                        room.canBeCriticalPath &&
+                        room.tags != null &&
+                        room.tags.Contains(tag)))
+                    {
+                        errors.Add("Missing critical room template for required tag: " + tag);
+                    }
+                }
+            }
+
             return errors;
         }
     }
