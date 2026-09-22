@@ -186,6 +186,13 @@ namespace MazeMath.Demo
                 puzzlePanel.gameObject.SetActive(false);
         }
 
+        public void HideAllOverlays()
+        {
+            HideQuestion();
+            HidePatternCrafting();
+            HideEnvironmentPuzzles();
+        }
+
         private static Text CreateText(
             Transform parent,
             string name,
