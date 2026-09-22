@@ -4,6 +4,9 @@
   "references": [
     "MazeMath.Runtime"
   ],
+  "includePlatforms": [
+    "Editor"
+  ],
   "optionalUnityReferences": [
     "TestAssemblies"
   ]
