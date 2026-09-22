@@ -6,7 +6,7 @@
 
 **Architecture:** Inventory, crafting, equipment, and enchant logic are pure C# services backed by ScriptableObject definitions. Maze checks capabilities through `IEquipmentService.HasAbility`; learning content grants `LearningReward` through `IRewardService`. Workshop UI is a presentation layer over those services.
 
-**Tech Stack:** Unity 6 LTS, C#, ScriptableObjects, Unity Test Framework, project UI stack.
+**Tech Stack:** Unity 2022.3.62f2 LTS, C#, ScriptableObjects, Unity Test Framework, project UI stack.
 
 **Spec:** `Docs/Design/02_CRAFTING_ENCHANT_DESIGN.md`
 
