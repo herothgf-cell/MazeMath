@@ -75,7 +75,7 @@ namespace MazeMath.Tests.Puzzles
         {
             var mirrors = new Dictionary<GridPosition, MirrorOrientation>
             {
-                { new GridPosition(2, 1), MirrorOrientation.Backslash }
+                { new GridPosition(2, 1), MirrorOrientation.Slash }
             };
 
             var puzzle = new LaserMirrorPuzzle(
