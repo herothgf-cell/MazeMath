@@ -24,7 +24,13 @@ namespace MazeMath.Editor
             if(EditorApplication.isPlaying) { Debug.LogWarning("Stop Play Mode before project setup."); return; }
             Directory.CreateDirectory("Assets/MazeMath/Scenes");
             var catalog=AssetDatabase.LoadAssetAtPath<Chapter1ContentCatalog>(Chapter1ContentSetup.CatalogPath);
-            if(catalog==null) catalog=Chapter1ContentSetup.CreateOrUpdate();
+            if(catalog==null)
+            {
+                // A partial/invalid catalog must not cause the generator to overwrite surviving authored assets.
+                if(Directory.Exists(Chapter1ContentSetup.Root) && Directory.GetFiles(Chapter1ContentSetup.Root,"*.asset",SearchOption.AllDirectories).Length>0)
+                    throw new System.InvalidOperationException("Legacy catalog is missing or invalid. Existing content was preserved. Open Adventure.unity, or restore the legacy catalog from version control.");
+                catalog=Chapter1ContentSetup.CreateOrUpdate();
+            }
             CreateMissingScene(BootstrapScenePath,true,catalog);
             CreateMissingScene(GameplayScenePath,false,catalog);
             var entries=new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);

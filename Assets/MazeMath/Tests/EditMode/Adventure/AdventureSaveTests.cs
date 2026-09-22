@@ -15,6 +15,22 @@ namespace MazeMath.Tests.Adventure
             public bool TryLoad(string key,out string json) { return Data.TryGetValue(key,out json); }
             public void Delete(string key) { Data.Remove(key); }
         }
+        [Test] public void NewRunWithoutQuestionRemainsWithoutQuestionAfterUnitySerialization()
+        {
+            var store=new MemoryStore(); var save=new AdventureSave(store);
+            save.Save(AdventureState.NewRun(17));
+            Assert.IsTrue(save.TryLoad(out var loaded,out var backup));
+            Assert.IsFalse(backup); Assert.IsNull(loaded.question); Assert.IsTrue(loaded.IsValid());
+        }
+        [Test] public void QuestionPresenceMarkerIsCoveredByChecksum()
+        {
+            var store=new MemoryStore(); var save=new AdventureSave(store); var s=AdventureState.NewRun(17);
+            AdventureQuestions.Ensure(s,"math"); save.Save(s);
+            string json=store.Data[AdventureSave.Key];
+            StringAssert.Contains("\"questionPresent\":true",json);
+            store.Data[AdventureSave.Key]=json.Replace("\"questionPresent\":true","\"questionPresent\":false");
+            Assert.IsFalse(save.TryLoad(out _,out _));
+        }
         [Test] public void JsonUtilityRoundTripPreservesQuestionAndMaterials()
         {
             var store=new MemoryStore(); var save=new AdventureSave(store); var s=AdventureState.NewRun(17);
