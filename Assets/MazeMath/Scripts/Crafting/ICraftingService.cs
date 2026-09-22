@@ -14,5 +14,6 @@ namespace MazeMath.Crafting
     {
         bool CanCraft(string recipeId);
         CraftResult Craft(string recipeId);
+        CraftResult CraftPattern(string recipeId, System.Collections.Generic.IReadOnlyList<string> gridItemIds);
     }
 }
