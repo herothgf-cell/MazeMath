@@ -153,7 +153,7 @@ namespace MazeMath.UI.Crafting
             rect.offsetMax = Vector2.zero;
 
             var text = textObject.GetComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            text.font = MazeMath.UI.RuntimeFontProvider.Get();
             text.fontSize = 22;
             text.alignment = TextAnchor.MiddleCenter;
             text.color = Color.white;
