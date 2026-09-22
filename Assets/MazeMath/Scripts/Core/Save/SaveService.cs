@@ -30,9 +30,9 @@ namespace MazeMath.Core.Save
             store.Save(key, JsonUtility.ToJson(envelope));
         }
 
-        public bool TryLoad<T>(string key, out T data)
+        public bool TryLoad<T>(string key, out T data) where T : class
         {
-            data = default;
+            data = null;
 
             if (string.IsNullOrWhiteSpace(key) || !store.TryLoad(key, out var json) || string.IsNullOrWhiteSpace(json))
             {
@@ -50,7 +50,7 @@ namespace MazeMath.Core.Save
                 }
 
                 var loaded = JsonUtility.FromJson<T>(envelope.payload);
-                if (loaded == null)
+                if (ReferenceEquals(loaded, null))
                 {
                     return false;
                 }
