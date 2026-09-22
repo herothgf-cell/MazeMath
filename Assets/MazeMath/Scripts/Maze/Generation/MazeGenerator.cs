@@ -68,9 +68,32 @@ namespace MazeMath.Maze.Generation
                         $"No critical room template supports floor {floor}.");
                 }
 
-                candidates = AvoidConsecutiveLearningRoom(
-                    candidates,
-                    criticalNodes[criticalNodes.Count - 1].Type);
+                var requiredTagIndex = index - 1;
+                var hasRequiredTag =
+                    chapter.requiredRoomTags != null &&
+                    requiredTagIndex < chapter.requiredRoomTags.Count;
+
+                if (hasRequiredTag)
+                {
+                    var requiredTag = chapter.requiredRoomTags[requiredTagIndex];
+                    candidates = candidates
+                        .Where(room =>
+                            room.tags != null &&
+                            room.tags.Contains(requiredTag))
+                        .ToList();
+
+                    if (candidates.Count == 0)
+                    {
+                        throw new InvalidOperationException(
+                            $"No critical room template satisfies required tag '{requiredTag}' on floor {floor}.");
+                    }
+                }
+                else
+                {
+                    candidates = AvoidConsecutiveLearningRoom(
+                        candidates,
+                        criticalNodes[criticalNodes.Count - 1].Type);
+                }
 
                 var template = PickWeighted(candidates, random);
                 var node = CreateNode(
