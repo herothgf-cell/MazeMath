@@ -11,7 +11,8 @@ namespace MazeMath.Maze.Generation
             string toNodeId,
             EdgeType type,
             string? gateId,
-            bool isBidirectional)
+            bool isBidirectional,
+            string? requirementId = null)
         {
             if (string.IsNullOrWhiteSpace(edgeId))
                 throw new ArgumentException("Edge ID is required.", nameof(edgeId));
@@ -26,6 +27,7 @@ namespace MazeMath.Maze.Generation
             Type = type;
             GateId = gateId;
             IsBidirectional = isBidirectional;
+            RequirementId = requirementId;
         }
 
         public string EdgeId { get; }
@@ -34,5 +36,6 @@ namespace MazeMath.Maze.Generation
         public EdgeType Type { get; }
         public string? GateId { get; }
         public bool IsBidirectional { get; }
+        public string? RequirementId { get; }
     }
 }
