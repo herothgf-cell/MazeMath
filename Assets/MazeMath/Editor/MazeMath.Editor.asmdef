@@ -1,0 +1,11 @@
+{
+  "name": "MazeMath.Editor",
+  "rootNamespace": "MazeMath.Editor",
+  "references": [
+    "MazeMath.Runtime",
+    "Unity.InputSystem"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ]
+}

@@ -6,7 +6,7 @@
 
 **Architecture:** Keep maze generation as pure C# data first: `MazeGraph`, deterministic PRNG, generator, validator. Only after graph validation passes does the runtime layer instantiate room prefabs and bind map/gate/objective presenters. Maze progression talks to equipment and puzzle systems only through `IEquipmentService` and completion events/IDs.
 
-**Tech Stack:** Unity 6 LTS, C#, ScriptableObject authoring, Unity Test Framework, uGUI/selected project UI stack.
+**Tech Stack:** Unity 2022.3.62f2 LTS, C#, ScriptableObject authoring, Unity Test Framework, uGUI/selected project UI stack.
 
 **Spec:** `Docs/Design/01_MAZE_SYSTEM_DESIGN.md`
 

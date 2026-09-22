@@ -1,190 +1,241 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using MazeMath.Core.Determinism;
 using MazeMath.Maze.Data;
+using MazeMath.Maze;
 
 namespace MazeMath.Maze.Generation
 {
-    public sealed class MazeGenerator : IMazeGenerator
+    public sealed class MazeGenerator
     {
-        private static readonly RoomType[] IntermediateRoomTypes =
+        public MazeGraph Generate(MazeChapterDefinition chapter, int seed)
         {
-            RoomType.Corridor,
-            RoomType.Junction,
-            RoomType.Question,
-            RoomType.Puzzle,
-            RoomType.Workshop
-        };
-
-        private static readonly RoomType[] OptionalRoomTypes =
-        {
-            RoomType.Reward,
-            RoomType.Secret,
-            RoomType.Question
-        };
-
-        public MazeGenerationResult Generate(MazeGenerationRequest request)
-        {
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
-
-            var settings = request.Settings;
-            var rng = new DeterministicRandom(request.Seed);
-            var roomCount = rng.NextInt(
-                settings.MinCriticalPathRooms,
-                settings.MaxCriticalPathRooms + 1);
-
-            var startId = "c00-start";
-            var bossId = $"c{roomCount - 1:00}-boss";
-            var graph = new MazeGraph(startId, bossId);
-
-            for (var i = 0; i < roomCount; i++)
+            if (chapter == null)
             {
-                var type = ResolveRoomType(i, roomCount, rng);
-                var floor = ResolveFloor(i, roomCount, settings.FloorCount);
-                var nodeId = ResolveNodeId(i, roomCount, type);
-
-                graph.AddNode(new MazeNode(
-                    nodeId,
-                    TemplateIdFor(type),
-                    floor,
-                    type,
-                    isCriticalPath: true));
+                throw new ArgumentNullException(nameof(chapter));
             }
 
-            for (var i = 0; i < roomCount - 1; i++)
+            var authoringErrors = chapter.ValidateAuthoring();
+            if (authoringErrors.Count > 0)
             {
-                var fromId = NodeIdAt(graph, i);
-                var toId = NodeIdAt(graph, i + 1);
-                var from = graph.GetNode(fromId);
-                var to = graph.GetNode(toId);
+                throw new InvalidOperationException(
+                    "Maze chapter authoring is invalid: " + string.Join(" | ", authoringErrors));
+            }
+
+            var random = new DeterministicRandom(seed);
+            var graph = new MazeGraph();
+
+            var criticalCount = random.NextInt(
+                chapter.requiredRoomCountRange.x,
+                chapter.requiredRoomCountRange.y + 1);
+
+            var startTemplate = chapter.allowedRooms.First(room => room.type == RoomType.Start);
+            var bossTemplate = chapter.allowedRooms.First(room => room.type == RoomType.Boss);
+            var criticalCandidates = chapter.allowedRooms
+                .Where(room =>
+                    room != null &&
+                    room.canBeCriticalPath &&
+                    room.type != RoomType.Start &&
+                    room.type != RoomType.Boss)
+                .ToList();
+
+            if (criticalCount > 2 && criticalCandidates.Count == 0)
+            {
+                throw new InvalidOperationException(
+                    "At least one non-start/non-boss critical room template is required.");
+            }
+
+            var criticalNodes = new List<MazeNode>(criticalCount);
+
+            var start = CreateNode(
+                "start",
+                startTemplate,
+                0,
+                isCriticalPath: true);
+            graph.AddNode(start);
+            criticalNodes.Add(start);
+
+            for (var index = 1; index < criticalCount - 1; index++)
+            {
+                var floor = CalculateFloor(index, criticalCount, chapter.floorCount);
+                var candidates = criticalCandidates
+                    .Where(room => room.SupportsFloor(floor))
+                    .ToList();
+
+                if (candidates.Count == 0)
+                {
+                    throw new InvalidOperationException(
+                        $"No critical room template supports floor {floor}.");
+                }
+
+                candidates = AvoidConsecutiveLearningRoom(
+                    candidates,
+                    criticalNodes[criticalNodes.Count - 1].Type);
+
+                var template = PickWeighted(candidates, random);
+                var node = CreateNode(
+                    $"critical-{index:00}",
+                    template,
+                    floor,
+                    isCriticalPath: true);
+
+                graph.AddNode(node);
+                criticalNodes.Add(node);
+            }
+
+            var bossFloor = CalculateFloor(criticalCount - 1, criticalCount, chapter.floorCount);
+            if (!bossTemplate.SupportsFloor(bossFloor))
+            {
+                throw new InvalidOperationException(
+                    $"Boss room template does not support floor {bossFloor}.");
+            }
+
+            var boss = CreateNode(
+                "boss",
+                bossTemplate,
+                bossFloor,
+                isCriticalPath: true);
+            graph.AddNode(boss);
+            criticalNodes.Add(boss);
+
+            for (var index = 0; index < criticalNodes.Count - 1; index++)
+            {
+                var from = criticalNodes[index];
+                var to = criticalNodes[index + 1];
                 var edgeType = from.Floor == to.Floor ? EdgeType.Open : EdgeType.Ladder;
 
                 graph.AddEdge(new MazeEdge(
-                    $"e{i:00}",
-                    fromId,
-                    toId,
+                    $"critical-edge-{index:00}",
+                    from.NodeId,
+                    to.NodeId,
                     edgeType,
-                    gateId: null,
                     isBidirectional: true));
             }
 
-            AddOptionalBranches(graph, settings, rng);
-
-            return new MazeGenerationResult(graph, request.Seed);
+            AddOptionalBranches(graph, chapter, criticalNodes, random);
+            return graph;
         }
 
         private static void AddOptionalBranches(
             MazeGraph graph,
-            MazeGenerationSettings settings,
-            DeterministicRandom rng)
+            MazeChapterDefinition chapter,
+            IReadOnlyList<MazeNode> criticalNodes,
+            DeterministicRandom random)
         {
-            if (settings.OptionalRoomCount == 0)
+            var optionalCount = random.NextInt(
+                chapter.optionalRoomCountRange.x,
+                chapter.optionalRoomCountRange.y + 1);
+
+            if (optionalCount == 0)
+            {
                 return;
+            }
 
-            var criticalCandidates = graph.Nodes
-                .Where(node =>
-                    node.IsCriticalPath &&
-                    node.Type != RoomType.Start &&
-                    node.Type != RoomType.Boss &&
-                    node.Type != RoomType.Checkpoint)
-                .OrderBy(node => node.NodeId)
-                .ToArray();
+            var optionalCandidates = chapter.allowedRooms
+                .Where(room =>
+                    room != null &&
+                    room.canBeOptional &&
+                    room.type != RoomType.Start &&
+                    room.type != RoomType.Boss)
+                .ToList();
 
-            if (criticalCandidates.Length == 0)
-                throw new InvalidOperationException("No critical node is available for optional branches.");
-
-            string? previousDepthOneOptionalId = null;
-
-            for (var i = 0; i < settings.OptionalRoomCount; i++)
+            if (optionalCandidates.Count == 0)
             {
-                var attachToPreviousOptional =
-                    settings.MaxOptionalBranchDepth == 2 &&
-                    previousDepthOneOptionalId != null &&
-                    i % 2 == 1;
+                throw new InvalidOperationException(
+                    "Optional rooms are requested but no optional room template is available.");
+            }
 
-                string parentNodeId;
-                if (attachToPreviousOptional)
+            for (var index = 0; index < optionalCount; index++)
+            {
+                var parent = criticalNodes[random.NextInt(0, criticalNodes.Count - 1)];
+                var candidates = optionalCandidates
+                    .Where(room => room.SupportsFloor(parent.Floor))
+                    .ToList();
+
+                if (candidates.Count == 0)
                 {
-                    parentNodeId = previousDepthOneOptionalId!;
-                }
-                else
-                {
-                    parentNodeId = criticalCandidates[
-                        rng.NextInt(0, criticalCandidates.Length)].NodeId;
+                    throw new InvalidOperationException(
+                        $"No optional room template supports floor {parent.Floor}.");
                 }
 
-                var type = OptionalRoomTypes[
-                    rng.NextInt(0, OptionalRoomTypes.Length)];
-                var nodeId = $"o{i:00}-{type.ToString().ToLowerInvariant()}";
-                var floor = graph.GetNode(parentNodeId).Floor;
+                var template = PickWeighted(candidates, random);
+                var node = CreateNode(
+                    $"optional-{index:00}",
+                    template,
+                    parent.Floor,
+                    isCriticalPath: false);
 
-                graph.AddNode(new MazeNode(
-                    nodeId,
-                    TemplateIdFor(type),
-                    floor,
-                    type,
-                    isCriticalPath: false));
-
+                graph.AddNode(node);
                 graph.AddEdge(new MazeEdge(
-                    $"oe{i:00}",
-                    parentNodeId,
-                    nodeId,
+                    $"optional-edge-{index:00}",
+                    parent.NodeId,
+                    node.NodeId,
                     EdgeType.Open,
-                    gateId: null,
                     isBidirectional: true));
-
-                previousDepthOneOptionalId =
-                    attachToPreviousOptional ? null : nodeId;
             }
         }
 
-        private static RoomType ResolveRoomType(
-            int index,
-            int roomCount,
-            DeterministicRandom rng)
+        private static List<RoomTemplateDefinition> AvoidConsecutiveLearningRoom(
+            List<RoomTemplateDefinition> candidates,
+            RoomType previousType)
         {
-            if (index == 0)
-                return RoomType.Start;
-            if (index == roomCount - 1)
-                return RoomType.Boss;
-            if (index == roomCount - 2)
-                return RoomType.Checkpoint;
-
-            return IntermediateRoomTypes[
-                rng.NextInt(0, IntermediateRoomTypes.Length)];
-        }
-
-        private static int ResolveFloor(int index, int roomCount, int floorCount)
-        {
-            var floor = 1 + (index * floorCount / roomCount);
-            return Math.Min(floor, floorCount);
-        }
-
-        private static string ResolveNodeId(int index, int roomCount, RoomType type)
-        {
-            if (index == 0)
-                return "c00-start";
-            if (index == roomCount - 1)
-                return $"c{index:00}-boss";
-
-            return $"c{index:00}-{type.ToString().ToLowerInvariant()}";
-        }
-
-        private static string TemplateIdFor(RoomType type)
-        {
-            return $"{type.ToString().ToLowerInvariant()}-room";
-        }
-
-        private static string NodeIdAt(MazeGraph graph, int index)
-        {
-            foreach (var node in graph.Nodes)
+            if (previousType != RoomType.Question && previousType != RoomType.Puzzle)
             {
-                if (node.NodeId.StartsWith($"c{index:00}-", StringComparison.Ordinal))
-                    return node.NodeId;
+                return candidates;
             }
 
-            throw new InvalidOperationException($"Critical node at index {index} was not created.");
+            var alternatives = candidates
+                .Where(room => room.type != previousType)
+                .ToList();
+
+            return alternatives.Count > 0 ? alternatives : candidates;
+        }
+
+        private static MazeNode CreateNode(
+            string nodeId,
+            RoomTemplateDefinition template,
+            int floor,
+            bool isCriticalPath)
+        {
+            return new MazeNode(nodeId, floor, template.type)
+            {
+                IsCriticalPath = isCriticalPath,
+                TemplateId = template.templateId
+            };
+        }
+
+        private static int CalculateFloor(int index, int totalCriticalRooms, int floorCount)
+        {
+            if (floorCount <= 1)
+            {
+                return 0;
+            }
+
+            var floor = index * floorCount / totalCriticalRooms;
+            return Math.Min(floorCount - 1, floor);
+        }
+
+        private static RoomTemplateDefinition PickWeighted(
+            IReadOnlyList<RoomTemplateDefinition> candidates,
+            DeterministicRandom random)
+        {
+            var totalWeight = 0;
+            for (var i = 0; i < candidates.Count; i++)
+            {
+                totalWeight += Math.Max(1, candidates[i].weight);
+            }
+
+            var roll = random.NextInt(0, totalWeight);
+            for (var i = 0; i < candidates.Count; i++)
+            {
+                roll -= Math.Max(1, candidates[i].weight);
+                if (roll < 0)
+                {
+                    return candidates[i];
+                }
+            }
+
+            return candidates[candidates.Count - 1];
         }
     }
 }

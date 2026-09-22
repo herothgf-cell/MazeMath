@@ -1,141 +1,92 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace MazeMath.Maze.Generation
+namespace MazeMath.Maze
 {
     public sealed class MazeGraph
     {
-        private readonly Dictionary<string, MazeNode> _nodes = new Dictionary<string, MazeNode>();
-        private readonly Dictionary<string, MazeEdge> _edges = new Dictionary<string, MazeEdge>();
-        private readonly Dictionary<string, List<string>> _adjacency = new Dictionary<string, List<string>>();
-        private readonly List<MazeRequirementPlacement> _requirements = new List<MazeRequirementPlacement>();
+        private readonly Dictionary<string, MazeNode> nodes = new Dictionary<string, MazeNode>();
+        private readonly Dictionary<string, MazeEdge> edges = new Dictionary<string, MazeEdge>();
+        private readonly Dictionary<string, List<MazeEdge>> adjacency = new Dictionary<string, List<MazeEdge>>();
 
-        public MazeGraph(
-            string startNodeId,
-            string bossNodeId,
-            int requiredBacktrackCount = 0)
-        {
-            if (string.IsNullOrWhiteSpace(startNodeId))
-                throw new ArgumentException("Start node ID is required.", nameof(startNodeId));
-            if (string.IsNullOrWhiteSpace(bossNodeId))
-                throw new ArgumentException("Boss node ID is required.", nameof(bossNodeId));
-            if (requiredBacktrackCount < 0)
-                throw new ArgumentOutOfRangeException(nameof(requiredBacktrackCount));
-
-            StartNodeId = startNodeId;
-            BossNodeId = bossNodeId;
-            RequiredBacktrackCount = requiredBacktrackCount;
-        }
-
-        public string StartNodeId { get; }
-        public string BossNodeId { get; }
-        public int RequiredBacktrackCount { get; }
-        public IReadOnlyCollection<MazeNode> Nodes => _nodes.Values;
-        public IReadOnlyCollection<MazeEdge> Edges => _edges.Values;
-        public IReadOnlyList<MazeRequirementPlacement> Requirements => _requirements;
+        public IReadOnlyDictionary<string, MazeNode> Nodes => nodes;
+        public IReadOnlyDictionary<string, MazeEdge> Edges => edges;
 
         public void AddNode(MazeNode node)
         {
             if (node == null)
+            {
                 throw new ArgumentNullException(nameof(node));
-            if (_nodes.ContainsKey(node.NodeId))
-                throw new InvalidOperationException($"Node '{node.NodeId}' already exists.");
+            }
 
-            _nodes.Add(node.NodeId, node);
-            _adjacency.Add(node.NodeId, new List<string>());
+            if (!nodes.TryAdd(node.NodeId, node))
+            {
+                throw new InvalidOperationException("Duplicate maze node: " + node.NodeId);
+            }
+
+            adjacency[node.NodeId] = new List<MazeEdge>();
         }
 
         public void AddEdge(MazeEdge edge)
         {
             if (edge == null)
-                throw new ArgumentNullException(nameof(edge));
-            if (_edges.ContainsKey(edge.EdgeId))
-                throw new InvalidOperationException($"Edge '{edge.EdgeId}' already exists.");
-            if (!_nodes.ContainsKey(edge.FromNodeId) || !_nodes.ContainsKey(edge.ToNodeId))
-                throw new InvalidOperationException("Both edge endpoints must exist before adding the edge.");
-
-            _edges.Add(edge.EdgeId, edge);
-            _adjacency[edge.FromNodeId].Add(edge.EdgeId);
-
-            if (edge.IsBidirectional)
-                _adjacency[edge.ToNodeId].Add(edge.EdgeId);
-        }
-
-        public void AddRequirement(MazeRequirementPlacement placement)
-        {
-            if (placement == null)
-                throw new ArgumentNullException(nameof(placement));
-            if (!_nodes.ContainsKey(placement.NodeId))
-                throw new InvalidOperationException(
-                    $"Requirement node '{placement.NodeId}' does not exist.");
-            if (_requirements.Any(r =>
-                r.RequirementId == placement.RequirementId &&
-                r.NodeId == placement.NodeId))
             {
-                throw new InvalidOperationException(
-                    $"Requirement '{placement.RequirementId}' already exists at '{placement.NodeId}'.");
+                throw new ArgumentNullException(nameof(edge));
             }
 
-            _requirements.Add(placement);
-        }
+            if (!nodes.ContainsKey(edge.FromNodeId) || !nodes.ContainsKey(edge.ToNodeId))
+            {
+                throw new InvalidOperationException(
+                    $"Maze edge {edge.EdgeId} references a missing endpoint.");
+            }
 
-        public MazeNode GetNode(string nodeId)
-        {
-            if (!_nodes.TryGetValue(nodeId, out var node))
-                throw new KeyNotFoundException($"Node '{nodeId}' does not exist.");
+            if (!edges.TryAdd(edge.EdgeId, edge))
+            {
+                throw new InvalidOperationException("Duplicate maze edge: " + edge.EdgeId);
+            }
 
-            return node;
-        }
-
-        public IReadOnlyList<MazeEdge> GetOutgoingEdges(string nodeId)
-        {
-            if (!_adjacency.TryGetValue(nodeId, out var edgeIds))
-                throw new KeyNotFoundException($"Node '{nodeId}' does not exist.");
-
-            return edgeIds.Select(id => _edges[id]).ToArray();
+            adjacency[edge.FromNodeId].Add(edge);
+            if (edge.IsBidirectional)
+            {
+                adjacency[edge.ToNodeId].Add(edge);
+            }
         }
 
         public IReadOnlyList<string> FindPath(string fromNodeId, string toNodeId)
         {
-            return FindPath(fromNodeId, toNodeId, blockedRequirementId: null);
-        }
-
-        public IReadOnlyList<string> FindPath(
-            string fromNodeId,
-            string toNodeId,
-            string? blockedRequirementId)
-        {
-            if (!_nodes.ContainsKey(fromNodeId) || !_nodes.ContainsKey(toNodeId))
+            if (!nodes.ContainsKey(fromNodeId) || !nodes.ContainsKey(toNodeId))
+            {
                 return Array.Empty<string>();
+            }
+
+            if (fromNodeId == toNodeId)
+            {
+                return new[] { fromNodeId };
+            }
 
             var queue = new Queue<string>();
-            var visited = new HashSet<string>();
+            var visited = new HashSet<string> { fromNodeId };
             var previous = new Dictionary<string, string>();
 
             queue.Enqueue(fromNodeId);
-            visited.Add(fromNodeId);
 
             while (queue.Count > 0)
             {
                 var current = queue.Dequeue();
-                if (current == toNodeId)
-                    return ReconstructPath(previous, fromNodeId, toNodeId);
-
-                foreach (var edgeId in _adjacency[current])
+                foreach (var edge in adjacency[current])
                 {
-                    var edge = _edges[edgeId];
-                    if (blockedRequirementId != null &&
-                        edge.RequirementId == blockedRequirementId)
+                    var next = GetTraversableNeighbor(current, edge);
+                    if (next == null || !visited.Add(next))
                     {
                         continue;
                     }
 
-                    var next = ResolveNeighbor(current, edge);
-                    if (next == null || !visited.Add(next))
-                        continue;
-
                     previous[next] = current;
+                    if (next == toNodeId)
+                    {
+                        return BuildPath(previous, fromNodeId, toNodeId);
+                    }
+
                     queue.Enqueue(next);
                 }
             }
@@ -143,29 +94,40 @@ namespace MazeMath.Maze.Generation
             return Array.Empty<string>();
         }
 
-        private static string? ResolveNeighbor(string currentNodeId, MazeEdge edge)
+        public IReadOnlyList<MazeEdge> GetEdges(string nodeId)
         {
-            if (edge.FromNodeId == currentNodeId)
-                return edge.ToNodeId;
+            return adjacency.TryGetValue(nodeId, out var list)
+                ? list
+                : Array.Empty<MazeEdge>();
+        }
 
-            if (edge.IsBidirectional && edge.ToNodeId == currentNodeId)
+        private static string GetTraversableNeighbor(string current, MazeEdge edge)
+        {
+            if (edge.FromNodeId == current)
+            {
+                return edge.ToNodeId;
+            }
+
+            if (edge.IsBidirectional && edge.ToNodeId == current)
+            {
                 return edge.FromNodeId;
+            }
 
             return null;
         }
 
-        private static IReadOnlyList<string> ReconstructPath(
+        private static IReadOnlyList<string> BuildPath(
             IReadOnlyDictionary<string, string> previous,
-            string fromNodeId,
-            string toNodeId)
+            string start,
+            string target)
         {
-            var path = new List<string> { toNodeId };
-            var current = toNodeId;
+            var path = new List<string> { target };
+            var cursor = target;
 
-            while (current != fromNodeId)
+            while (cursor != start)
             {
-                current = previous[current];
-                path.Add(current);
+                cursor = previous[cursor];
+                path.Add(cursor);
             }
 
             path.Reverse();

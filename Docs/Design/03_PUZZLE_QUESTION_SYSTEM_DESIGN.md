@@ -2,7 +2,7 @@
 
 - Project: MazeMath
 - Document type: Implementation-ready game system specification
-- Target: Unity 6 LTS, Web build + Android native app
+- Target: Unity 2022.3.62f2 LTS, Web build + Android native app
 - Related specs: 01_MAZE_SYSTEM_DESIGN.md, 02_CRAFTING_ENCHANT_DESIGN.md
 
 ## 1. Purpose

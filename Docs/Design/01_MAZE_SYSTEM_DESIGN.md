@@ -2,7 +2,7 @@
 
 - Project: MazeMath
 - Document type: Implementation-ready game system specification
-- Target: Unity 6 LTS, Web build + Android native app
+- Target: Unity 2022.3.62f2 LTS, Web build + Android native app
 - Primary audience: solo developer / Codex implementation agent
 - Related specs: 02_CRAFTING_ENCHANT_DESIGN.md, 03_PUZZLE_QUESTION_SYSTEM_DESIGN.md
 
@@ -37,15 +37,15 @@ MazeMath의 미로는 단순히 출구를 찾는 배경이 아니다. 플레이�
 
 ### Unity
 
-프로젝트 최초 생성 시점의 Unity 6 LTS 패치 버전을 ProjectVersion.txt에 고정한다. 이후 팀/PC 간에는 동일한 Editor 버전을 사용한다.
+프로젝트 최초 생성 시점의 Unity 2022.3.62f2 LTS 패치 버전을 ProjectVersion.txt에 고정한다. 이후 팀/PC 간에는 동일한 Editor 버전을 사용한다.
 
 ### Web
 
-Unity 6 웹 플랫폼 기준으로 WebGL 2, WebAssembly, HTML5 지원 브라우저를 기본 대상으로 한다. 모바일 웹도 Unity 6에서 지원 대상이지만 Android의 주 배포 방식은 네이티브 앱으로 잡고, 모바일 웹은 보조 배포 채널로 본다.
+Unity 2022.3 WebGL 기준으로 WebGL 2, WebAssembly, HTML5를 지원하는 64비트 데스크톱 브라우저를 대상으로 한다. Unity 2022.3 WebGL은 모바일 브라우저를 공식 지원하지 않으므로 Android에서는 네이티브 앱을 주 배포 방식으로 사용한다.
 
 ### Android
 
-Unity 6 자체 런타임 최소 지원은 Android 6.0 / API 23 이상이다. MazeMath의 제품 최소 사양도 API 23으로 시작하되 실제 스토어 제출 Target API는 배포 시점 Google Play 정책에 맞춘다.
+Unity 2022.3 자체 런타임은 Android 5.1 / API 22 이상을 지원한다. MazeMath의 제품 최소 사양은 API 23으로 시작하되 실제 스토어 제출 Target API는 배포 시점 Google Play 정책에 맞춘다. Android 개발 도구는 Unity 2022.3 호환 기준인 NDK r23b와 OpenJDK 11을 사용한다.
 
 ## 5. High-Level Architecture
 
@@ -666,6 +666,6 @@ Phase M10 — Web + Android smoke test
 
 ## 30. References
 
-- Unity 6 System Requirements: https://docs.unity3d.com/6000.0/Documentation/Manual/system-requirements.html
-- Unity Web Browser Compatibility: https://docs.unity3d.com/6000.0/Documentation/Manual/webgl-browsercompatibility.html
-- Unity Android Requirements: https://docs.unity3d.com/6000.0/Documentation/Manual/android-requirements-and-compatibility.html
+- Unity 2022.3 System Requirements: https://docs.unity3d.com/2022.3/Documentation/Manual/system-requirements.html
+- Unity Web Browser Compatibility: https://docs.unity3d.com/2022.3/Documentation/Manual/webgl-browsercompatibility.html
+- Unity Android Requirements: https://docs.unity3d.com/2022.3/Documentation/Manual/android-requirements-and-compatibility.html
