@@ -1,4 +1,5 @@
 using System.Linq;
+using MazeMath.Maze;
 using MazeMath.Maze.Data;
 
 namespace MazeMath.Maze.Generation
