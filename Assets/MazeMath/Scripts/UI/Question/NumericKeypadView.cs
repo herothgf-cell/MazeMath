@@ -35,7 +35,7 @@ namespace MazeMath.UI.Question
             }
 
             built = true;
-            font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            font = MazeMath.UI.RuntimeFontProvider.Get();
 
             var root = GetComponent<RectTransform>();
             root.sizeDelta = new Vector2(420f, 520f);
@@ -184,7 +184,7 @@ namespace MazeMath.UI.Question
             textObject.transform.SetParent(parent, false);
 
             var text = textObject.GetComponent<Text>();
-            text.font = font != null ? font : Resources.GetBuiltinResource<Font>("Arial.ttf");
+            text.font = font != null ? font : MazeMath.UI.RuntimeFontProvider.Get();
             text.text = value;
             text.fontSize = size;
             text.alignment = alignment;
