@@ -1,0 +1,10 @@
+{
+  "name": "MazeMath.PlayMode.Tests",
+  "rootNamespace": "MazeMath.Tests",
+  "references": [
+    "MazeMath.Runtime"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}
