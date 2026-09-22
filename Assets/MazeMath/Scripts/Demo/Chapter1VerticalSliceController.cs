@@ -318,20 +318,31 @@ namespace MazeMath.Demo
 
         private void RunEnvironmentPuzzleDemo()
         {
-            var weight = new WeightBridgePuzzle("demo-weight", 8);
-            weight.StartPuzzle();
-            weight.PlaceWeight("3kg", 3);
-            weight.PlaceWeight("5kg", 5);
+            hud.ShowEnvironmentPuzzles(OnEnvironmentPuzzleSolved);
+            hud.SetMessage("무게 다리·소코반·레이저 중 하나를 선택해 직접 해결해 보세요.");
+        }
 
-            var text = weight.IsSolved()
-                ? "무게 다리 데모: 3kg + 5kg = 8kg, 다리가 열렸습니다."
-                : "무게 다리 데모가 아직 해결되지 않았습니다.";
+        private void OnEnvironmentPuzzleSolved(string puzzleId)
+        {
+            var result = rewards.Grant(
+                "puzzle:" + puzzleId,
+                new LearningReward(
+                    10,
+                    new[] { new ItemReward(ContentIds.Scrap, 1) }));
 
-            rewards.Grant(
-                "puzzle:demo-weight",
-                new LearningReward(10, new[] { new ItemReward(ContentIds.Scrap, 1) }));
+            if (result == RewardGrantResult.Granted)
+            {
+                hud.SetMessage("환경 퍼즐 해결! Scrap +1, Knowledge XP +10");
+            }
+            else if (result == RewardGrantResult.Duplicate)
+            {
+                hud.SetMessage("이미 해결 보상을 받은 퍼즐입니다. 연습은 계속할 수 있어요.");
+            }
+            else
+            {
+                hud.SetMessage("보상은 가방 공간이 생기면 받을 수 있습니다.");
+            }
 
-            hud.SetMessage(text + " / Scrap +1, XP +10");
             RefreshStatus();
         }
 
