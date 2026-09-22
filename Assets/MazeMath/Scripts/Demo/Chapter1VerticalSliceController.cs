@@ -32,7 +32,6 @@ namespace MazeMath.Demo
         private RewardService rewards;
         private MazeRuntimeService maze;
         private QuestionSession questionSession;
-        private QuestionRewardBinding questionRewardBinding;
         private Chapter1DemoHud hud;
         private MazeWorldDebugRenderer world;
         private List<string> criticalPath;
@@ -65,7 +64,10 @@ namespace MazeMath.Demo
 
         private void OnDestroy()
         {
-            questionRewardBinding?.Dispose();
+            if (questionSession != null)
+            {
+                questionSession.Completed -= OnQuestionCompleted;
+            }
         }
 
         private void InitializeServices()
@@ -87,7 +89,6 @@ namespace MazeMath.Demo
 
             rewards = new RewardService(inventory, xp);
             questionSession = new QuestionSession();
-            questionRewardBinding = new QuestionRewardBinding(questionSession, rewards);
             questionSession.Completed += OnQuestionCompleted;
         }
 
@@ -222,6 +223,12 @@ namespace MazeMath.Demo
 
         private void StartQuestion()
         {
+            if (!IsCurrentRoom(RoomType.Question))
+            {
+                hud.SetMessage("수학 문제는 파란 Question 방에서 풀 수 있습니다.");
+                return;
+            }
+
             if (catalog.questionTemplates == null || catalog.questionTemplates.Count == 0)
                 return;
 
@@ -248,6 +255,12 @@ namespace MazeMath.Demo
 
         private void CraftMiningArm()
         {
+            if (!IsCurrentRoom(RoomType.Workshop))
+            {
+                hud.SetMessage("장비 제작은 Workshop으로 돌아가서 할 수 있습니다.");
+                return;
+            }
+
             var result = crafting.Craft(ContentIds.MiningRecipe);
             if (result == CraftResult.Success)
             {
@@ -264,6 +277,12 @@ namespace MazeMath.Demo
 
         private void ShowSensorPattern()
         {
+            if (!IsCurrentRoom(RoomType.Workshop))
+            {
+                hud.SetMessage("3×3 조합은 Workshop에서만 할 수 있습니다.");
+                return;
+            }
+
             hud.ShowPatternCrafting(
                 crafting,
                 ContentIds.SensorPatternRecipe,
@@ -291,6 +310,12 @@ namespace MazeMath.Demo
 
         private void EnchantSensor()
         {
+            if (!IsCurrentRoom(RoomType.Workshop))
+            {
+                hud.SetMessage("인챈트는 Workshop에서만 적용할 수 있습니다.");
+                return;
+            }
+
             if (!inventory.Has(ContentIds.ExplorerSensorItem, 1))
             {
                 hud.SetMessage("먼저 Explorer Sensor를 제작해 주세요.");
@@ -318,6 +343,12 @@ namespace MazeMath.Demo
 
         private void RunEnvironmentPuzzleDemo()
         {
+            if (!IsCurrentRoom(RoomType.Puzzle))
+            {
+                hud.SetMessage("환경 퍼즐은 보라색 Puzzle 방에서 도전할 수 있습니다.");
+                return;
+            }
+
             hud.ShowEnvironmentPuzzles(OnEnvironmentPuzzleSolved);
             hud.SetMessage("무게 다리·소코반·레이저 중 하나를 선택해 직접 해결해 보세요.");
         }
@@ -348,8 +379,29 @@ namespace MazeMath.Demo
 
         private void OnQuestionCompleted(QuestionInstance question)
         {
-            hud.SetMessage("정답! Scrap +1과 Knowledge XP를 획득했습니다.");
+            var result = rewards.Grant(
+                "question-node:" + CurrentNodeId,
+                QuestionRewardPolicy.For(question));
+
+            if (result == RewardGrantResult.Granted)
+            {
+                hud.SetMessage("정답! 이 문제방의 Scrap +1과 Knowledge XP를 획득했습니다.");
+            }
+            else
+            {
+                hud.SetMessage("정답! 이미 보상을 받은 문제방이라 이번에는 연습 기록만 남습니다.");
+            }
+
             RefreshStatus();
+        }
+
+        private bool IsCurrentRoom(RoomType type)
+        {
+            if (maze == null || maze.CurrentGraph == null || string.IsNullOrEmpty(CurrentNodeId))
+                return false;
+
+            return maze.CurrentGraph.Nodes.TryGetValue(CurrentNodeId, out var node) &&
+                   node.Type == type;
         }
 
         private void RefreshStatus()
