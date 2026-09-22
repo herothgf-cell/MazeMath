@@ -10,6 +10,16 @@ namespace MazeMath.Tests.Core
 {
     public sealed class GameBootstrapTests
     {
+
+        [Test]
+        public void ShouldLoadGameplay_OnlyForBootstrapWithSecondScene()
+        {
+            Assert.IsTrue(GameBootstrap.ShouldLoadGameplay("Bootstrap", 2));
+            Assert.IsFalse(GameBootstrap.ShouldLoadGameplay("Bootstrap", 1));
+            Assert.IsFalse(GameBootstrap.ShouldLoadGameplay("Gameplay", 2));
+            Assert.IsFalse(GameBootstrap.ShouldLoadGameplay("TestScene", 2));
+        }
+
         [UnityTest]
         public IEnumerator Bootstrap_RegistersInputAndSaveServices()
         {
