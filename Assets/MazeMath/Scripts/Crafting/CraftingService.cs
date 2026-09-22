@@ -50,6 +50,34 @@ namespace MazeMath.Crafting
                 return CraftResult.UnknownRecipe;
             }
 
+            if (recipe.type == RecipeType.Pattern)
+            {
+                return CraftResult.InvalidPattern;
+            }
+
+            return CraftInternal(recipeId, recipe);
+        }
+
+        public CraftResult CraftPattern(
+            string recipeId,
+            System.Collections.Generic.IReadOnlyList<string> gridItemIds)
+        {
+            if (!recipes.TryGetValue(recipeId, out var recipe))
+            {
+                return CraftResult.UnknownRecipe;
+            }
+
+            if (recipe.type != RecipeType.Pattern ||
+                !RecipeMatcher.Matches(recipe, gridItemIds))
+            {
+                return CraftResult.InvalidPattern;
+            }
+
+            return CraftInternal(recipeId, recipe);
+        }
+
+        private CraftResult CraftInternal(string recipeId, RecipeDefinition recipe)
+        {
             if (!unlockedRecipeIds.Contains(recipeId))
             {
                 return CraftResult.RecipeLocked;
