@@ -7,7 +7,7 @@ Branch: `feat/native-foundation`
 - Unity Editor: **2022.3.62f2**
 - Input System: **1.6.1**
 - Unity Test Framework: **1.1.33**
-- Unity UI: editor-bound core package (`com.unity.ugui`)
+- Unity UI: `com.unity.ugui@1.0.0`
 - Web distribution: Unity 2022.3 WebGL for supported desktop browsers
 - Mobile distribution: Android native app
 - Android product minimum: API 23
@@ -23,32 +23,69 @@ Branch: `feat/native-foundation`
 
 ## Rulings
 
-1. **Isolation:** connector-backed feature branch substitutes for a local worktree because the container cannot clone GitHub. Cost if wrong: branch-level isolation is preserved, but local worktree helper/ledger scripts cannot be used.
+1. **Isolation:** connector-backed feature branch substitutes for a local worktree because the container cannot clone GitHub.
 2. **Unity version:** direct user requirement `2022.3.62f2` overrides the earlier Unity 6 assumption in design/plan documents.
 3. **Web target:** Unity 2022.3 WebGL is treated as desktop-browser distribution; Android uses the native build.
-4. **Editor-generated assets:** scenes/prefabs that require Unity serialization will be generated through an Editor setup utility rather than hand-writing fragile YAML where possible.
+4. **Editor-generated assets:** scenes/prefabs that require Unity serialization are generated through `ProjectSetup` rather than hand-writing fragile Unity YAML.
 
 ## Implemented Source (verification pending in Unity)
 
-- Unity project version/package manifest baseline
-- Runtime/EditMode/PlayMode assembly definitions
-- Persistent `GameBootstrap` and `GameServices`
+### Foundation
+- Project version/package manifest pinned for Unity 2022.3.62f2
+- Runtime / Editor / EditMode / PlayMode assembly definitions
+- Persistent `GameBootstrap` / `GameServices`
 - Versioned `SaveService` + `PlayerPrefsSaveStore`
 - Unified keyboard/mobile `GameInputService`
 - `MobileControlBridge`
 - `SafeAreaFitter`
+- `ProjectSetup` scene/build-settings generator
+- WebGL and Android build entry points + build validation
 
-## Authored Tests (not yet executed)
+### Maze
+- `MazeGraph`, `MazeNode`, `MazeEdge`
+- Deterministic PRNG + stable RunSeed
+- ScriptableObject chapter/difficulty/room/gate definitions
+- Hybrid critical-path + optional-branch generator
+- Topology validator + 1,000-seed test authored
+- `MazeRuntimeService` / `MazeRunState`
+- Gate solved state and traversal check
+- Fog-of-war `MazeMapService`
+- Maze run save adapter
+- Progressive maze hint service
 
-- `GameBootstrapTests`
-- `SaveServiceTests`
-- `GameInputTests`
-- `SafeAreaFitterTests`
+### Questions
+- Numeric subjective answer validator
+- Numeric keypad input buffer
+- Question data model
+- Deterministic addition/subtraction generators
 
-## Next
+### Environment Puzzles
+- Common environment-puzzle contract
+- Sequence Plate puzzle
+- Memory Path puzzle
 
-1. Editor project setup + scene/build settings generator
-2. WebGL/Android build entry points
-3. MazeGraph domain model
-4. deterministic seed/PRNG
-5. maze generator/validator
+### Crafting
+- Item definitions / stack model
+- Atomic material inventory service
+- Guided recipe definition
+- Transactional crafting service with rollback
+
+## Authored Tests (Unity execution pending)
+
+- Foundation: Bootstrap, SaveService, GameInput, SafeAreaFitter, ProjectSetup, BuildValidation
+- Maze: Graph, Seed, Authoring, Generator, Validator, Runtime, Map, SaveAdapter, Hint
+- Questions: NumericAnswerValidator, NumericInputBuffer, ArithmeticGenerator
+- Puzzles: Sequence/Memory
+- Inventory/Crafting: InventoryService, CraftingService
+
+## Next Implementation Batch
+
+1. Numeric keypad uGUI presenter + question service/reward-once guard
+2. Multiple choice + multiplication/division + missing-number questions
+3. Weight Bridge + Sokoban Lite + Laser/pipe puzzle
+4. Equipment slots and five robot tools
+5. 3x3 pattern crafting
+6. Knowledge XP + enchant system
+7. Maze equipment-gate integration
+8. Chapter 1 vertical slice authoring
+9. Unity 2022.3.62f2 EditMode/PlayMode execution and build smoke tests on a Unity-capable machine
