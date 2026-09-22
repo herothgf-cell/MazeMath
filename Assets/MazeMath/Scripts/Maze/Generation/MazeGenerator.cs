@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MazeMath.Maze.Data;
+using MazeMath.Maze;
 
 namespace MazeMath.Maze.Generation
 {
