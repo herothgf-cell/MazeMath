@@ -12,6 +12,8 @@ namespace MazeMath.Questions.Data
         public string Prompt { get; set; }
         public int CorrectInteger { get; set; }
         public int[] Operands { get; set; }
+        public int[] Choices { get; set; }
+        public int CorrectChoiceIndex { get; set; } = -1;
         public DifficultyBand Difficulty { get; set; }
         public LearningAxis PrimaryAxis { get; set; }
         public int MaxInputLength { get; set; }
