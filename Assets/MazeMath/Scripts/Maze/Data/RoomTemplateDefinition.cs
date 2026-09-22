@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using MazeMath.Maze;
 
 namespace MazeMath.Maze.Data
 {
