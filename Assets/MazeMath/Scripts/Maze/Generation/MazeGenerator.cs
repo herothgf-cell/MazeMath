@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using MazeMath.Core.Determinism;
 using MazeMath.Maze.Data;
 
@@ -13,6 +14,13 @@ namespace MazeMath.Maze.Generation
             RoomType.Question,
             RoomType.Puzzle,
             RoomType.Workshop
+        };
+
+        private static readonly RoomType[] OptionalRoomTypes =
+        {
+            RoomType.Reward,
+            RoomType.Secret,
+            RoomType.Question
         };
 
         public MazeGenerationResult Generate(MazeGenerationRequest request)
@@ -61,7 +69,74 @@ namespace MazeMath.Maze.Generation
                     isBidirectional: true));
             }
 
+            AddOptionalBranches(graph, settings, rng);
+
             return new MazeGenerationResult(graph, request.Seed);
+        }
+
+        private static void AddOptionalBranches(
+            MazeGraph graph,
+            MazeGenerationSettings settings,
+            DeterministicRandom rng)
+        {
+            if (settings.OptionalRoomCount == 0)
+                return;
+
+            var criticalCandidates = graph.Nodes
+                .Where(node =>
+                    node.IsCriticalPath &&
+                    node.Type != RoomType.Start &&
+                    node.Type != RoomType.Boss &&
+                    node.Type != RoomType.Checkpoint)
+                .OrderBy(node => node.NodeId)
+                .ToArray();
+
+            if (criticalCandidates.Length == 0)
+                throw new InvalidOperationException("No critical node is available for optional branches.");
+
+            string? previousDepthOneOptionalId = null;
+
+            for (var i = 0; i < settings.OptionalRoomCount; i++)
+            {
+                var attachToPreviousOptional =
+                    settings.MaxOptionalBranchDepth == 2 &&
+                    previousDepthOneOptionalId != null &&
+                    i % 2 == 1;
+
+                string parentNodeId;
+                if (attachToPreviousOptional)
+                {
+                    parentNodeId = previousDepthOneOptionalId!;
+                }
+                else
+                {
+                    parentNodeId = criticalCandidates[
+                        rng.NextInt(0, criticalCandidates.Length)].NodeId;
+                }
+
+                var type = OptionalRoomTypes[
+                    rng.NextInt(0, OptionalRoomTypes.Length)];
+                var nodeId = $"o{i:00}-{type.ToString().ToLowerInvariant()}";
+                var floor = graph.GetNode(parentNodeId).Floor;
+
+                graph.AddNode(new MazeNode(
+                    nodeId,
+                    TemplateIdFor(type),
+                    floor,
+                    type,
+                    isCriticalPath: false));
+
+                graph.AddEdge(new MazeEdge(
+                    $"oe{i:00}",
+                    parentNodeId,
+                    nodeId,
+                    EdgeType.Open,
+                    gateId: null,
+                    isBidirectional: true));
+
+                previousDepthOneOptionalId =
+                    attachToPreviousOptional ? null : nodeId;
+            }
         }
 
         private static RoomType ResolveRoomType(
