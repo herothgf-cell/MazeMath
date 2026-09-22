@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using MazeMath.Equipment;
 using MazeMath.Maze;
 using MazeMath.Maze.Data;
 using MazeMath.Maze.Generation;
@@ -11,6 +12,7 @@ namespace MazeMath.Maze.Runtime
         private readonly MazeGenerator generator;
         private readonly MazeValidator validator;
         private readonly IMazeChapterProvider chapterProvider;
+        private readonly IAbilityProvider abilityProvider;
 
         public MazeGraph CurrentGraph { get; private set; }
         public MazeRunState CurrentState { get; private set; }
@@ -18,11 +20,13 @@ namespace MazeMath.Maze.Runtime
         public MazeRuntimeService(
             MazeGenerator generator,
             MazeValidator validator,
-            IMazeChapterProvider chapterProvider)
+            IMazeChapterProvider chapterProvider,
+            IAbilityProvider abilityProvider = null)
         {
             this.generator = generator ?? throw new ArgumentNullException(nameof(generator));
             this.validator = validator ?? throw new ArgumentNullException(nameof(validator));
             this.chapterProvider = chapterProvider ?? throw new ArgumentNullException(nameof(chapterProvider));
+            this.abilityProvider = abilityProvider;
         }
 
         public MazeGraph StartChapter(string chapterId, int runSeed)
@@ -93,12 +97,25 @@ namespace MazeMath.Maze.Runtime
                 return false;
             }
 
+            if (!string.IsNullOrWhiteSpace(edge.GateId) &&
+                CurrentState.solvedGateIds.Contains(edge.GateId))
+            {
+                return true;
+            }
+
+            if (edge.Type == EdgeType.EquipmentLocked)
+            {
+                return !string.IsNullOrWhiteSpace(edge.RequirementId) &&
+                       abilityProvider != null &&
+                       abilityProvider.HasAbility(edge.RequirementId);
+            }
+
             if (string.IsNullOrWhiteSpace(edge.GateId))
             {
                 return true;
             }
 
-            return CurrentState.solvedGateIds.Contains(edge.GateId);
+            return false;
         }
 
         private void EnsureRunStarted()
