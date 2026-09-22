@@ -14,6 +14,7 @@ using MazeMath.Questions.Generation;
 using MazeMath.Questions.Generation.Arithmetic;
 using MazeMath.Questions.Generation.Pattern;
 using MazeMath.Questions.Runtime;
+using MazeMath.Puzzles.Types;
 using MazeMath.Rewards;
 using UnityEngine;
 
@@ -317,7 +318,7 @@ namespace MazeMath.Demo
 
         private void RunEnvironmentPuzzleDemo()
         {
-            var weight = new Puzzles.Types.WeightBridgePuzzle("demo-weight", 8);
+            var weight = new WeightBridgePuzzle("demo-weight", 8);
             weight.StartPuzzle();
             weight.PlaceWeight("3kg", 3);
             weight.PlaceWeight("5kg", 5);
