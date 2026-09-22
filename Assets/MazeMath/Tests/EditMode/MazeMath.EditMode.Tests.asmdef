@@ -2,7 +2,8 @@
   "name": "MazeMath.EditMode.Tests",
   "rootNamespace": "MazeMath.Tests",
   "references": [
-    "MazeMath.Runtime"
+    "MazeMath.Runtime",
+    "MazeMath.Editor"
   ],
   "includePlatforms": [
     "Editor"
