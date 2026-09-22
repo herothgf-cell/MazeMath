@@ -37,6 +37,40 @@ namespace MazeMath.Tests.Maze
             Assert.AreEqual(3, graph.Nodes.Values.Count(node => !node.IsCriticalPath));
         }
 
+
+        [Test]
+        public void Generate_PlacesRequiredRoomTagsOnCriticalPathInOrder()
+        {
+            var chapter = CreateChapter(requiredRooms: 7, optionalRooms: 0);
+            chapter.requiredRoomTags.Add("workshop");
+            chapter.requiredRoomTags.Add("question");
+
+            foreach (var room in chapter.allowedRooms)
+            {
+                if (room.type == RoomType.Corridor)
+                {
+                    room.tags.Add("workshop");
+                }
+
+                if (room.type == RoomType.Question)
+                {
+                    room.tags.Add("question");
+                }
+            }
+
+            var graph = new MazeGenerator().Generate(chapter, 42);
+            var start = graph.Nodes.Values.Single(node => node.Type == RoomType.Start);
+            var boss = graph.Nodes.Values.Single(node => node.Type == RoomType.Boss);
+            var path = graph.FindPath(start.NodeId, boss.NodeId);
+
+            Assert.AreEqual(
+                RoomType.Corridor,
+                graph.Nodes[path[1]].Type);
+            Assert.AreEqual(
+                RoomType.Question,
+                graph.Nodes[path[2]].Type);
+        }
+
         [Test]
         public void SameSeed_CreatesSameTopology()
         {
