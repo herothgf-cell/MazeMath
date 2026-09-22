@@ -3,7 +3,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
   </PropertyGroup>
 
@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="../../Assets/MazeMath/Scripts/Core/Determinism/**/*.cs" Link="Runtime/Core/Determinism/%(RecursiveDir)%(Filename)%(Extension)" />
-    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Data/**/*.cs" Link="Runtime/Maze/Data/%(RecursiveDir)%(Filename)%(Extension)" />
-    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Generation/**/*.cs" Link="Runtime/Maze/Generation/%(RecursiveDir)%(Filename)%(Extension)" />
-    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Validation/**/*.cs" Link="Runtime/Maze/Validation/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Data/MazeTypes.cs" Link="Runtime/Maze/MazeTypes.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Generation/MazeGraph.cs" Link="Runtime/Maze/MazeGraph.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Generation/DeterministicRandom.cs" Link="Runtime/Maze/DeterministicRandom.cs" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Generation/MazeSeedService.cs" Link="Runtime/Maze/MazeSeedService.cs" />
   </ItemGroup>
 </Project>
