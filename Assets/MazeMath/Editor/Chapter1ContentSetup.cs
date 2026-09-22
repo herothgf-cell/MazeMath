@@ -259,6 +259,11 @@ namespace MazeMath.Editor
             chapter.allowedRooms.Clear();
             chapter.allowedRooms.AddRange(rooms);
             chapter.requiredRoomTags.Clear();
+            chapter.requiredRoomTags.Add("workshop");
+            chapter.requiredRoomTags.Add("question");
+            chapter.requiredRoomTags.Add("corridor");
+            chapter.requiredRoomTags.Add("puzzle");
+            chapter.requiredRoomTags.Add("checkpoint");
             chapter.baseSeedOffset = 101;
             EditorUtility.SetDirty(chapter);
             return chapter;
@@ -407,6 +412,8 @@ namespace MazeMath.Editor
             room.floorMin = 0;
             room.floorMax = 0;
             room.weight = weight;
+            room.tags.Clear();
+            room.tags.Add(templateId);
             EditorUtility.SetDirty(room);
             return room;
         }
