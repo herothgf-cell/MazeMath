@@ -24,7 +24,7 @@ namespace MazeMath.Adventure
             int floor = Math.Max(0, Math.Min(2, (int)Math.Floor((y + .25f) / 8)));
             return floor * 5 + Math.Max(0, Math.Min(4, (int)(x / 12)));
         }
-        // The renderer and motor consume this same geometry; no hidden collision-only shortcuts.
+        // Collision layout mirrored by AdventureWorldView's authored platforms and gates.
         public static void Solids(AdventureState s, List<AdventureSolid> output)
         {
             output.Clear();
@@ -47,6 +47,10 @@ namespace MazeMath.Adventure
             if (s.Has("sequence")) { output.Add(new AdventureLadder(30, 8, 16)); output.Add(new AdventureLadder(18, 0, 8)); }
         }
         public static void Objective(AdventureState s, out float x, out float y, out string key)
+        {
+            Goal(s,out x,out y,out key); AdventureNavigator.Route(s,ref x,ref y);
+        }
+        private static void Goal(AdventureState s, out float x, out float y, out string key)
         {
             x = 30; y = 0; key = "math";
             if (!s.Has("math")) return;

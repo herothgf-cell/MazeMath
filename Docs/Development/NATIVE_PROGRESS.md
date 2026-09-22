@@ -1,91 +1,31 @@
-# Native Development Progress
+# MazeMath Native development status
 
-Branch: `feat/native-foundation`
+Target branch: **main** (owner explicitly authorized). Editor: **Unity 2022.3.62f2**.
 
-## Fixed Environment
+## Playable chapter entry
 
-- Unity Editor: **2022.3.62f2**
-- Input System: **1.6.1**
-- Unity Test Framework: **1.1.33**
-- Unity UI: `com.unity.ugui@1.0.0`
-- Web distribution: Unity 2022.3 WebGL for supported desktop browsers
-- Mobile distribution: Android native app
-- Android product minimum: API 23
-- Unity 2022.3 Android toolchain baseline: NDK r23b / OpenJDK 11
+Open `Assets/MazeMath/Scenes/Adventure.unity` or choose `MazeMath > Play Adventure`. Scene and script GUID metadata are committed. No first-run scene generator is required.
 
-## Execution Notes
+See [Adventure run/build guide](ADVENTURE_PLAY_GUIDE.md) for controls, progression, save behavior and validation commands.
 
-- Native/inline implementation selected by the project owner.
-- Development is isolated on `feat/native-foundation`; `main` is not being used for implementation writes.
-- The local execution container has Git but no Unity Editor, `dotnet`, `mcs`, or `csc`.
-- The local container cannot resolve github.com, so repository changes are made through the authorized GitHub connector rather than a local git worktree.
-- Automated Unity RED/GREEN runs therefore remain **pending**. Test files are committed before their matching implementations where practical, but no test-pass claim is made until Unity 2022.3.62f2 runs them.
+## New Adventure implementation
 
-## Rulings
+- Block UI from the HTML reference: objective card, hearts, XP, six hotbar slots, inventory grid, workbench tabs, numeric keypad, touch controls.
+- Physical side-scroll walking/jumping, 3 floors/15 areas, actual ladders, collision barriers, meaningful workbench backtracking and unlockable shortcut.
+- World interactions for weight crates/scale, sequence plates and mirror power devices.
+- Five Tier 1 tools, guided and 3×3 crafting, two selectable enchants per tool and equipped-only effects.
+- Guardian with three puzzle shields, warning pulse, explicit final interaction and chapter-clear screen.
+- Versioned single-state save, valid backup recovery, material overflow queue, claimed-reward records, unfinished math question restoration.
+- Build menu targets Adventure without regenerating scenes. PowerShell script checks Unity test results and WebGL/APK outputs.
 
-1. **Isolation:** connector-backed feature branch substitutes for a local worktree because the container cannot clone GitHub.
-2. **Unity version:** direct user requirement `2022.3.62f2` overrides the earlier Unity 6 assumption in design/plan documents.
-3. **Web target:** Unity 2022.3 WebGL is treated as desktop-browser distribution; Android uses the native build.
-4. **Editor-generated assets:** scenes/prefabs that require Unity serialization are generated through `ProjectSetup` rather than hand-writing fragile Unity YAML.
+## Legacy stability
 
-## Implemented Source (verification pending in Unity)
+Old demo services remain available. Fixed laser constructor state, scale re-evaluation after removing excess weight, and enchant effects on unequipped legacy tools. Setup Project only creates missing legacy scenes; existing scenes and content are preserved.
 
-### Foundation
-- Project version/package manifest pinned for Unity 2022.3.62f2
-- Runtime / Editor / EditMode / PlayMode assembly definitions
-- Persistent `GameBootstrap` / `GameServices`
-- Versioned `SaveService` + `PlayerPrefsSaveStore`
-- Unified keyboard/mobile `GameInputService`
-- `MobileControlBridge`
-- `SafeAreaFitter`
-- `ProjectSetup` scene/build-settings generator
-- WebGL and Android build entry points + build validation
+## Verification boundaries
 
-### Maze
-- `MazeGraph`, `MazeNode`, `MazeEdge`
-- Deterministic PRNG + stable RunSeed
-- ScriptableObject chapter/difficulty/room/gate definitions
-- Hybrid critical-path + optional-branch generator
-- Topology validator + 1,000-seed test authored
-- `MazeRuntimeService` / `MazeRunState`
-- Gate solved state and traversal check
-- Fog-of-war `MazeMapService`
-- Maze run save adapter
-- Progressive maze hint service
+GitHub Actions runs real pure C# tests and source syntax checks. Unity-specific tests have been authored but not run in this environment. Unity Editor import/play, final UI layout, WebGL output, APK output and real-device play remain separate pending gates. A successful core workflow must not be described as a successful Unity build.
 
-### Questions
-- Numeric subjective answer validator
-- Numeric keypad input buffer
-- Question data model
-- Deterministic addition/subtraction generators
+## Scope boundaries
 
-### Environment Puzzles
-- Common environment-puzzle contract
-- Sequence Plate puzzle
-- Memory Path puzzle
-
-### Crafting
-- Item definitions / stack model
-- Atomic material inventory service
-- Guided recipe definition
-- Transactional crafting service with rollback
-
-## Authored Tests (Unity execution pending)
-
-- Foundation: Bootstrap, SaveService, GameInput, SafeAreaFitter, ProjectSetup, BuildValidation
-- Maze: Graph, Seed, Authoring, Generator, Validator, Runtime, Map, SaveAdapter, Hint
-- Questions: NumericAnswerValidator, NumericInputBuffer, ArithmeticGenerator
-- Puzzles: Sequence/Memory
-- Inventory/Crafting: InventoryService, CraftingService
-
-## Next Implementation Batch
-
-1. Numeric keypad uGUI presenter + question service/reward-once guard
-2. Multiple choice + multiplication/division + missing-number questions
-3. Weight Bridge + Sokoban Lite + Laser/pipe puzzle
-4. Equipment slots and five robot tools
-5. 3x3 pattern crafting
-6. Knowledge XP + enchant system
-7. Maze equipment-gate integration
-8. Chapter 1 vertical slice authoring
-9. Unity 2022.3.62f2 EditMode/PlayMode execution and build smoke tests on a Unity-capable machine
+The chapter layout is authored, not fully random. New-run questions and plate permutations are seeded. Tier 2 tools, later chapters, store signing/AAB release and cloud saves are not implemented in Adventure. No generated font binaries or copied Minecraft assets are included.

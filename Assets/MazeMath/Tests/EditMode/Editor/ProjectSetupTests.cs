@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using MazeMath.Editor;
 using NUnit.Framework;
 using UnityEditor;
@@ -7,20 +8,20 @@ namespace MazeMath.Tests.Editor
 {
     public sealed class ProjectSetupTests
     {
-        [Test]
-        public void ConfigureProject_CreatesRequiredScenesAndBuildSettings()
+        [Test] public void ConfigureProject_CreatesMissingLegacyScenesWithoutReplacingExistingOnes()
         {
             ProjectSetup.ConfigureProject();
-
             Assert.IsTrue(File.Exists(ProjectSetup.BootstrapScenePath));
             Assert.IsTrue(File.Exists(ProjectSetup.GameplayScenePath));
-
-            var scenes = EditorBuildSettings.scenes;
-            Assert.AreEqual(2, scenes.Length);
-            Assert.AreEqual(ProjectSetup.BootstrapScenePath, scenes[0].path);
-            Assert.AreEqual(ProjectSetup.GameplayScenePath, scenes[1].path);
-            Assert.IsTrue(scenes[0].enabled);
-            Assert.IsTrue(scenes[1].enabled);
+            byte[] bootstrap=File.ReadAllBytes(ProjectSetup.BootstrapScenePath);
+            byte[] gameplay=File.ReadAllBytes(ProjectSetup.GameplayScenePath);
+            byte[] adventure=File.ReadAllBytes(AdventureProjectTools.ScenePath);
+            ProjectSetup.ConfigureProject();
+            CollectionAssert.AreEqual(bootstrap,File.ReadAllBytes(ProjectSetup.BootstrapScenePath));
+            CollectionAssert.AreEqual(gameplay,File.ReadAllBytes(ProjectSetup.GameplayScenePath));
+            CollectionAssert.AreEqual(adventure,File.ReadAllBytes(AdventureProjectTools.ScenePath));
+            Assert.IsTrue(EditorBuildSettings.scenes.Any(v=>v.path==ProjectSetup.BootstrapScenePath));
+            Assert.IsTrue(EditorBuildSettings.scenes.Any(v=>v.path==ProjectSetup.GameplayScenePath));
         }
     }
 }
