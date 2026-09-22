@@ -3,7 +3,7 @@ name: core-tests
 on:
   push:
     branches:
-      - feat/maze-foundation
+      - main
   pull_request:
     branches:
       - main
@@ -17,5 +17,5 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-      - name: Run core tests
+      - name: Run pure C# core tests
         run: dotnet test Tools/CoreTests/MazeMath.CoreTests.csproj --configuration Release --verbosity normal
