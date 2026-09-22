@@ -202,7 +202,7 @@ namespace MazeMath.Demo
             var go = new GameObject(name, typeof(RectTransform), typeof(Text));
             go.transform.SetParent(parent, false);
             var text = go.GetComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            text.font = MazeMath.UI.RuntimeFontProvider.Get();
             text.fontSize = fontSize;
             text.alignment = anchor;
             text.color = Color.white;
