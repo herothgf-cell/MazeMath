@@ -80,6 +80,47 @@ public sealed class MazeGeneratorTests
         Assert.That(graph.Edges.Any(e => e.Type == EdgeType.Ladder), Is.True);
     }
 
+    [Test]
+    public void Generate_WithOptionalRooms_AddsReachableNonCriticalNodes()
+    {
+        var settings = MazeGenerationSettings.Chapter1Defaults()
+            .WithOptionalRoomCount(3);
+
+        var result = new MazeGenerator().Generate(
+            new MazeGenerationRequest("chapter-1", 99u, settings));
+
+        var optionalNodes = result.Graph.Nodes
+            .Where(node => !node.IsCriticalPath)
+            .ToArray();
+
+        Assert.That(optionalNodes.Length, Is.EqualTo(3));
+        Assert.That(optionalNodes.All(node =>
+            result.Graph.FindPath(result.Graph.StartNodeId, node.NodeId).Count > 0), Is.True);
+    }
+
+    [Test]
+    public void Generate_DepthOneOptionalRooms_AttachDirectlyToCriticalPath()
+    {
+        var settings = new MazeGenerationSettings(
+            6, 8, optionalRoomCount: 4, floorCount: 1,
+            maxRequiredBacktracks: 1, maxOptionalBranchDepth: 1);
+
+        var graph = new MazeGenerator()
+            .Generate(new MazeGenerationRequest("chapter-1", 314u, settings))
+            .Graph;
+
+        foreach (var optional in graph.Nodes.Where(node => !node.IsCriticalPath))
+        {
+            var touchesCriticalPath = graph.GetOutgoingEdges(optional.NodeId)
+                .Select(edge => edge.FromNodeId == optional.NodeId
+                    ? graph.GetNode(edge.ToNodeId)
+                    : graph.GetNode(edge.FromNodeId))
+                .Any(neighbor => neighbor.IsCriticalPath);
+
+            Assert.That(touchesCriticalPath, Is.True, optional.NodeId);
+        }
+    }
+
     private static string Signature(MazeGraph graph)
     {
         var nodes = graph.Nodes
