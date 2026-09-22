@@ -2,6 +2,7 @@
   "name": "MazeMath.Runtime",
   "rootNamespace": "MazeMath",
   "references": [
-    "Unity.InputSystem"
+    "Unity.InputSystem",
+    "UnityEngine.UI"
   ]
 }
