@@ -3,7 +3,8 @@
   "rootNamespace": "MazeMath.Editor",
   "references": [
     "MazeMath.Runtime",
-    "Unity.InputSystem"
+    "Unity.InputSystem",
+    "UnityEngine.UI"
   ],
   "includePlatforms": [
     "Editor"
