@@ -1,4 +1,5 @@
 using System;
+using MazeMath.Puzzles;
 
 namespace MazeMath.Puzzles.Types
 {
