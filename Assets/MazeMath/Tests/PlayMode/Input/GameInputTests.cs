@@ -1,5 +1,6 @@
 using System.Collections;
 using MazeMath.Input;
+using MazeMath.UI.Mobile;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
