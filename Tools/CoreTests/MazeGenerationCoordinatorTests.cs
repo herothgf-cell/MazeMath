@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using MazeMath.Maze.Data;
 using MazeMath.Maze.Generation;
 using MazeMath.Maze.Validation;
@@ -30,6 +31,36 @@ public sealed class MazeGenerationCoordinatorTests
             result.Graph,
             MazeGenerationSettings.Chapter1Defaults());
 
+        Assert.That(validation.IsValid, Is.True);
+    }
+
+    [Test]
+    public void GenerateValidated_FallbackPreservesConfiguredFloorCount()
+    {
+        var settings = new MazeGenerationSettings(
+            minCriticalPathRooms: 8,
+            maxCriticalPathRooms: 8,
+            optionalRoomCount: 2,
+            floorCount: 2,
+            maxRequiredBacktracks: 1);
+
+        var coordinator = new MazeGenerationCoordinator(
+            new AlwaysInvalidGenerator(),
+            new AlwaysInvalidValidator(),
+            new MazeSeedService(),
+            new SafeMazeFactory());
+
+        var result = coordinator.GenerateValidated(
+            "default",
+            "chapter-2",
+            20,
+            settings);
+
+        Assert.That(result.UsedSafeLayout, Is.True);
+        Assert.That(result.Graph.Nodes.Where(n => n.IsCriticalPath).Select(n => n.Floor).Distinct(),
+            Is.EquivalentTo(new[] { 1, 2 }));
+
+        var validation = new MazeValidator().Validate(result.Graph, settings);
         Assert.That(validation.IsValid, Is.True);
     }
 
