@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="NUnit" Version="4.2.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="../../Assets/MazeMath/Scripts/Core/Determinism/**/*.cs" Link="Runtime/Core/Determinism/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Data/**/*.cs" Link="Runtime/Maze/Data/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Generation/**/*.cs" Link="Runtime/Maze/Generation/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="../../Assets/MazeMath/Scripts/Maze/Validation/**/*.cs" Link="Runtime/Maze/Validation/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>
