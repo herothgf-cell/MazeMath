@@ -1,6 +1,7 @@
 using MazeMath.Core.Save;
 using MazeMath.Input;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace MazeMath.Core
 {
@@ -31,6 +32,23 @@ namespace MazeMath.Core
             {
                 services.Register(new SaveService(new PlayerPrefsSaveStore()));
             }
+        }
+
+        private void Start()
+        {
+            var activeScene = SceneManager.GetActiveScene();
+            if (ShouldLoadGameplay(activeScene.name, SceneManager.sceneCountInBuildSettings))
+            {
+                SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
+            }
+        }
+
+        public static bool ShouldLoadGameplay(
+            string activeSceneName,
+            int sceneCountInBuildSettings)
+        {
+            return activeSceneName == "Bootstrap" &&
+                   sceneCountInBuildSettings > 1;
         }
     }
 }
