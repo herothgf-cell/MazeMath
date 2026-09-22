@@ -111,7 +111,7 @@ namespace MazeMath.UI.Question
             var go = new GameObject(name, typeof(RectTransform), typeof(Text));
             go.transform.SetParent(transform, false);
             var text = go.GetComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            text.font = MazeMath.UI.RuntimeFontProvider.Get();
             text.fontSize = size;
             text.alignment = alignment;
             text.color = Color.white;
