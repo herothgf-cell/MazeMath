@@ -57,16 +57,18 @@ namespace MazeMath.Maze
         public string EdgeId { get; }
         public string FromNodeId { get; }
         public string ToNodeId { get; }
-        public EdgeType Type { get; }
+        public EdgeType Type { get; set; }
         public bool IsBidirectional { get; }
         public string GateId { get; set; }
+        public string RequirementId { get; set; }
 
         public MazeEdge(
             string edgeId,
             string fromNodeId,
             string toNodeId,
             EdgeType type,
-            bool isBidirectional)
+            bool isBidirectional,
+            string requirementId = null)
         {
             if (string.IsNullOrWhiteSpace(edgeId))
             {
@@ -78,6 +80,7 @@ namespace MazeMath.Maze
             ToNodeId = toNodeId;
             Type = type;
             IsBidirectional = isBidirectional;
+            RequirementId = requirementId;
         }
     }
 }
