@@ -33,6 +33,11 @@ namespace MazeMath.Demo
             var canvas = GetComponentInParent<Canvas>();
             if (canvas == null)
             {
+                canvas = UnityEngine.Object.FindObjectOfType<Canvas>();
+            }
+
+            if (canvas == null)
+            {
                 var canvasObject = new GameObject(
                     "Chapter1Canvas",
                     typeof(Canvas),
