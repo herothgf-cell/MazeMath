@@ -50,16 +50,16 @@ namespace MazeMath.Adventure
             safe=t.Rect(transform,"SafeArea",0,0,1,1); safe.gameObject.AddComponent<global::MazeMath.UI.SafeAreaFitter>();
             header=t.Rect(safe,"CompactHeader",0,0,1,1); dock=t.Rect(safe,"ControlDock",0,0,1,1);
             portrait=t.Rect(header,"MomoPortrait",0,0,1,1); var p=t.Fill(portrait,Color.white); p.sprite=art.Get("robot"); p.preserveAspect=true;
-            eyebrow=t.Label(header,"MOMO / CHAPTER 01",11,TextAnchor.MiddleLeft,0,0,1,1); eyebrow.color=t.Muted;
-            quest=t.Label(header,"",17,TextAnchor.MiddleLeft,0,0,1,1);
-            toast=t.Label(header,"",16,TextAnchor.MiddleLeft,0,0,1,1); toast.color=t.Green;
-            floor=t.Label(header,"1F",14,TextAnchor.MiddleCenter,0,0,1,1); floor.color=t.Muted;
+            eyebrow=t.Label(header,"MOMO / BLOCK ADVENTURE",13,TextAnchor.MiddleLeft,0,0,1,1); eyebrow.color=t.Muted;
+            quest=t.Label(header,"",19,TextAnchor.MiddleLeft,0,0,1,1);
+            toast=t.Label(header,"",18,TextAnchor.MiddleLeft,0,0,1,1); toast.color=t.Green;
+            floor=t.Label(header,"1F",16,TextAnchor.MiddleCenter,0,0,1,1); floor.color=t.Muted;
             mapButton=t.Button(header,t.T("지도","Map"),Map,0,0,1,1).GetComponent<RectTransform>();
             pauseButton=t.Button(header,"II",Pause,0,0,1,1).GetComponent<RectTransform>();
-            boss=t.Label(header,"",12,TextAnchor.MiddleLeft,0,0,1,1); boss.color=t.Gold;
+            boss=t.Label(header,"",14,TextAnchor.MiddleLeft,0,0,1,1); boss.color=t.Gold;
             for(int i=0;i<6;i++)
             {
-                int index=i; var b=t.Button(dock,"",()=>Hotbar(index),0,0,1,1);
+                int index=i; var b=t.Button(dock,"",()=>Hotbar(index),0,0,1,1); b.gameObject.name="BlockHotbarSlot_"+i;
                 hotSlots[i]=b.GetComponent<RectTransform>();
                 var icon=t.Rect(b.transform,"ToolIcon",.16f,.16f,.84f,.84f); hotbar[i]=t.Fill(icon,Color.white); hotbar[i].sprite=art.Get(i.ToString()); hotbar[i].preserveAspect=true;
             }
@@ -69,8 +69,8 @@ namespace MazeMath.Adventure
             }
             xpTrack=t.Rect(dock,"Experience",0,0,1,1); t.Fill(xpTrack,t.Edge);
             xpFill=t.Fill(t.Rect(xpTrack,"XP",0,0,0,1),t.Green);
-            stats=t.Label(dock,"",12,TextAnchor.MiddleRight,0,0,1,1); stats.color=t.Muted;
-            tip=t.Label(dock,"",14,TextAnchor.MiddleCenter,0,0,1,1); tip.color=t.Ink;
+            stats=t.Label(dock,"",14,TextAnchor.MiddleRight,0,0,1,1); stats.color=t.Muted;
+            tip=t.Label(dock,"",16,TextAnchor.MiddleCenter,0,0,1,1); tip.color=t.Ink;
             string[] arrows={"<",">","^","v"};
             for(int i=0;i<4;i++)
             {
@@ -166,7 +166,7 @@ namespace MazeMath.Adventure
             {
                 hearts[i].color=i<s.health?Color.white:new Color(.65f,.70f,.72f,.45f);
                 hotbar[i].color=s.owned[i]?(s.equipped[i]?Color.white:new Color(1,1,1,.55f)):new Color(.65f,.72f,.75f,.3f);
-                hotSlots[i].GetComponent<Image>().color=s.owned[i] && s.equipped[i]?t.Mint:t.Sky;
+                hotSlots[i].GetComponent<Image>().color=s.owned[i]?(s.equipped[i]?t.Grass:t.Wood):t.SlotDark;
             }
             xpFill.rectTransform.anchorMax=new Vector2((s.xp%50)/50f,1);
             stats.text="XP "+s.xp;
@@ -217,7 +217,7 @@ namespace MazeMath.Adventure
             var q=game.State.question;
             var mascot=t.Rect(body,"MomoHelper",.02f,.82f,.16f,.98f); var mi=t.Fill(mascot,Color.white); mi.sprite=art.Get("robot"); mi.preserveAspect=true;
             t.Label(body,q.prompt,28,TextAnchor.MiddleCenter,.18f,.82f,.98f,.99f);
-            feedback=t.Label(body,"",16,TextAnchor.MiddleCenter,.02f,.68f,.98f,.81f);
+            feedback=t.Label(body,"",18,TextAnchor.MiddleCenter,.02f,.68f,.98f,.81f);
             if(q.multipleChoice)
             {
                 for(int i=0;i<q.choices.Length;i++)
