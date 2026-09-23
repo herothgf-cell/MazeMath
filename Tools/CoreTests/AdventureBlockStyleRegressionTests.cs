@@ -49,5 +49,13 @@ namespace MazeMath.CoreTests
             StringAssert.Contains("quest=t.Label(header,\"\",19", source);
             StringAssert.Contains("tip=t.Label(dock,\"\",16", source);
         }
+        [Test]
+        public void AdventureCanvasUsesPixelPerfectRendering()
+        {
+            var source = Read("Assets/MazeMath/Scripts/Adventure/Runtime/AdventureHud.cs");
+
+            StringAssert.Contains("canvas.pixelPerfect=true", source);
+        }
+
     }
 }
