@@ -42,7 +42,7 @@ namespace MazeMath.Adventure
         public void Initialize(AdventureGame owner,AdventureTheme theme,AdventureArt artwork)
         {
             game=owner; t=theme; art=artwork;
-            canvas=gameObject.AddComponent<Canvas>(); canvas.renderMode=RenderMode.ScreenSpaceOverlay; canvas.sortingOrder=50;
+            canvas=gameObject.AddComponent<Canvas>(); canvas.renderMode=RenderMode.ScreenSpaceOverlay; canvas.sortingOrder=50; canvas.pixelPerfect=true;
             var scaler=gameObject.AddComponent<CanvasScaler>(); scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution=new Vector2(1280,720); scaler.matchWidthOrHeight=.5f;
             gameObject.AddComponent<GraphicRaycaster>();
