@@ -4,65 +4,99 @@ using UnityEngine.Events;
 
 namespace MazeMath.Adventure
 {
+    /// <summary>Cozy robot expedition: paper cards, sea-glass mint, apricot accents and quiet typography.</summary>
     public sealed class AdventureTheme
     {
-        public readonly Color Ink = new Color32(236,240,219,255), Muted = new Color32(181,191,172,255), Stone = new Color32(52,60,53,255), Edge = new Color32(18,25,18,255), Green = new Color32(178,225,109,255), Gold = new Color32(244,204,123,255);
+        public readonly Color Ink = new Color32(42,65,77,255), Muted = new Color32(107,128,138,255),
+            Stone = new Color32(255,252,246,255), Edge = new Color32(211,229,225,255),
+            Green = new Color32(42,151,127,255), Gold = new Color32(170,98,48,255),
+            Mint = new Color32(206,239,224,255), Peach = new Color32(255,224,199,255),
+            Sky = new Color32(218,237,248,255), Rail = new Color32(244,249,246,255);
         public Font Font { get; private set; }
         public bool Korean { get; private set; }
         private bool ownsFont;
+        private Sprite rounded;
+        private Texture2D roundedTexture;
         public AdventureTheme(Font supplied = null)
         {
             Font = supplied != null ? supplied : Resources.Load<Font>("MazeMathKorean");
 #if !UNITY_WEBGL || UNITY_EDITOR
             if (Font == null)
             {
-                Font = UnityEngine.Font.CreateDynamicFontFromOSFont(new[]{"Malgun Gothic","Apple SD Gothic Neo","Noto Sans CJK KR","Noto Sans KR","sans-serif"}, 24);
+                Font = UnityEngine.Font.CreateDynamicFontFromOSFont(new[]{"Malgun Gothic","Apple SD Gothic Neo","Noto Sans CJK KR","Noto Sans KR","sans-serif"}, 20);
                 ownsFont = Font != null;
             }
 #endif
-            if (Font != null) { Font.RequestCharactersInTexture("모험숫자제작", 24); Korean = Font.HasCharacter('모') && Font.HasCharacter('험'); }
+            if (Font != null) { Font.RequestCharactersInTexture("모험숫자제작",20); Korean = Font.HasCharacter('모') && Font.HasCharacter('험'); }
             if (Font == null || !Korean)
             {
                 if (ownsFont && Font != null) Object.Destroy(Font);
                 ownsFont = false; Font = global::MazeMath.UI.RuntimeFontProvider.Get(); Korean = false;
             }
         }
-        public string T(string ko, string en) { return Korean ? ko : en; }
-        public string Material(int i) { return Korean ? new[]{"철 조각","철판","기어","에너지석","희귀 코어"}[i] : new[]{"Scrap","Iron","Gear","Crystal","Core"}[i]; }
-        public string Tool(int i) { return Korean ? new[]{"곡괭이 팔","파워 렌치","점프 부스터","에너지 실드","탐험 센서","가방"}[i] : new[]{"Mining Arm","Power Wrench","Jump Boots","Shield","Sensor","Bag"}[i]; }
-        public string Effect(int tool, int variant)
+        public string T(string ko,string en) => Korean ? ko : en;
+        public string Material(int i) => Korean ? new[]{"철 조각","철판","기어","에너지석","코어"}[i] : new[]{"Scrap","Iron","Gear","Crystal","Core"}[i];
+        public string Tool(int i) => Korean ? new[]{"곡괭이 팔","파워 렌치","점프 부스터","에너지 실드","탐험 센서","가방"}[i] : new[]{"Mining arm","Wrench","Jump boots","Shield","Sensor","Bag"}[i];
+        public string Effect(int tool,int variant)
         {
-            string[] ko = {"메아리: 보물 표식","행운: 보물 철 조각 +1","빠른 수리: 한 번에 수리","회로 감지: 수리 위치 안내","착지 보호: 낙하 피해 없음","경로 탐색: 높은 보물 위치","재충전: 퍼즐 해결 시 실드 회복","안정장: 보스 예고 시간 증가","기억: 방문한 경로 강조","길잡이: 다음 목표 방향"};
-            string[] en = {"Echo: mark hidden loot","Lucky: +1 scrap from loot","Quick fix: repair in one action","Circuit: locate broken machine","Soft landing: no fall damage","Route scan: high loot marker","Recharge: shield after puzzles","Stable: longer boss warning","Memory: highlight visited trail","Guide: next objective direction"};
-            return Korean ? ko[tool * 2 + variant] : en[tool * 2 + variant];
+            string[] ko={"메아리 · 보물 표식","행운 · 보물 철 조각 +1","빠른 수리 · 한 번에 수리","회로 감지 · 수리 위치 안내","착지 보호 · 낙하 피해 없음","경로 탐색 · 높은 보물 위치","재충전 · 퍼즐로 실드 회복","안정장 · 보스 예고 연장","기억 · 방문한 경로 강조","길잡이 · 다음 목표 방향"};
+            string[] en={"Echo · mark hidden loot","Lucky · extra scrap","Quick fix · one-step repair","Circuit · repair marker","Soft landing · no fall damage","Route scan · high loot","Recharge · puzzle shield refill","Stable · longer boss warning","Memory · highlight your trail","Guide · next objective"};
+            return Korean ? ko[tool*2+variant] : en[tool*2+variant];
         }
-        public RectTransform Rect(Transform parent, string name, float x0, float y0, float x1, float y1)
+        public RectTransform Rect(Transform parent,string name,float x0,float y0,float x1,float y1)
         {
-            var go = new GameObject(name, typeof(RectTransform)); go.transform.SetParent(parent, false);
-            var r = go.GetComponent<RectTransform>(); r.anchorMin = new Vector2(x0,y0); r.anchorMax = new Vector2(x1,y1); r.offsetMin = r.offsetMax = Vector2.zero; return r;
+            var go=new GameObject(name,typeof(RectTransform)); go.transform.SetParent(parent,false);
+            var r=go.GetComponent<RectTransform>(); r.anchorMin=new Vector2(x0,y0); r.anchorMax=new Vector2(x1,y1); r.offsetMin=r.offsetMax=Vector2.zero; return r;
         }
-        public Image Fill(RectTransform parent, Color c, bool raycast = false)
+        public Image Fill(RectTransform parent,Color c,bool raycast=false)
         {
-            var i = parent.gameObject.AddComponent<Image>(); i.color = c; i.raycastTarget = raycast; return i;
+            var image=parent.gameObject.AddComponent<Image>(); image.color=c; image.raycastTarget=raycast; return image;
         }
-        public RectTransform Box(Transform parent, string name, float x0, float y0, float x1, float y1)
+        public RectTransform Box(Transform parent,string name,float x0,float y0,float x1,float y1)
         {
-            var r = Rect(parent, name, x0,y0,x1,y1); Fill(r, Edge);
-            var light = Rect(r, "Bevel", 0,0,1,1); light.offsetMin = new Vector2(3,3); light.offsetMax = new Vector2(-3,-3); Fill(light,new Color32(113,129,100,255));
-            var inside = Rect(light,"Stone",0,0,1,1); inside.offsetMin = new Vector2(2,2); inside.offsetMax = new Vector2(-2,-2); Fill(inside,Stone); return r;
+            var r=Rect(parent,name,x0,y0,x1,y1); var image=Fill(r,Stone); image.sprite=Rounded(); image.type=Image.Type.Sliced;
+            var shadow=r.gameObject.AddComponent<Shadow>(); shadow.effectDistance=new Vector2(0,-2); shadow.effectColor=new Color(.12f,.23f,.26f,.10f);
+            return r;
         }
-        public Text Label(Transform parent, string text, int size, TextAnchor align, float x0, float y0, float x1, float y1)
+        public Text Label(Transform parent,string text,int size,TextAnchor align,float x0,float y0,float x1,float y1)
         {
-            var r = Rect(parent,"Label",x0,y0,x1,y1); var t = r.gameObject.AddComponent<Text>(); t.font = Font; t.text = text; t.fontSize = size; t.color = Ink; t.alignment = align;
-            t.horizontalOverflow = HorizontalWrapMode.Wrap; t.verticalOverflow = VerticalWrapMode.Truncate; t.raycastTarget = false; return t;
+            var r=Rect(parent,"Label",x0,y0,x1,y1); var label=r.gameObject.AddComponent<Text>();
+            label.font=Font; label.text=text; label.fontSize=Mathf.Clamp(size,10,28); label.color=Ink; label.alignment=align;
+            label.fontStyle=FontStyle.Normal; label.lineSpacing=1.05f; label.supportRichText=false;
+            label.resizeTextForBestFit=true; label.resizeTextMinSize=Mathf.Min(12,label.fontSize); label.resizeTextMaxSize=label.fontSize;
+            label.horizontalOverflow=HorizontalWrapMode.Wrap; label.verticalOverflow=VerticalWrapMode.Truncate; label.raycastTarget=false; return label;
         }
-        public Button Button(Transform parent, string text, UnityAction action, float x0,float y0,float x1,float y1, bool primary = false)
+        public Button Button(Transform parent,string text,UnityAction action,float x0,float y0,float x1,float y1,bool primary=false)
         {
-            var r = Box(parent,text,x0,y0,x1,y1); var b = r.gameObject.AddComponent<Button>(); var i = r.GetComponent<Image>(); i.raycastTarget = true; b.targetGraphic = i;
-            var inner = r.GetChild(0).GetChild(0).GetComponent<Image>(); inner.color = primary ? Green : new Color32(74,87,70,255);
-            b.onClick.AddListener(action); var t = Label(r,text,22,TextAnchor.MiddleCenter,.04f,.06f,.96f,.94f); if (primary) t.color = Edge;
-            b.navigation = new Navigation { mode = Navigation.Mode.None }; return b;
+            var r=Box(parent,string.IsNullOrEmpty(text)?"IconButton":text,x0,y0,x1,y1);
+            var image=r.GetComponent<Image>(); image.color=primary?Mint:Sky; image.raycastTarget=true;
+            var button=r.gameObject.AddComponent<Button>(); button.targetGraphic=image; button.onClick.AddListener(action);
+            var colors=button.colors; colors.normalColor=Color.white; colors.highlightedColor=new Color(.94f,.98f,1f);
+            colors.pressedColor=new Color(.80f,.90f,.88f); colors.selectedColor=Color.white;
+            colors.disabledColor=new Color(.78f,.81f,.81f,.65f); colors.fadeDuration=.10f; button.colors=colors;
+            Label(r,text,16,TextAnchor.MiddleCenter,.06f,.08f,.94f,.92f);
+            button.navigation=new Navigation{mode=Navigation.Mode.None}; return button;
         }
-        public void Dispose() { if (ownsFont && Font != null) Object.Destroy(Font); }
+        private Sprite Rounded()
+        {
+            if(rounded!=null) return rounded;
+            const int size=64; const float radius=13;
+            roundedTexture=new Texture2D(size,size,TextureFormat.RGBA32,false){filterMode=FilterMode.Bilinear,wrapMode=TextureWrapMode.Clamp,name="Momo soft card"};
+            var pixels=new Color[size*size];
+            for(int y=0;y<size;y++) for(int x=0;x<size;x++)
+            {
+                float dx=Mathf.Max(Mathf.Abs(x+0.5f-size/2f)-(size/2f-radius),0);
+                float dy=Mathf.Max(Mathf.Abs(y+0.5f-size/2f)-(size/2f-radius),0);
+                pixels[y*size+x]=new Color(1,1,1,Mathf.Clamp01(radius-Mathf.Sqrt(dx*dx+dy*dy)));
+            }
+            roundedTexture.SetPixels(pixels); roundedTexture.Apply(false,true);
+            rounded=Sprite.Create(roundedTexture,new Rect(0,0,size,size),new Vector2(.5f,.5f),100,0,SpriteMeshType.FullRect,new Vector4(15,15,15,15)); return rounded;
+        }
+        public void Dispose()
+        {
+            if(ownsFont && Font!=null) Object.Destroy(Font);
+            if(rounded!=null) Object.Destroy(rounded);
+            if(roundedTexture!=null) Object.Destroy(roundedTexture);
+        }
     }
 }

@@ -2,7 +2,8 @@
   "name": "MazeMath.PlayMode.Tests",
   "rootNamespace": "MazeMath.Tests",
   "references": [
-    "MazeMath.Runtime"
+    "MazeMath.Runtime",
+    "UnityEngine.UI"
   ],
   "optionalUnityReferences": [
     "TestAssemblies"
