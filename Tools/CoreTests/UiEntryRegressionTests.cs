@@ -48,10 +48,15 @@ namespace MazeMath.CoreTests
         [Test]
         public void AnswerDismissalRunsEvenWhenWorldPresentationCannotBeUpdated()
         {
-            var source = Read("Assets/MazeMath/Scripts/Adventure/Runtime/AdventureHud.cs");
-            var update = Method(source, "Update");
-            StringAssert.Contains("ShouldClose", update);
-            StringAssert.DoesNotContain("presentation.Update", update);
+            // Inspect all partial declarations; file splitting must not weaken this integration assertion.
+            var folder = Path.Combine(SourceSyntaxTests.RepositoryRoot(), "Assets/MazeMath/Scripts/Adventure/Runtime");
+            var update = Directory.GetFiles(folder, "AdventureHud*.cs")
+                .SelectMany(path => CSharpSyntaxTree.ParseText(File.ReadAllText(path)).GetRoot()
+                    .DescendantNodes().OfType<MethodDeclarationSyntax>())
+                .SingleOrDefault(method => method.Identifier.ValueText == "Update");
+            Assert.That(update, Is.Not.Null, "A dedicated HUD Update must tick dismissal independently.");
+            StringAssert.Contains("ShouldClose", update.ToString());
+            StringAssert.DoesNotContain("presentation.Update", update.ToString());
         }
 
         [Test]

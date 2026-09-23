@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MazeMath.Adventure;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,75 +10,41 @@ namespace MazeMath.UI.Question
     public sealed class MultipleChoiceView : MonoBehaviour
     {
         private readonly List<Button> buttons = new List<Button>();
-        private Font font;
-
+        private AdventureTheme theme;
+        private bool ownsTheme;
         public int ButtonCount => buttons.Count;
-
-        public void ShowChoices(int[] choices, Action<int> onSelected)
+        public void UseTheme(AdventureTheme value)
+        {
+            if (theme != null) return;
+            theme = value;
+        }
+        public void ShowChoices(int[] values, Action<int> onSelected)
         {
             ClearButtons();
-            if (choices == null) return;
-
-            font = MazeMath.UI.RuntimeFontProvider.Get();
-
-            var layout = GetComponent<VerticalLayoutGroup>();
-            if (layout == null)
+            if (values == null || values.Length == 0) return;
+            if (theme == null) { theme = new AdventureTheme(); ownsTheme = true; }
+            float row = 1f / values.Length;
+            for (int i = 0; i < values.Length; i++)
             {
-                layout = gameObject.AddComponent<VerticalLayoutGroup>();
-                layout.spacing = 12f;
-                layout.padding = new RectOffset(8, 8, 8, 8);
-                layout.childControlHeight = true;
-                layout.childForceExpandHeight = false;
-            }
-
-            for (var i = 0; i < choices.Length; i++)
-            {
-                var index = i;
-                var buttonObject = new GameObject(
-                    "Choice_" + i,
-                    typeof(RectTransform),
-                    typeof(Image),
-                    typeof(Button),
-                    typeof(LayoutElement));
-                buttonObject.transform.SetParent(transform, false);
-
-                var image = buttonObject.GetComponent<Image>();
-                image.color = new Color(0.28f, 0.30f, 0.34f, 1f);
-
-                var layoutElement = buttonObject.GetComponent<LayoutElement>();
-                layoutElement.preferredHeight = 72f;
-
-                var button = buttonObject.GetComponent<Button>();
-                button.onClick.AddListener(() => onSelected?.Invoke(index));
+                int index = i;
+                var button = theme.Button(transform, values[i].ToString(), () => onSelected?.Invoke(index),
+                    .04f, 1f - (i + 1) * row + .012f, .96f, 1f - i * row - .012f);
+                var label = button.GetComponentInChildren<Text>();
+                label.fontSize = 22;
+                label.resizeTextMaxSize = 22;
                 buttons.Add(button);
-
-                var labelObject = new GameObject("Label", typeof(RectTransform), typeof(Text));
-                labelObject.transform.SetParent(buttonObject.transform, false);
-                var labelRect = labelObject.GetComponent<RectTransform>();
-                labelRect.anchorMin = Vector2.zero;
-                labelRect.anchorMax = Vector2.one;
-                labelRect.offsetMin = Vector2.zero;
-                labelRect.offsetMax = Vector2.zero;
-
-                var label = labelObject.GetComponent<Text>();
-                label.font = font;
-                label.fontSize = 32;
-                label.alignment = TextAnchor.MiddleCenter;
-                label.color = Color.white;
-                label.text = choices[i].ToString();
             }
         }
-
+        public void SetInteractable(bool value)
+        {
+            foreach (var button in buttons) if (button != null) button.interactable = value;
+        }
         public void ClearButtons()
         {
-            for (var i = 0; i < buttons.Count; i++)
-            {
-                if (buttons[i] != null)
-                {
-                    Destroy(buttons[i].gameObject);
-                }
-            }
+            foreach (var button in buttons)
+                if (button != null) { button.gameObject.SetActive(false); Destroy(button.gameObject); }
             buttons.Clear();
         }
+        private void OnDestroy() { if (ownsTheme) theme?.Dispose(); }
     }
 }

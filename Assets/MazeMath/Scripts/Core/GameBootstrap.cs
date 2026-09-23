@@ -1,3 +1,4 @@
+using MazeMath.Adventure;
 using MazeMath.Core.Save;
 using MazeMath.Input;
 using UnityEngine;
@@ -16,39 +17,26 @@ namespace MazeMath.Core
                 Destroy(gameObject);
                 return;
             }
-
             Instance = this;
             DontDestroyOnLoad(gameObject);
-
             var services = GameServices.Ensure();
-
             var input = GetComponent<GameInputService>();
-            if (input != null)
-            {
-                services.Register<IGameInput>(input);
-            }
-
+            if (input != null) services.Register<IGameInput>(input);
             if (!services.TryGet<SaveService>(out _))
-            {
                 services.Register(new SaveService(new PlayerPrefsSaveStore()));
-            }
         }
 
         private void Start()
         {
-            var activeScene = SceneManager.GetActiveScene();
-            if (ShouldLoadGameplay(activeScene.name, SceneManager.sceneCountInBuildSettings))
-            {
-                SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
-            }
+            if (Instance != this) return;
+            var scene = SceneManager.GetActiveScene();
+            if (scene.name == "Bootstrap") AdventureEntry.EnsureCurrent(scene);
         }
 
-        public static bool ShouldLoadGameplay(
-            string activeSceneName,
-            int sceneCountInBuildSettings)
+        // Retained for callers of the original Foundation contract; runtime no longer assumes index 1.
+        public static bool ShouldLoadGameplay(string activeSceneName, int sceneCountInBuildSettings)
         {
-            return activeSceneName == "Bootstrap" &&
-                   sceneCountInBuildSettings > 1;
+            return activeSceneName == "Bootstrap" && sceneCountInBuildSettings > 1;
         }
     }
 }
