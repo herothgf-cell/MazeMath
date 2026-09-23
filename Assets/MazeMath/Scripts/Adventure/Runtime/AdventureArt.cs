@@ -73,12 +73,16 @@ namespace MazeMath.Adventure
             }
             else
             {
-                p.Rounded(0,0,100,100,6,new Color32(212,227,220,255));
-                p.Rounded(2,3,96,95,5,new Color32(241,247,239,255));
-                p.Line(8,91,91,91,2,new Color(1,1,1,.7f));
-                p.Line(12,6,88,6,2,new Color32(197,216,208,255));
+                // Generic world tile: crisp block face with a bright top edge and dark lower seam.
+                p.Rounded(0,0,100,100,1,new Color32(89,96,77,255));
+                p.Rounded(4,5,92,91,1,new Color32(225,221,199,255));
+                p.Rounded(5,78,90,17,0,new Color32(240,236,214,255));
+                p.Rounded(6,6,88,8,0,new Color32(179,174,151,255));
+                p.Rounded(13,31,10,8,0,new Color32(201,196,173,255));
+                p.Rounded(68,54,13,9,0,new Color32(197,192,169,255));
+                p.Rounded(38,18,7,7,0,new Color32(236,231,208,255));
             }
-            var texture=new Texture2D(p.Width,p.Height,TextureFormat.RGBA32,false){filterMode=FilterMode.Bilinear,wrapMode=TextureWrapMode.Clamp,name="Momo illustration / "+key};
+            var texture=new Texture2D(p.Width,p.Height,TextureFormat.RGBA32,false){filterMode=FilterMode.Point,wrapMode=TextureWrapMode.Clamp,name="Momo illustration / "+key};
             texture.SetPixels(p.Pixels); texture.Apply(false,true);
             sprite=Sprite.Create(texture,new Rect(0,0,p.Width,p.Height),new Vector2(.5f,.5f),p.Width);
             owned.Add(texture); owned.Add(sprite); cache[key]=sprite; return sprite;
