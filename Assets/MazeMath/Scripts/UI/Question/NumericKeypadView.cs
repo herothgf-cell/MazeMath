@@ -44,8 +44,8 @@ namespace MazeMath.UI.Question
             var root = GetComponent<RectTransform>();
             if (root.parent == null) root.sizeDelta = new Vector2(310f, 350f);
             var inputCard = theme.Box(transform, "InputCard", .02f, .82f, .98f, .99f);
-            inputCard.GetComponent<Image>().color = theme.Sky;
-            displayText = theme.Label(inputCard, string.Empty, 26, TextAnchor.MiddleCenter, .04f, .05f, .96f, .95f);
+            inputCard.GetComponent<Image>().color = theme.BlockStone;
+            displayText = theme.Label(inputCard, string.Empty, 28, TextAnchor.MiddleCenter, .04f, .05f, .96f, .95f);
             grid = theme.Rect(transform, "KeyGrid", .02f, .02f, .98f, .78f);
             for (int i = 0; i < 12; i++)
             {
@@ -53,7 +53,7 @@ namespace MazeMath.UI.Question
                 string label = i < 9 ? (i + 1).ToString() : i == 9 ? "←" : i == 10 ? "0" : theme.T("확인", "OK");
                 var button = theme.Button(grid, label, () => PressKey(index), 0, 0, 1, 1, i == 11);
                 var text = button.GetComponentInChildren<Text>();
-                text.fontSize = i == 11 ? 16 : 22;
+                text.fontSize = i == 11 ? 18 : 22;
                 text.resizeTextMaxSize = text.fontSize;
                 buttons.Add(button);
             }
