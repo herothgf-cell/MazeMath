@@ -26,7 +26,7 @@ namespace MazeMath.Adventure
             if(camera==null) return;
             if(!cameraCaptured) { oldRect=camera.rect; oldBackground=camera.backgroundColor; cameraCaptured=true; }
             camera.rect=viewport;
-            camera.backgroundColor=new Color32(214,232,240,255);
+            camera.backgroundColor=new Color32(145,201,218,255);
         }
         public void Update()
         {
@@ -74,22 +74,22 @@ namespace MazeMath.Adventure
                 {
                     case "Backdrop":
                         r.sprite=art.Get("solid"); int floor=Mathf.Clamp((int)(r.transform.position.y/8),0,2);
-                        r.color=floor==0?new Color32(217,235,240,255):floor==1?new Color32(226,237,224,255):new Color32(239,231,218,255); break;
-                    case "Pillar": r.sprite=art.Get("solid"); r.color=new Color32(197,216,217,255); break;
-                    case "Moss": r.color=new Color32(165,207,177,255); break;
-                    case "Stone": r.color=new Color32(177,204,197,255); break;
-                    case "Soil": r.color=new Color32(171,189,180,255); break;
-                    case "mined": r.color=new Color32(159,181,194,255); break;
-                    case "bridge": case "repaired": case "repaired-top": r.color=new Color32(213,174,143,255); break;
-                    case "laser": r.color=new Color32(145,198,197,255); break;
-                    case "LadderRail": case "LadderRung": case "BridgePlanks": r.color=new Color32(210,169,129,255); break;
-                    case "Memory": r.sprite=art.Get("solid"); r.color=new Color32(79,169,151,150); break;
+                        r.color=floor==0?new Color32(149,202,216,255):floor==1?new Color32(164,207,188,255):new Color32(205,190,158,255); break;
+                    case "Pillar": r.sprite=art.Get("tile"); r.color=new Color32(126,133,111,255); break;
+                    case "Moss": r.color=new Color32(104,154,72,255); break;
+                    case "Stone": r.color=new Color32(170,174,151,255); break;
+                    case "Soil": r.color=new Color32(128,96,67,255); break;
+                    case "mined": r.color=new Color32(112,117,100,255); break;
+                    case "bridge": case "repaired": case "repaired-top": r.color=new Color32(159,111,67,255); break;
+                    case "laser": r.color=new Color32(92,166,173,255); break;
+                    case "LadderRail": case "LadderRung": case "BridgePlanks": r.color=new Color32(159,111,67,255); break;
+                    case "Memory": r.sprite=art.Get("tile"); r.color=new Color32(112,165,78,145); break;
                 }
             }
             labels=root.GetComponentsInChildren<TextMesh>(true); owners=new SpriteRenderer[labels.Length];
             for(int i=0;i<labels.Length;i++)
             {
-                var label=labels[i]; label.fontSize=40; label.characterSize=IsPlate(label)?.15f:.085f;
+                var label=labels[i]; label.fontSize=42; label.fontStyle=FontStyle.Bold; label.characterSize=IsPlate(label)?.16f:.10f;
                 label.color=theme.Ink;
                 if(!IsPlate(label) && !theme.Korean) label.text=CultureInfo.InvariantCulture.TextInfo.ToTitleCase(label.text.ToLowerInvariant());
                 float best=float.MaxValue;
