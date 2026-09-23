@@ -127,7 +127,7 @@ namespace MazeMath.Adventure
             var label=r.gameObject.AddComponent<Text>();
             label.font=Font;
             label.text=text;
-            label.fontSize=Mathf.Clamp(size,12,30);
+            label.fontSize=Mathf.Clamp(size,14,30);
             label.color=Ink;
             label.alignment=align;
             label.fontStyle=FontStyle.Bold;
