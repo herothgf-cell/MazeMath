@@ -32,10 +32,10 @@ namespace MazeMath.UI.Question
             theme = new AdventureTheme();
             var card = theme.Box(transform, "QuestionCard", 0, 0, 1, 1);
             card.GetComponent<Image>().raycastTarget = true;
-            theme.Label(card, theme.T("모모와 숫자 탐험", "Numbers with Momo"), 17, TextAnchor.MiddleLeft, .06f, .90f, .83f, .99f);
+            theme.Label(card, theme.T("모모와 숫자 탐험", "Numbers with Momo"), 19, TextAnchor.MiddleLeft, .06f, .90f, .83f, .99f);
             theme.Button(card, "×", Hide, .88f, .91f, .98f, .99f);
             promptText = theme.Label(card, string.Empty, 28, TextAnchor.MiddleCenter, .06f, .74f, .94f, .90f);
-            feedbackText = theme.Label(card, string.Empty, 16, TextAnchor.MiddleCenter, .06f, .63f, .94f, .74f);
+            feedbackText = theme.Label(card, string.Empty, 18, TextAnchor.MiddleCenter, .06f, .63f, .94f, .74f);
             var keypadRoot = theme.Rect(card, "NumericKeypad", .18f, .04f, .82f, .63f);
             keypad = keypadRoot.gameObject.AddComponent<NumericKeypadView>();
             keypad.UseTheme(theme);
