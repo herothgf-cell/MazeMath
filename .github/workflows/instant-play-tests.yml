@@ -1,0 +1,32 @@
+name: instant-play-tests
+on:
+  push:
+    branches: [main]
+    paths: ['Web/Instant/**', '.github/workflows/instant-play-tests.yml']
+  pull_request:
+    paths: ['Web/Instant/**', '.github/workflows/instant-play-tests.yml']
+permissions:
+  contents: read
+jobs:
+  mobile-browser-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Pure game rule tests
+        run: node --test Web/Instant/core.test.cjs
+      - name: Install isolated browser test tools
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.63.0
+          npx playwright install --with-deps chromium webkit
+      - name: Mobile browser gameplay and persistence tests
+        run: node Web/Instant/browser.test.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: instant-play-browser-screenshots
+          path: TestResults/instant
+          if-no-files-found: ignore

@@ -1,0 +1,12 @@
+const test=require('node:test'),a=require('node:assert/strict');
+let C;try {C=require('./core.js');}catch{};
+test('browser game core is available',()=>a.ok(C));
+test('seed creates reproducible solvable arithmetic',()=>{for(let n=1;n<500;n++){let q=C.question(n,'math',n%5);a.deepEqual(q,C.question(n,'math',n%5));a.ok(Number.isInteger(q.answer)&&q.answer>=0&&q.answer<=100);a.equal(C.check(q,String(q.answer)),true);a.equal(C.check(q,''),false);}});
+test('starter question enables first required craft without grinding',()=>{let s=C.fresh(1);a.equal(C.craft(s,0),false);a.equal(C.complete(s,'math'),true);a.equal(C.craft(s,0),true);a.ok(s.owned[0]);});
+test('reward is idempotent and invalid craft never consumes',()=>{let s=C.fresh(2);C.complete(s,'math');let m=[...s.items],xp=s.xp;a.equal(C.complete(s,'math'),false);a.deepEqual(s.items,m);a.equal(s.xp,xp);a.equal(C.craft(s,4),false);a.deepEqual(s.items,m);});
+test('pattern is checked and charge is exact',()=>{let s=C.fresh(3);s.owned[0]=true;s.items=[10,10,10,10,0];let old=[...s.items];a.equal(C.craft(s,4,Array(9).fill(-1)),false);a.deepEqual(s.items,old);a.ok(C.craft(s,4,[2,-1,2,-1,3,-1,0,-1,0]));a.deepEqual(s.items,[8,10,8,9,0]);});
+test('enchant is free after unlock and only active while equipped',()=>{let s=C.fresh(4);s.owned[4]=s.equipped[4]=true;s.xp=20;a.ok(C.enchant(s,4,0));a.equal(s.xp,10);a.ok(C.enchant(s,4,0));a.equal(s.xp,10);s.equipped[4]=false;a.equal(C.hasEnchant(s,4,0),false);});
+test('locked wall prevents walking through; opened wall allows',()=>{let s=C.fresh(1);s.x=34;for(let i=0;i<60;i++)C.move(s,1,0,false,1/60);a.ok(s.x<35.3);s.flags.push('mined');for(let i=0;i<60;i++)C.move(s,1,0,false,1/60);a.ok(s.x>39);});
+test('ladder climb reaches the next floor and can descend',()=>{let s=C.fresh(1);s.x=54;for(let i=0;i<160;i++)C.move(s,0,1,false,1/60);a.equal(s.y,8);for(let i=0;i<160;i++)C.move(s,0,-1,false,1/60);a.equal(s.y,0);});
+test('boss cannot clear early, phases complete exactly once',()=>{let s=C.fresh(1);a.equal(C.finish(s),false);for(let k of ['boss.math','boss.sequence','boss.laser']) C.complete(s,k);a.equal(C.shields(s),0);a.ok(C.finish(s));a.equal(C.finish(s),false);});
+test('save restores progress, rejects corrupt and different versions',()=>{let s=C.fresh(333);C.complete(s,'math');s.question=C.question(333,'math',0);let t=C.restore(JSON.stringify(s));a.equal(t.seed,333);a.ok(t.flags.includes('math'));a.deepEqual(t.question,s.question);a.equal(C.restore('{bad'),null);a.equal(C.restore('{"v":99}'),null);});
