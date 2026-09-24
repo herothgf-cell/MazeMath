@@ -1,0 +1,27 @@
+name: instant-host-check
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/instant-host-check.yml']
+permissions:
+  contents: read
+jobs:
+  verify-public-link:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check pinned public game and scripts
+        env:
+          GAME_REF: 9982a17529047997345bf5f62e7be33c77e80fc4
+        run: |
+          set -eu
+          base="https://rawcdn.githack.com/herothgf-cell/MazeMath/$GAME_REF/Web/Instant"
+          mkdir -p /tmp/instant-cdn
+          for name in index.html core.js game.js; do
+            curl --fail --location --silent --show-error --max-time 45 --retry 2 --dump-header "/tmp/instant-cdn/$name.headers" "$base/$name" -o "/tmp/instant-cdn/$name"
+            cmp "Web/Instant/$name" "/tmp/instant-cdn/$name"
+            echo "VERIFIED PUBLIC FILE $base/$name"
+            grep -i 'content-type:' "/tmp/instant-cdn/$name.headers"
+          done
+          echo "PLAY_URL=$base/index.html"
