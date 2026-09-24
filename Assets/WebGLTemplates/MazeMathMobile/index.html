@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#4d683b">
+  <title>MazeMath · 모모의 블록 모험</title>
+  <link rel="stylesheet" href="mobile-web.css">
+</head>
+<body>
+  <main id="game-shell" aria-label="MazeMath 모바일 웹 시험 빌드">
+    <canvas id="unity-canvas" tabindex="0" aria-label="게임 화면"></canvas>
+    <section id="start-layer" class="layer">
+      <div class="card">
+        <span class="tag">MAZEMATH · MOBILE WEB TEST</span>
+        <h1>모모의 블록 모험</h1>
+        <p>길을 찾고, 장비를 만들고, 골렘 친구를 도와요.</p>
+        <label for="quality">화면 품질</label>
+        <select id="quality"><option value="sharp">선명하게 · 기본</option><option value="light">가볍게 · 느린 기기용</option></select>
+        <button id="start-button" type="button">게임 불러오기</button>
+        <div id="loading" hidden><progress id="progress" max="1" value="0"></progress><p id="status" role="status">불러오는 중…</p></div>
+        <p id="storage-warning" hidden>브라우저 저장소를 사용할 수 없습니다. 이어하기가 저장되지 않을 수 있어요.</p>
+        <p id="error" role="alert" hidden></p>
+        <p class="note">가로 화면을 권장합니다. Unity 2022.3의 모바일 브라우저 실행은 공식 지원 대상이 아닌 시험 기능입니다.</p>
+      </div>
+    </section>
+    <section id="rotate-layer" class="layer" hidden><div class="card"><h2>휴대폰을 가로로 돌려 주세요</h2><p>미로와 조작 버튼을 넓게 볼 수 있어요. 회전 잠금도 확인해 주세요.</p></div></section>
+  </main>
+  <button id="fullscreen" type="button" hidden aria-label="전체 화면 요청">전체 화면</button>
+  <script>
+    window.MAZEMATH_BUILD = {
+      loaderUrl: 'Build/{{{ LOADER_FILENAME }}}',
+      config: {
+        dataUrl: 'Build/{{{ DATA_FILENAME }}}',
+        frameworkUrl: 'Build/{{{ FRAMEWORK_FILENAME }}}',
+        codeUrl: 'Build/{{{ CODE_FILENAME }}}',
+        streamingAssetsUrl: 'StreamingAssets',
+        companyName: 'MazeMath', productName: 'MazeMath', productVersion: 'mobile-web-test'
+      }
+    };
+  </script>
+  <script src="mobile-web.js"></script>
+  <script>MazeMathMobile.mount(window);</script>
+</body>
+</html>

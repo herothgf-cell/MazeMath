@@ -1,0 +1,22 @@
+name: mobile-web-template-tests
+on:
+  push:
+    branches: [main]
+    paths: ['Assets/WebGLTemplates/**', 'Assets/MazeMath/Editor/Build/BuildMobileWeb.cs', 'Assets/MazeMath/Scripts/Adventure/Runtime/MobileWebBridge.cs', 'Tools/WebTests/**', 'Tools/serve_mobile_web.py', '.github/workflows/mobile-web-template-tests.yml']
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  template-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test browser loader logic (not a Unity build)
+        run: node --test Tools/WebTests/mobile-web.test.cjs
+      - name: Test local build-output server
+        run: python3 -m unittest discover -s Tools/WebTests -p 'test_*.py'

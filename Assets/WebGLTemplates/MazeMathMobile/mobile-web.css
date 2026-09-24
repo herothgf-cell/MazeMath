@@ -1,0 +1,23 @@
+:root { color-scheme: light; font-family: system-ui, -apple-system, 'Malgun Gothic', sans-serif; background: #303a28; color: #253020; }
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; }
+[hidden] { display: none !important; }
+#game-shell { position: fixed; inset: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); overflow: hidden; }
+#unity-canvas { width: 100%; height: 100%; display: block; background: #91c9da; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; outline: none; }
+.layer { position: absolute; inset: 0; display: grid; place-items: center; overflow-y: auto; padding: 16px; background: #91c9da; }
+.card { width: min(540px,100%); margin: auto; background: #f1edda; border: 3px solid #464a3c; box-shadow: 0 5px 0 #6b785a; padding: 20px 24px; }
+.tag { font-weight: 800; font-size: 12px; letter-spacing: .07em; color: #3f5731; }
+h1 { font-size: clamp(24px, 5vw, 32px); margin: 10px 0; }
+h2 { font-size: 24px; margin-top: 0; }
+p { font-size: 17px; line-height: 1.5; margin: 12px 0; }
+label { display: block; font-weight: 700; margin-top: 14px; }
+button, select { font: 700 17px/1.3 system-ui, sans-serif; min-height: 46px; border: 2px solid #464a3c; border-radius: 2px; }
+select { width: 100%; padding: 8px; margin: 6px 0 12px; background: #fffdf3; color: #253020; }
+button { cursor: pointer; padding: 10px 16px; background: #527d3c; color: #fffbed; box-shadow: inset 0 3px #8aae70; }
+button:disabled { opacity: .65; cursor: default; }
+#start-button { width: 100%; }
+progress { width: 100%; height: 18px; accent-color: #527d3c; margin-top: 14px; }
+.note { font-size: 13px; color: #44513a; margin-bottom: 0; }
+#error, #storage-warning { color: #7f2d21; font-size: 15px; overflow-wrap: anywhere; }
+#fullscreen { position: fixed; z-index: 4; left: max(8px, env(safe-area-inset-left, 0px)); top: max(8px, env(safe-area-inset-top, 0px)); }
+@media (max-height: 430px) { .card { padding: 14px 20px; } p { margin: 8px 0; } h1 { margin: 6px 0; } }
