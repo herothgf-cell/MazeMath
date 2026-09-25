@@ -1,6 +1,6 @@
 const {chromium,webkit}=require('playwright');
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const files={'/':'index.html','/index.html':'index.html','/core.js':'core.js','/game.js':'game.js'};
+const files={'/':'index.html','/index.html':'index.html','/chapter-data.js':'chapter-data.js','/core.js':'core.js','/chapter-runtime.js':'chapter-runtime.js','/game.js':'game.js'};
 const server=http.createServer((req,res)=>{const file=files[req.url];if(!file){res.writeHead(404);res.end();return;}res.writeHead(200,{'Content-Type':file.endsWith('.html')?'text/html; charset=utf-8':'text/javascript; charset=utf-8'});res.end(fs.readFileSync(path.join(__dirname,file)));});
 (async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));const url=`http://127.0.0.1:${server.address().port}/`;fs.mkdirSync('TestResults/instant',{recursive:true});
 for(const [name,type] of [['chromium',chromium],['webkit',webkit]]){const browser=await type.launch();try{const page=await browser.newPage({viewport:{width:393,height:852},deviceScaleFactor:2,isMobile:true,hasTouch:true});let errors=[];page.on('pageerror',e=>errors.push(String(e)));await page.goto(url);await page.locator('#new').click();
