@@ -43,6 +43,12 @@ function campaignThings(){
  ['boss.sokoban',36,16,'상자 보호막','sign'],['boss.memory',45,16,'기억 보호막','sign'],['boss.missing',54,16,'빈칸 보호막','terminal'],
  ['chapterBoss',58,16,'창고 관리자 로봇','golem'],['checkpoint',52,8,'체크포인트','flag'],['checkpointTop',31,16,'체크포인트','flag']
  ];
+ if(ch==='chapter-04')return[
+ ['workshop',18,0,'작업대','bench'],['c4.intro',14,0,'잠긴 회로문','terminal'],['c4.rule',34,0,'규칙 기계','terminal'],
+ ['ladder',54,0,'2층 사다리','sign'],['c4.shield',18,8,'전기 통로','terminal'],['c4.laser',44,8,'수정 다중 거울','mirror'],
+ ['boss.rule',36,16,'규칙 보호막','terminal'],['boss.laser',46,16,'다중 거울 보호막','mirror'],['boss.switch',54,16,'조건 스위치','terminal'],
+ ['chapterBoss',58,16,'수정 코어 수호자','golem'],['checkpoint',52,8,'체크포인트','flag'],['checkpointTop',31,16,'체크포인트','flag']
+ ];
  return[];
 }
 function bossRemaining(){let d=MMChapters.get(campaign.chapter);return d?d.boss.phases.filter(k=>!has(k)).length:0;}
@@ -71,6 +77,22 @@ function memoryUI(id){
  open('memory','기억 경로',`<p>잠깐 보이는 3개의 순서를 기억해요.</p><div class="equation" id="memoryShow">${sequence.map(i=>symbols[i]).join('  ')}</div><div class="keys">${symbols.map((v,i)=>'<button class="btn" id="mem'+i+'" disabled>'+v+'</button>').join('')}</div><div class="feedback" id="memoryFeedback">순서를 기억해 주세요...</div>`);
  setTimeout(()=>{if(modal!=='memory')return;locked=false;$('memoryShow').textContent='?  ?  ?';symbols.forEach((_,i)=>$('mem'+i).disabled=false);$('memoryFeedback').textContent='같은 순서로 눌러 보세요.';},900);
  symbols.forEach((_,i)=>bind('mem'+i,()=>{if(locked)return;input.push(i);if(input[input.length-1]!==sequence[input.length-1]){input=[];$('memoryFeedback').textContent='괜찮아요. 처음부터 다시 해요.';return;}if(input.length===sequence.length){MMRuntime.completeStep(campaign,id);done();hide();toast('기억 경로 성공!');}}));
+}
+function ruleUI(id){
+ const p=MMRuntime.rulePuzzle(s.seed,id);
+ open('rule','규칙 기계',`<p class="help">${esc(p.clue)}</p><div class="stack">${p.options.map((o,i)=>'<button class="btn wide" id="rule'+i+'">'+esc(o.label)+'</button>').join('')}</div><div class="feedback" id="ruleFeedback">조건을 잘 읽고 골라보세요.</div>`);
+ p.options.forEach((o,i)=>bind('rule'+i,()=>{if(o.correct){MMRuntime.completeStep(campaign,id);done();hide();toast('규칙을 찾았어요!');}else $('ruleFeedback').textContent='그 답은 조건과 달라요. 벌점 없이 다시 골라요.';}));
+}
+function multiLaserUI(id){
+ let rot=[0,0,0,0],target=[1,3,2,1],glyph=['╱','—','╲','│'];
+ open('laser-grid','수정 거울 연결',`<p>네 거울을 돌려 빛이 코어까지 이어지게 해요.</p><div class="recipe">${rot.map((v,i)=>'<button class="btn" id="laser'+i+'">'+glyph[v]+'</button>').join('')}</div><button class="btn primary wide" id="laserCheck">빛 연결 확인</button><div class="feedback" id="laserFeedback"></div>`);
+ rot.forEach((_,i)=>bind('laser'+i,()=>{rot[i]=(rot[i]+1)%4;$('laser'+i).textContent=glyph[rot[i]];}));
+ bind('laserCheck',()=>{if(rot.every((v,i)=>v===target[i])){MMRuntime.completeStep(campaign,id);done();hide();toast('수정 빛 연결 성공!');}else $('laserFeedback').textContent='빛이 끊긴 거울이 있어요. 다시 돌려 보세요.';});
+}
+function switchUI(id){
+ const correct=((s.seed+id.length)%3+3)%3,labels=['파란 스위치','노란 스위치','초록 스위치'];
+ open('switch','조건 스위치',`<p class="help">힌트: <b>${labels[correct]}</b>는 짝수 신호와 연결되어 있어요. 조건에 맞는 스위치를 선택하세요.</p><div class="stack">${labels.map((x,i)=>'<button class="btn wide" id="switch'+i+'">'+x+'</button>').join('')}</div><div class="feedback" id="switchFeedback"></div>`);
+ labels.forEach((_,i)=>bind('switch'+i,()=>{if(i===correct){MMRuntime.completeStep(campaign,id);done();hide();toast('조건 스위치 성공! 남은 보호막 '+bossRemaining()+'개');}else $('switchFeedback').textContent='조건과 맞지 않아요. 다시 생각해 봐요.';}));
 }
 function finishCampaignChapter(){
  if(bossRemaining()>0){toast('아직 보호막이 '+bossRemaining()+'개 남았어요. 상단 목표를 따라가요.');return;}
@@ -108,6 +130,17 @@ function interactCampaign(){
  if(id==='c3.memory'||id==='boss.memory'){if(!has(id)){showTutorial('first-memory');memoryUI(id);}else toast('이미 해결한 기억 경로예요.');return;}
  if(id==='c3.lift'){if(!C.tool(s,2)){toast('점프 부스터를 장착해 주세요.');showTutorial('first-booster');return;}if(!has(id)){MMRuntime.completeStep(campaign,id);done();toast('높은 리프트에 도착했어요! 3층으로 올라가요.');}return;}
  if(id==='boss.missing'){questionUI(id);return;}
+ if(id==='c4.intro'){
+   if(!has(id)){MMRuntime.completeStep(campaign,id);s.items[0]+=2;s.items[1]+=2;s.items[2]+=2;s.items[3]+=3;done();if(!showTutorial('first-sensor'))toast('작업대에서 탐험 센서를 만들어요.');}
+   else toast('센서로 숨은 규칙 단서를 찾을 수 있어요.');return;
+ }
+ if(id==='c4.rule'||id==='boss.rule'){if(!has(id)){showTutorial('first-rule');ruleUI(id);}else toast('이미 해결한 규칙 기계예요.');return;}
+ if(id==='c4.shield'){
+   if(!C.tool(s,3)){toast('전기 통로는 에너지 실드를 장착하면 안전해요. 작업대에서 제작해 보세요.');showTutorial('first-shield');return;}
+   if(!has(id)){MMRuntime.completeStep(campaign,id);done();toast('실드로 전기 구간을 안전하게 통과했어요!');}return;
+ }
+ if(id==='c4.laser'||id==='boss.laser'){if(!has(id))multiLaserUI(id);else toast('수정 빛이 이미 연결되어 있어요.');return;}
+ if(id==='boss.switch'){if(!has(id))switchUI(id);else toast('조건 스위치가 이미 맞춰졌어요.');return;}
  if(id==='chapterBoss'){finishCampaignChapter();return;}
 }
 
