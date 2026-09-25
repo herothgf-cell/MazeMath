@@ -1,4 +1,5 @@
 const test=require('node:test'),a=require('node:assert/strict');
+let D;try{D=require('./chapter-data.js');}catch{}
 let C;try {C=require('./core.js');}catch{};
 test('browser game core is available',()=>a.ok(C));
 test('seed creates reproducible solvable arithmetic',()=>{for(let n=1;n<500;n++){let q=C.question(n,'math',n%5);a.deepEqual(q,C.question(n,'math',n%5));a.ok(Number.isInteger(q.answer)&&q.answer>=0&&q.answer<=100);a.equal(C.check(q,String(q.answer)),true);a.equal(C.check(q,''),false);}});
@@ -12,3 +13,7 @@ test('boss cannot clear early, phases complete exactly once',()=>{let s=C.fresh(
 test('save restores progress, rejects corrupt and different versions',()=>{let s=C.fresh(333);C.complete(s,'math');s.question=C.question(333,'math',0);let t=C.restore(JSON.stringify(s));a.equal(t.seed,333);a.ok(t.flags.includes('math'));a.deepEqual(t.question,s.question);a.equal(C.restore('{bad'),null);a.equal(C.restore('{"v":99}'),null);});
 
 test('first craft and final boss objectives tell a child the exact next action',()=>{let s=C.fresh(7);C.complete(s,'math');let g=C.goal(s);a.match(g[2],/곡괭이 팔/);a.match(g[2],/철 조각 2/);a.match(g[2],/철판 1/);s.owned[0]=s.equipped[0]=true;s.flags.push('mined','bridge','laser','sequence','boss.math','boss.sequence','boss.laser');g=C.goal(s);a.match(g[2],/골렘/);a.match(g[2],/조사/);});
+
+test('five chapter definitions expose stable ids and starts',()=>{a.ok(D);a.deepEqual(D.list().map(x=>x.id),['chapter-01','chapter-02','chapter-03','chapter-04','chapter-05']);a.deepEqual(D.get('chapter-02').start,[8,0]);a.equal(D.get('chapter-02').boss.id,'furnace-golem');});
+test('v1 save migrates to campaign v2 without progress loss',()=>{let legacy=C.fresh(123);C.complete(legacy,'math');legacy.x=22;let restored=C.restore(JSON.stringify(legacy));a.equal(restored.v,2);a.equal(restored.chapter,'chapter-01');a.equal(restored.chapterState.x,22);a.ok(restored.chapterState.flags.includes('math'));});
+test('chapter clear unlock is idempotent',()=>{let s=C.freshCampaign(9);C.markChapterComplete(s,'chapter-01');C.markChapterComplete(s,'chapter-01');a.deepEqual(s.unlockedChapters,['chapter-01','chapter-02']);});
