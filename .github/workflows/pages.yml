@@ -26,6 +26,12 @@ jobs:
           node-version: '22'
       - name: Verify instant-play game rules
         run: node --test Web/Instant/core.test.cjs
+      - name: Install browser test tools
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.63.0
+          npx playwright install --with-deps chromium webkit
+      - name: Verify five chapter mobile campaign
+        run: node Web/Instant/browser.test.cjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
