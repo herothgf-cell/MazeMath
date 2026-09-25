@@ -151,7 +151,7 @@ function interactCampaign(){
    if(!has(id)){MMRuntime.completeStep(campaign,id);s.items[0]+=2;s.items[1]+=2;s.items[2]+=2;s.items[3]+=3;done();if(!showTutorial('first-sensor'))toast('작업대에서 탐험 센서를 만들어요.');}
    else toast('센서로 숨은 규칙 단서를 찾을 수 있어요.');return;
  }
- if(id==='c4.rule'||id==='boss.rule'){if(!has(id)){if(id==='c4.rule'&&showTutorial('first-rule'))return;ruleUI(id);}else toast('이미 해결한 규칙 기계예요.');return;}
+ if(id==='c4.rule'||id==='boss.rule'){if(id==='c4.rule'&&!C.tool(s,4)){toast('탐험 센서를 장착하면 숨은 규칙 단서를 찾을 수 있어요.');showTutorial('first-sensor');return;}if(!has(id)){if(id==='c4.rule'&&showTutorial('first-rule'))return;ruleUI(id);}else toast('이미 해결한 규칙 기계예요.');return;}
  if(id==='c4.shield'){
    if(!C.tool(s,3)){toast('전기 통로는 에너지 실드를 장착하면 안전해요. 작업대에서 제작해 보세요.');showTutorial('first-shield');return;}
    if(!has(id)){if(showTutorial('first-shield'))return;MMRuntime.completeStep(campaign,id);done();toast('실드로 전기 구간을 안전하게 통과했어요!');}return;
