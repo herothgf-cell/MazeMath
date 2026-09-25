@@ -49,6 +49,12 @@ function campaignThings(){
  ['boss.rule',36,16,'규칙 보호막','terminal'],['boss.laser',46,16,'다중 거울 보호막','mirror'],['boss.switch',54,16,'조건 스위치','terminal'],
  ['chapterBoss',58,16,'수정 코어 수호자','golem'],['checkpoint',52,8,'체크포인트','flag'],['checkpointTop',31,16,'체크포인트','flag']
  ];
+ if(ch==='chapter-05')return[
+ ['workshop',18,0,'작업대','bench'],['c5.number',14,0,'별빛 숫자 엔진','terminal'],['c5.equipment',30,0,'장비 선택 게이트','terminal'],['c5.spatial',46,0,'공간 상자 퍼즐','sign'],
+ ['ladder',54,0,'2층 사다리','sign'],['c5.memory',20,8,'별빛 기억 경로','sign'],
+ ['boss.number',34,16,'숫자 엔진 보호막','terminal'],['boss.equipment',40,16,'장비 보호막','terminal'],['boss.spatial',46,16,'공간 보호막','sign'],['boss.memory',52,16,'기억 보호막','sign'],['boss.core',56,16,'별빛 코어','terminal'],
+ ['chapterBoss',58,16,'별빛 코어 골렘','golem'],['checkpoint',50,8,'체크포인트','flag'],['checkpointTop',30,16,'체크포인트','flag']
+ ];
  return[];
 }
 function bossRemaining(){let d=MMChapters.get(campaign.chapter);return d?d.boss.phases.filter(k=>!has(k)).length:0;}
@@ -94,12 +100,23 @@ function switchUI(id){
  open('switch','조건 스위치',`<p class="help">힌트: <b>${labels[correct]}</b>는 짝수 신호와 연결되어 있어요. 조건에 맞는 스위치를 선택하세요.</p><div class="stack">${labels.map((x,i)=>'<button class="btn wide" id="switch'+i+'">'+x+'</button>').join('')}</div><div class="feedback" id="switchFeedback"></div>`);
  labels.forEach((_,i)=>bind('switch'+i,()=>{if(i===correct){MMRuntime.completeStep(campaign,id);done();hide();toast('조건 스위치 성공! 남은 보호막 '+bossRemaining()+'개');}else $('switchFeedback').textContent='조건과 맞지 않아요. 다시 생각해 봐요.';}));
 }
+function equipmentTrialUI(id){
+ const order=id==='boss.equipment'?[4,3,2,1,0]:[0,1,2,3,4],labels=['곡괭이 팔','파워 렌치','점프 부스터','에너지 실드','탐험 센서'];let step=0;
+ open('equipment-trial','장비 선택 게이트',`<p>표시된 상황에 맞는 장비를 순서대로 선택해요.</p><div class="help center" id="equipClue"></div><div class="grid5">${labels.map((x,i)=>'<button class="btn wide" id="trialTool'+i+'">'+x+'</button>').join('')}</div><div class="feedback" id="equipFeedback"></div>`);
+ const clues=['균열벽을 열려면?','고장 난 기계를 고치려면?','높은 발판에 오르려면?','위험을 한 번 막으려면?','숨은 단서를 찾으려면?'];
+ function render(){let need=order[step];$('equipClue').textContent=(step+1)+' / 5 · '+clues[need];}
+ labels.forEach((_,i)=>bind('trialTool'+i,()=>{let need=order[step];if(i!==need){$('equipFeedback').textContent='이 상황에 더 잘 맞는 장비를 다시 골라봐요.';return;}if(!s.owned[i]){$('equipFeedback').textContent='아직 만들지 않은 장비예요. 작업대에서 먼저 제작해요.';return;}s.equipped[i]=true;step++;if(step===order.length){MMRuntime.completeStep(campaign,id);done();hide();toast('장비 선택 성공! 모든 도구를 잘 기억했어요.');}else{render();$('equipFeedback').textContent='좋아요! 다음 상황이에요.';}}));render();
+}
+function coreInspectUI(id){
+ open('core','별빛 코어',`<div class="hero"><div class="face"></div><div class="glass"></div></div><p class="center">마지막 코어가 안정되려면 직접 조사해야 해요.</p><button class="btn primary wide" id="coreInspect">별빛 코어 조사하기</button>`);
+ bind('coreInspect',()=>{MMRuntime.completeStep(campaign,id);done();hide();toast('마지막 보호막 해제! 골렘에게 다가가 조사해요.');});
+}
 function finishCampaignChapter(){
  if(bossRemaining()>0){toast('아직 보호막이 '+bossRemaining()+'개 남았어요. 상단 목표를 따라가요.');return;}
  if(!has('clear'))s.flags.push('clear');
  C.markChapterComplete(campaign,campaign.chapter);save();
- const d=MMChapters.get(campaign.chapter),next=campaign.unlockedChapters.find(x=>!campaign.completedChapters.includes(x));
- open('clear','챕터 완료!',`<div class="hero"><div class="face"></div><div class="glass"></div></div><h1 class="center">${d.title} 탐험 성공!</h1><p class="center">모모와 함께 모든 장치를 해결했어요.</p><div class="help center">지식 경험치 ${s.xp} XP</div><div class="stack">${next?'<button class="btn primary wide" id="nextChapter">다음 챕터로</button>':''}<button class="btn wide" id="chapters">챕터 선택</button></div>`);
+ const d=MMChapters.get(campaign.chapter),next=campaign.unlockedChapters.find(x=>!campaign.completedChapters.includes(x)),allDone=campaign.completedChapters.length>=5;
+ open('clear','챕터 완료!',`<div class="hero"><div class="face"></div><div class="glass"></div></div><h1 class="center">${d.title} 탐험 성공!</h1><p class="center">${allDone?'모모의 별빛 코어를 모두 되찾았어요!':'모모와 함께 모든 장치를 해결했어요.'}</p><div class="help center">지식 경험치 ${s.xp} XP · 완료 챕터 ${campaign.completedChapters.length}/5</div><div class="stack">${next?'<button class="btn primary wide" id="nextChapter">다음 챕터로</button>':''}<button class="btn wide" id="chapters">챕터 선택</button></div>`);
  if(next)bind('nextChapter',()=>switchChapter(next));bind('chapters',chapterSelect);
 }
 function interactCampaign(){
@@ -141,6 +158,11 @@ function interactCampaign(){
  }
  if(id==='c4.laser'||id==='boss.laser'){if(!has(id))multiLaserUI(id);else toast('수정 빛이 이미 연결되어 있어요.');return;}
  if(id==='boss.switch'){if(!has(id))switchUI(id);else toast('조건 스위치가 이미 맞춰졌어요.');return;}
+ if(id==='c5.number'||id==='boss.number'){questionUI(id);return;}
+ if(id==='c5.equipment'||id==='boss.equipment'){if(!has(id))equipmentTrialUI(id);else toast('장비 게이트는 이미 해결했어요.');return;}
+ if(id==='c5.spatial'||id==='boss.spatial'){if(!has(id))sokobanUI(id);else toast('공간 퍼즐은 이미 해결했어요.');return;}
+ if(id==='c5.memory'||id==='boss.memory'){if(!has(id))memoryUI(id);else toast('기억 퍼즐은 이미 해결했어요.');return;}
+ if(id==='boss.core'){if(!has(id))coreInspectUI(id);else toast('별빛 코어는 안정됐어요.');return;}
  if(id==='chapterBoss'){finishCampaignChapter();return;}
 }
 
