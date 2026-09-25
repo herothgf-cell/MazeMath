@@ -22,8 +22,50 @@ function help(){open('help','모모의 탐험 안내','<p><b>← →</b>를 누�
 function resources(){return `<div class="resources">${names.map((n,i)=>`${esc(n)} <b>${s.items[i]}</b>`).join(' · ')}<br>지식 경험치 <b>${s.xp} XP</b></div>`;}
 function bag(){if(!running)return;open('bag','탐험 가방',resources()+`<div class="grid5">${tools.map((n,i)=>`<div class="item"><div class="itemicon">${icons[i]}</div><div class="itembody"><b>${n}</b><small>${desc[i]}${s.ench[i]>=0?' · 인챈트 적용':''}</small></div><button class="btn small" id="equip${i}" ${s.owned[i]?'':'disabled'}>${s.owned[i]?(s.equipped[i]?'장착 중':'장착'):'미제작'}</button></div>`).join('')}</div><p class="sub">새 장비는 1층의 작업대에서 만듭니다.</p>`);tools.forEach((n,i)=>bind('equip'+i,()=>{s.equipped[i]=!s.equipped[i];done();bag();}));}
 function atBench(){return Math.abs(s.x-18)<2&&Math.abs(s.y)<1;}
-function workshop(){if(!atBench()){toast('제작은 1층 작업대에서 할 수 있어요.');return;}open('workshop','모모의 작업대',resources()+'<div class="tabs"><button class="btn primary" id="normal">만들기</button><button class="btn" id="pattern">3×3 조합</button><button class="btn" id="enchant">인챈트</button></div><div class="grid5">'+tools.map((n,i)=>`<div class="item"><div class="itemicon">${icons[i]}</div><div class="itembody"><b>${n}</b><small>${C.costs[i].map((v,j)=>v?names[j]+' '+v:'').filter(Boolean).join(' · ')}</small></div><button class="btn small ${i===0&&!s.owned[0]?'primary':''}" id="craft${i}" ${s.owned[i]?'disabled':''}>${s.owned[i]?'보유 중':i===0&&!s.owned[0]?'지금 만들기':'제작'}</button></div>`).join('')+'</div><p class="sub">첫 도구는 곡괭이 팔입니다. 재료가 모자라면 숫자 장치를 먼저 풀어보세요.</p>');tools.forEach((n,i)=>bind('craft'+i,()=>{if(C.craft(s,i)){done();workshop();toast(n+' 제작과 장착 완료!');}else toast(i&&!s.owned[0]?'곡괭이 팔을 먼저 만들어 주세요.':'재료가 더 필요해요. 보물과 퍼즐을 찾아보세요.');}));bind('pattern',patternUI);bind('enchant',enchantUI);bind('normal',workshop);}
-function patternUI(){let grid=Array(9).fill(-1),pick=2;open('pattern','3×3 센서 조합',`<p class="sub">재료를 선택한 뒤 칸을 눌러 놓으세요.<br>같은 재료를 다시 누르면 그 칸이 비워집니다.</p><div class="help center">기어 · 빈칸 · 기어<br>빈칸 · 에너지석 · 빈칸<br>철 조각 · 빈칸 · 철 조각</div><div class="pickers">${[0,2,3].map(i=>`<button class="btn small" id="pick${i}">${names[i]}</button>`).join('')}</div><div class="recipe">${grid.map((v,i)=>`<button class="btn" id="cell${i}" aria-label="조합 칸 ${i+1}">·</button>`).join('')}</div><button class="btn primary wide" id="makePattern">센서 조립하기</button><p class="sub center">실패해도 재료는 사라지지 않아요.</p>`);[0,2,3].forEach(i=>bind('pick'+i,()=>{pick=i;[0,2,3].forEach(j=>$('pick'+j).classList.toggle('chosen',j===i));}));$('pick2').classList.add('chosen');grid.forEach((v,i)=>bind('cell'+i,()=>{grid[i]=grid[i]===pick?-1:pick;$('cell'+i).textContent=grid[i]<0?'·':['▰','▥','⚙','◆'][grid[i]];}));bind('makePattern',()=>{if(!atBench())return;if(C.craft(s,4,grid)){done();hide();toast('탐험 센서를 조립했어요!');}else toast('도안, 필요한 재료, 센서 보유 여부를 확인해 주세요.');});}
+function recommendedTool(){
+ if(campaign.chapter==='chapter-01')return 0;
+ if(campaign.chapter==='chapter-02')return 1;
+ if(campaign.chapter==='chapter-03')return 2;
+ if(campaign.chapter==='chapter-04')return s.owned[4]?3:4;
+ return [0,1,2,3,4].find(i=>!s.owned[i])??0;
+}
+function workshop(){if(!atBench()){toast('제작은 1층 작업대에서 할 수 있어요.');return;}craftingTable(recommendedTool());}
+function craftingTable(selected=0){
+ let grid=Array(9).fill(-1),pick=0,showHint=selected===0&&!s.owned[0];
+ const materialIcons=['▰','▥','⚙','◆','★'];
+ const canSelect=i=>i===0||s.owned[0];
+ function recipeText(i){return C.costs[i].map((v,j)=>v?names[j]+' '+v:'').filter(Boolean).join(' · ');}
+ function cellText(i){let v=grid[i];if(v>=0)return materialIcons[v];let hint=C.recipes[selected][i];return showHint&&hint>=0?'<span style="opacity:.28">'+materialIcons[hint]+'</span>':'·';}
+ function matches(){return grid.every((v,i)=>v===C.recipes[selected][i]);}
+ function body(){return resources()+`
+ <div class="tabs"><button class="btn primary" id="craftTab">3×3 제작</button><button class="btn" id="enchant">인챈트</button></div>
+ <p class="sub"><b>만들 장비를 고르고</b> 아래 재료를 3×3 칸에 직접 놓아보세요. 틀려도 재료는 사라지지 않아요.</p>
+ <div class="grid5">${tools.map((n,i)=>`<button class="btn ${selected===i?'primary':''}" id="recipe${i}" ${(!canSelect(i)||s.owned[i])?'disabled':''}>${icons[i]} ${n}${s.owned[i]?' ✓':''}</button>`).join('')}</div>
+ <div class="help center"><b id="craftTarget">${icons[selected]} ${tools[selected]}</b><br><span id="craftNeeds">${recipeText(selected)}</span></div>
+ <div class="pickers">${[0,1,2,3].map(i=>`<button class="btn small ${pick===i?'chosen':''}" id="pick${i}">${materialIcons[i]} ${names[i]} (${s.items[i]})</button>`).join('')}</div>
+ <div class="recipe" id="craftGrid">${grid.map((_,i)=>`<button class="btn" id="cell${i}" aria-label="제작 칸 ${i+1}">${cellText(i)}</button>`).join('')}</div>
+ <div class="item" style="justify-content:center"><div class="itemicon" id="craftResultIcon">?</div><div class="itembody"><b>결과 슬롯</b><small id="craftResult">${matches()?tools[selected]:'조합을 맞춰 보세요'}</small></div></div>
+ <div class="tabs"><button class="btn" id="recipeHint">${showHint?'조합법 숨기기':'조합법 보기'}</button><button class="btn" id="clearGrid">칸 비우기</button></div>
+ <button class="btn primary wide" id="makeCraft" ${matches()?'':'disabled'}>${icons[selected]} ${tools[selected]} 제작하기</button>
+ <div class="feedback" id="craftFeedback">${selected===0&&!s.owned[0]?'반투명 모양을 따라 재료를 놓아보세요.':''}</div>`;
+ }
+ open('workshop','3×3 제작대',body());
+ function redraw(){
+   for(let i=0;i<9;i++){let e=$('cell'+i);if(e)e.innerHTML=cellText(i);}
+   let ok=matches(),make=$('makeCraft'),result=$('craftResult'),icon=$('craftResultIcon');
+   if(make)make.disabled=!ok;if(result)result.textContent=ok?tools[selected]:'조합을 맞춰 보세요';if(icon)icon.textContent=ok?icons[selected]:'?';
+   for(let i=0;i<4;i++){let p=$('pick'+i);if(p)p.classList.toggle('chosen',pick===i);}
+   let hint=$('recipeHint');if(hint)hint.textContent=showHint?'조합법 숨기기':'조합법 보기';
+ }
+ tools.forEach((_,i)=>bind('recipe'+i,()=>craftingTable(i)));
+ [0,1,2,3].forEach(i=>bind('pick'+i,()=>{pick=i;redraw();}));
+ for(let i=0;i<9;i++)bind('cell'+i,()=>{grid[i]=grid[i]===pick?-1:pick;redraw();});
+ bind('recipeHint',()=>{showHint=!showHint;redraw();});
+ bind('clearGrid',()=>{grid=Array(9).fill(-1);redraw();});
+ bind('makeCraft',()=>{if(!matches())return;if(C.craft(s,selected,grid)){done();toast(tools[selected]+' 제작과 장착 완료!');craftingTable(recommendedTool());}else{$('craftFeedback').textContent=selected&&!s.owned[0]?'곡괭이 팔을 먼저 만들어 주세요.':'재료 수량을 확인해 주세요.';}});
+ bind('enchant',enchantUI);bind('craftTab',()=>craftingTable(selected));redraw();
+}
+function patternUI(){craftingTable(4);}
 const enchantNames=[['메아리','행운'],['빠른 수리','회로 감지'],['착지 보호','경로 탐색'],['재충전','튼튼한 실드'],['기억','길잡이']];
 function enchantUI(){open('enchant','도구에 특별한 능력',resources()+'<p class="sub">최초 해금 10 XP · 해금한 인챈트로 바꾸기는 무료</p>'+tools.map((n,i)=>`<div class="item"><div class="itembody"><b>${icons[i]} ${n}</b><div class="tabs">${enchantNames[i].map((v,j)=>`<button class="btn small ${s.ench[i]===j?'primary':''}" id="ench${i}${j}" ${s.owned[i]?'':'disabled'}>${v}${s.unlocked.includes(i*2+j)?' ✓':''}</button>`).join('')}</div></div></div>`).join(''));tools.forEach((n,i)=>[0,1].forEach(j=>bind('ench'+i+j,()=>{if(!atBench())return;if(C.enchant(s,i,j)){if(i===3)s.shield=j===1?2:1;done();enchantUI();toast(enchantNames[i][j]+' 적용!');}else toast('문제와 퍼즐을 풀어 10 XP를 모아주세요.');})));}
 function mapUI(){open('map','지나온 길과 다음 목표',`<p class="sub">${esc(C.goal(s)[2])}<br>지도를 눌러도 순간이동하지 않습니다. 사다리를 찾아 이동해요.</p>`+[2,1,0].map(f=>`<b>${f+1}층 ${['작업대와 저울','거울과 발판','수호 골렘'][f]}</b><div class="map">${Array.from({length:5},(_,i)=>{let id=f*5+i,here=Math.floor((s.y+.25)/8)===f&&Math.floor(s.x/12)===i;return`<div class="room ${here?'here':s.visited.includes(id)?'':'unknown'}">${here?'모모':s.visited.includes(id)?['보물','작업대','장치','갈림길','사다리'][i]:'?'}</div>`;}).join('')}</div>`).join('')+`<p class="help">${esc(C.waypoint(s)[2])}<br>다음 방향: ${C.waypoint(s)[0]<s.x?'← 왼쪽':'오른쪽 →'}</p>`);}
