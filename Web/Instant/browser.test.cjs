@@ -25,6 +25,49 @@ await place(48,16);await use();await page.locator('#pipe0').click();await page.l
 const xs2=await page.evaluate(()=>{let r=MM.rng(MMApp.state().seed+2*777),nums=[2,3,5];for(let i=2;i>0;i--){let j=r(i+1);[nums[i],nums[j]]=[nums[j],nums[i]];}return[2,3,5].map(n=>42+nums.indexOf(n)*4);});for(let x of xs2)await place(x,16);assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('boss.plates')));
 await place(57,16);await use();assert.equal(await page.evaluate(()=>MMApp.modal),'clear');assert.ok(await page.locator('#nextChapter').isVisible());
 
+// Chapter 3
+await page.locator('#nextChapter').click();assert.equal(await page.evaluate(()=>MMApp.campaign().chapter),'chapter-03');
+await place(14,0);await use();if(await page.locator('#tutorialOk').count())await page.locator('#tutorialOk').click();
+await place(18,0);await use();await page.locator('#craft2').click();assert.ok(await page.evaluate(()=>MMApp.state().owned[2]));await page.locator('#close').click();
+const solveSoko=async()=>{await page.locator('#sDown').click();await page.locator('#sRight').click();await page.waitForTimeout(120);assert.equal(await page.evaluate(()=>MMApp.modal),'');};
+const solveMemory=async(id)=>{await page.waitForTimeout(1000);const seq=await page.evaluate(id=>MMRuntime.memorySequence(MMApp.state().seed,id),id);for(const n of seq)await page.locator('#mem'+n).click();await page.waitForTimeout(120);assert.equal(await page.evaluate(()=>MMApp.modal),'');};
+await place(34,0);await use();await solveSoko();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c3.sokoban')));
+await place(22,8);await use();await solveMemory('c3.memory');assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c3.memory')));
+await place(50,8);await use();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c3.lift')));
+await place(36,16);await use();await solveSoko();
+await place(45,16);await use();await solveMemory('boss.memory');
+await place(54,16);await use();await solve();
+await place(58,16);await use();assert.equal(await page.evaluate(()=>MMApp.modal),'clear');assert.ok(await page.locator('#nextChapter').isVisible());
+
+// Chapter 4
+await page.locator('#nextChapter').click();assert.equal(await page.evaluate(()=>MMApp.campaign().chapter),'chapter-04');
+await place(14,0);await use();if(await page.locator('#tutorialOk').count())await page.locator('#tutorialOk').click();
+await place(18,0);await use();await page.locator('#craft4').click();await page.locator('#craft3').click();assert.ok(await page.evaluate(()=>MMApp.state().owned[4]&&MMApp.state().owned[3]));await page.locator('#close').click();
+const solveRule=async(id)=>{const p=await page.evaluate(id=>MMRuntime.rulePuzzle(MMApp.state().seed,id),id);const i=p.options.findIndex(x=>x.correct);await page.locator('#rule'+i).click();await page.waitForTimeout(100);};
+const solveLaser=async()=>{for(let i=0;i<1;i++)await page.locator('#laser0').click();for(let i=0;i<3;i++)await page.locator('#laser1').click();for(let i=0;i<2;i++)await page.locator('#laser2').click();for(let i=0;i<1;i++)await page.locator('#laser3').click();await page.locator('#laserCheck').click();await page.waitForTimeout(100);};
+await place(34,0);await use();await solveRule('c4.rule');
+await place(18,8);await use();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c4.shield')));
+await place(44,8);await use();await solveLaser();
+await place(36,16);await use();await solveRule('boss.rule');
+await place(46,16);await use();await solveLaser();
+await place(54,16);await use();const switchIndex=await page.evaluate(()=>((MMApp.state().seed+'boss.switch'.length)%3+3)%3);await page.locator('#switch'+switchIndex).click();
+await place(58,16);await use();assert.equal(await page.evaluate(()=>MMApp.modal),'clear');assert.ok(await page.locator('#nextChapter').isVisible());
+
+// Chapter 5
+await page.locator('#nextChapter').click();assert.equal(await page.evaluate(()=>MMApp.campaign().chapter),'chapter-05');
+const solveEquipment=async(order)=>{for(const i of order)await page.locator('#trialTool'+i).click();await page.waitForTimeout(100);assert.equal(await page.evaluate(()=>MMApp.modal),'');};
+await place(14,0);await use();await solve();
+await place(30,0);await use();await solveEquipment([0,1,2,3,4]);
+await place(46,0);await use();await solveSoko();
+await place(20,8);await use();await solveMemory('c5.memory');
+await place(34,16);await use();await solve();
+await place(40,16);await use();await solveEquipment([4,3,2,1,0]);
+await place(46,16);await use();await solveSoko();
+await place(52,16);await use();await solveMemory('boss.memory');
+await place(56,16);await use();await page.locator('#coreInspect').click();await page.waitForTimeout(100);
+await place(58,16);await use();assert.equal(await page.evaluate(()=>MMApp.modal),'clear');assert.equal(await page.evaluate(()=>MMApp.campaign().completedChapters.length),5);
+await page.locator('#chapters').click();assert.match(await page.locator('#sheet').innerText(),/5장 · 별빛 코어 타워/);await page.locator('#close').click();
+
 for(const [width,height] of [[393,852],[844,390],[320,568],[667,375]]){await page.setViewportSize({width,height});await page.waitForTimeout(150);for(const sel of ['#jump','#use','[data-hold=left]','[data-hold=down]']){const b=await page.locator(sel).boundingBox();assert.ok(b&&b.x>=0&&b.y>=0&&b.x+b.width<=width+.5&&b.y+b.height<=height+.5,`${name} ${sel} ${width}x${height}`);}assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:`TestResults/instant/${name}-${width}x${height}.png`});}
 assert.deepEqual(errors,[]);console.log(`PASS ${name}: touch movement, answer feedback/close, crafting, real localStorage reload, bridge/mirrors/plates/boss, four mobile viewports`);
 }finally{await browser.close();}}
