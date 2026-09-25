@@ -69,6 +69,13 @@ function objectiveFor(s){const id=s&&s.v===2?s.chapter:'chapter-01',list=steps[i
 function completeStep(s,key){let x=cs(s);if(!x||done(s,key))return false;if(key.startsWith('craft')){let i=Number(key.slice(5));if(s.v===2)s.inventory.owned[i]=s.inventory.equipped[i]=true;else s.owned[i]=s.equipped[i]=true;return true;}x.flags.push(key);return true;}
 function waypoint(s){let o=objectiveFor(s),x=cs(s),floor=Math.max(0,Math.floor(((x&&x.y)||0+.25)/8)),target=Math.max(0,Math.floor(o.y/8));if(floor===target)return o;const d=D&&D.get?D.get(o.chapter):null;const width=d&&d.width||60;return{x:target>floor?width-8:Math.floor(width/2),y:floor*8,text:target>floor?'사다리를 찾아 ↑로 올라가요':'사다리를 찾아 ↓로 내려가요',key:'ladder',chapter:o.chapter};}
 function memorySequence(seed,id){let h=2166136261;for(const ch of String(seed)+':'+id)h=Math.imul(h^ch.charCodeAt(0),16777619);let out=[];for(let i=0;i<3;i++){h^=h<<13;h^=h>>>17;h^=h<<5;out.push((h>>>0)%4);}return out;}
+function rulePuzzle(seed,id){let h=2166136261;for(const ch of String(seed)+':'+id)h=Math.imul(h^ch.charCodeAt(0),16777619);let mode=(h>>>0)%3;
+ const sets=[
+  {clue:'2, 4, 6처럼 모두 짝수인 것을 고르세요.',vals:[8,7,9],ok:0},
+  {clue:'3의 배수인 것을 고르세요.',vals:[10,12,14],ok:1},
+  {clue:'10보다 크고 20보다 작은 짝수를 고르세요.',vals:[9,16,21],ok:1}
+ ],s=sets[mode];
+ return{clue:s.clue,options:s.vals.map((v,i)=>({label:String(v),correct:i===s.ok}))};}
 function tutorialCueFor(s,eventId){let x=cs(s);x.tutorials=x.tutorials||[];if(x.tutorials.includes(eventId))return null;const cues={
  'first-wrench':{title:'파워 렌치 만들기',text:'지금 만들 것: ⚒ 파워 렌치\n왜 필요해요? 멈춘 발전기를 고칠 수 있어요.\n어디서? 작업대에서 만들어요.'},
  'first-booster':{title:'점프 부스터 만들기',text:'높은 길을 가려면 점프 부스터가 필요해요. 작업대에서 만들고 장착해요.'},
@@ -80,5 +87,5 @@ function tutorialCueFor(s,eventId){let x=cs(s);x.tutorials=x.tutorials||[];if(x.
  'final-boss':{title:'마지막 보호막',text:'남은 보호막과 다음 행동을 상단 목표에서 확인해요.'}
 };return cues[eventId]||null;}
 function ackTutorial(s,eventId){let x=cs(s);x.tutorials=x.tutorials||[];if(!x.tutorials.includes(eventId))x.tutorials.push(eventId);}
-return{objectiveFor,completeStep,waypoint,memorySequence,tutorialCueFor,ackTutorial,steps};
+return{objectiveFor,completeStep,waypoint,memorySequence,rulePuzzle,tutorialCueFor,ackTutorial,steps};
 });
