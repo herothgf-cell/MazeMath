@@ -1,7 +1,14 @@
 /* MazeMath Instant 1.0. Browser adaptation; not a Unity WebGL build. */
 (function(root,factory){const c=factory();if(typeof module==='object')module.exports=c;else root.MM=c;})(typeof globalThis!=='undefined'?globalThis:this,function(){
 'use strict';
-const costs=[[2,1,0,0,0],[2,0,1,1,0],[2,0,2,1,0],[0,2,0,2,0],[2,0,2,1,0]],pattern=[2,-1,2,-1,3,-1,0,-1,0];
+const costs=[[2,1,0,0,0],[2,0,1,1,0],[2,0,2,1,0],[0,2,0,2,0],[2,0,2,1,0]];
+const recipes=[
+ [-1,1,-1,-1,0,-1,-1,0,-1],
+ [2,-1,-1,-1,0,3,-1,-1,0],
+ [2,-1,2,0,3,0,-1,-1,-1],
+ [-1,1,-1,3,-1,3,-1,1,-1],
+ [2,-1,2,-1,3,-1,0,-1,0]
+];
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n)),has=(s,k)=>s.flags.includes(k),tool=(s,i)=>s.owned[i]&&s.equipped[i];
 const chapterIds=['chapter-01','chapter-02','chapter-03','chapter-04','chapter-05'];
 function fresh(seed){return{v:1,seed:seed>>>0,x:14,y:0,vy:0,grounded:true,climb:null,face:1,checkpoint:[14,0],flags:[],items:[0,1,2,1,0],owned:Array(5).fill(false),equipped:Array(5).fill(false),ench:Array(5).fill(-1),unlocked:[],xp:0,health:5,shield:1,visited:[],question:null};}
@@ -43,7 +50,7 @@ function chapterQuestion(seed,chapter,id,level){
 
 function claim(s,id,xp,items){if(has(s,'reward/'+id))return false;s.flags.push('reward/'+id);s.xp=Math.min(99999,s.xp+xp);items.forEach((n,i)=>s.items[i]=Math.min(9999,s.items[i]+n));return true;}
 function complete(s,k){if(!['math','bridge','laser','sequence','boss.math','boss.sequence','boss.laser'].includes(k)||has(s,k))return false;s.flags.push(k);claim(s,k,k.startsWith('boss.')?20:10,k==='math'?[2,0,0,0,0]:[2,1,1,1,0]);if(hasEnchant(s,3,0))s.shield=1;return true;}
-function craft(s,i,grid){if(!Number.isInteger(i)||i<0||i>4||s.owned[i]||(i!==0&&!s.owned[0]))return false;if(grid&&(i!==4||grid.length!==9||grid.some((v,n)=>v!==pattern[n])))return false;let c=costs[i];if(c.some((v,n)=>v>s.items[n]))return false;c.forEach((v,n)=>s.items[n]-=v);s.owned[i]=s.equipped[i]=true;return true;}
+function craft(s,i,grid){if(!Number.isInteger(i)||i<0||i>4||s.owned[i]||(i!==0&&!s.owned[0]))return false;if(!Array.isArray(grid)||grid.length!==9||grid.some((v,n)=>v!==recipes[i][n]))return false;let c=costs[i];if(c.some((v,n)=>v>s.items[n]))return false;c.forEach((v,n)=>s.items[n]-=v);s.owned[i]=s.equipped[i]=true;return true;}
 function enchant(s,i,v){if(!s.owned[i]||![0,1].includes(v))return false;let id=i*2+v;if(!s.unlocked.includes(id)){if(s.xp<10)return false;s.xp-=10;s.unlocked.push(id);}s.ench[i]=v;s.equipped[i]=true;return true;}
 function hasEnchant(s,i,v){return tool(s,i)&&s.ench[i]===v&&s.unlocked.includes(i*2+v);}
 function shields(s){return 3-['boss.math','boss.sequence','boss.laser'].filter(k=>has(s,k)).length;}
@@ -62,5 +69,5 @@ function goal(s){if(!has(s,'math'))return[30,0,'숫자 장치를 찾아 문제�
 function waypoint(s){let g=goal(s),f=clamp(Math.floor((s.y+.25)/8),0,2),t=g[1]/8;if(f===t)return g;if(t===2&&f===1)return[30,8,'가운데 사다리로 3층에 올라가요'];if(f===2)return[30,16,'가운데 사다리로 내려가요'];return[has(s,'sequence')&&g[0]<36?18:54,f*8,t>f?'사다리에서 ↑를 눌러 올라가요':'사다리에서 ↓를 눌러 내려가요'];}
 function validLegacy(s){if(!s||!Number.isInteger(s.seed)||!Number.isFinite(s.x)||!Number.isFinite(s.y)||s.x<0||s.x>72||s.y< -3||s.y>34||!Array.isArray(s.flags)||s.flags.some(k=>typeof k!=='string'||k.length>90))return false;for(let key of ['items','owned','equipped','ench'])if(!Array.isArray(s[key])||s[key].length!==5)return false;return !s.items.some(n=>!Number.isInteger(n)||n<0||n>9999)&&Number.isInteger(s.xp)&&s.xp>=0&&s.xp<=99999&&Array.isArray(s.visited)&&Array.isArray(s.unlocked)&&Array.isArray(s.checkpoint)&&s.checkpoint.length===2&&!s.checkpoint.some(n=>!Number.isFinite(n))&&(!s.question||(Number.isInteger(s.question.answer)&&typeof s.question.prompt==='string'));}
 function restore(raw){try{let s=JSON.parse(raw);if(s&&s.v===1){if(!validLegacy(s))return null;s.vy=0;s.climb=null;s.grounded=true;return campaignFromLegacy(s);}if(!s||s.v!==2||!chapterIds.includes(s.chapter)||!Array.isArray(s.unlockedChapters)||!Array.isArray(s.completedChapters))return null;let cs=s.chapterState&&s.chapterState!==s?s.chapterState:s;if(!validLegacy(cs))return null;if(!s.inventory||!['items','owned','equipped','ench','unlocked'].every(k=>Array.isArray(s.inventory[k])))return null;s.vy=cs.vy=0;s.climb=cs.climb=null;s.grounded=cs.grounded=true;if(s.chapterState!==s){Object.assign(s,{x:cs.x,y:cs.y,flags:cs.flags,items:s.inventory.items,owned:s.inventory.owned,equipped:s.inventory.equipped,ench:s.inventory.ench,unlocked:s.inventory.unlocked,xp:s.campaignXp??cs.xp,visited:cs.visited,question:cs.question,checkpoint:cs.checkpoint});}return s;}catch{return null;}}
-return{fresh,freshCampaign,markChapterComplete,unlocks,startChapter,syncCampaign,rng,hash,has,tool,costs,pattern,question,chapterQuestion,check,claim,complete,craft,enchant,hasEnchant,shields,finish,solids,ladders,move,goal,waypoint,restore};
+return{fresh,freshCampaign,markChapterComplete,unlocks,startChapter,syncCampaign,rng,hash,has,tool,costs,recipes,question,chapterQuestion,check,claim,complete,craft,enchant,hasEnchant,shields,finish,solids,ladders,move,goal,waypoint,restore};
 });
