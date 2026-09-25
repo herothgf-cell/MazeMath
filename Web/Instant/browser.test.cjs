@@ -6,6 +6,7 @@ const server=http.createServer((req,res)=>{const file=files[req.url];if(!file){r
 for(const [name,type] of [['chromium',chromium],['webkit',webkit]]){const browser=await type.launch();try{const page=await browser.newPage({viewport:{width:393,height:852},deviceScaleFactor:2,isMobile:true,hasTouch:true});let errors=[];page.on('pageerror',e=>errors.push(String(e)));await page.goto(url);await page.locator('#new').click();
 const place=async(x,y=0)=>{await page.evaluate(([x,y])=>{Object.assign(MMApp.state(),{x,y,vy:0,climb:null,grounded:true});},[x,y]);await page.waitForTimeout(100);};
 const use=async()=>{await page.locator('#use').dispatchEvent('pointerdown',{pointerId:31,pointerType:'touch'});};
+const useThroughTutorial=async()=>{await use();if(await page.locator('#tutorialOk').count()){await page.locator('#tutorialOk').click();await use();}};
 const solve=async()=>{const q=await page.evaluate(()=>MMApp.state().question);for(const d of String(q.answer))await page.locator('#key'+(d==='0'?'10':Number(d)-1)).click();await page.locator('#key11').click();await page.waitForTimeout(850);assert.equal(await page.evaluate(()=>MMApp.modal),'');};
 let start=await page.evaluate(()=>MMApp.state().x);await page.locator('[data-hold=right]').dispatchEvent('pointerdown',{pointerId:21,pointerType:'touch'});await page.waitForTimeout(450);await page.locator('[data-hold=right]').dispatchEvent('pointerup',{pointerId:21,pointerType:'touch'});let stop=await page.evaluate(()=>MMApp.state().x);assert.ok(stop>start+1);await page.waitForTimeout(180);assert.ok(Math.abs(await page.evaluate(()=>MMApp.state().x)-stop)<.2);
 await place(30);await use();assert.equal(await page.evaluate(()=>MMApp.modal),'question');await page.locator('#key10').click();await page.locator('#key11').click();assert.equal(await page.evaluate(()=>MMApp.modal),'question');const q1=await page.evaluate(()=>MMApp.state().question);for(const d of String(q1.answer))await page.locator('#key'+(d==='0'?'10':Number(d)-1)).click();await page.locator('#key11').click();await page.waitForTimeout(850);assert.equal(await page.evaluate(()=>MMApp.modal),'craft-guide');assert.match(await page.locator('#sheet').innerText(),/곡괭이 팔/);assert.match(await page.locator('#sheet').innerText(),/철 조각 2/);await page.locator('#craftGuideClose').click();await place(18);await use();assert.match(await page.locator('#craft0').innerText(),/지금 만들/);await page.locator('#craft0').click();assert.ok(await page.evaluate(()=>MMApp.state().owned[0]));await page.locator('#close').click();await page.evaluate(()=>MMApp.save());await page.reload();await page.locator('#continue').click();assert.ok(await page.evaluate(()=>MMApp.state().owned[0]));
@@ -31,8 +32,8 @@ await place(14,0);await use();if(await page.locator('#tutorialOk').count())await
 await place(18,0);await use();await page.locator('#craft2').click();assert.ok(await page.evaluate(()=>MMApp.state().owned[2]));await page.locator('#close').click();
 const solveSoko=async()=>{await page.locator('#sDown').click();await page.locator('#sRight').click();await page.waitForTimeout(120);assert.equal(await page.evaluate(()=>MMApp.modal),'');};
 const solveMemory=async(id)=>{await page.waitForTimeout(1000);const seq=await page.evaluate(id=>MMRuntime.memorySequence(MMApp.state().seed,id),id);for(const n of seq)await page.locator('#mem'+n).click();await page.waitForTimeout(120);assert.equal(await page.evaluate(()=>MMApp.modal),'');};
-await place(34,0);await use();await solveSoko();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c3.sokoban')));
-await place(22,8);await use();await solveMemory('c3.memory');assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c3.memory')));
+await place(34,0);await useThroughTutorial();await solveSoko();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c3.sokoban')));
+await place(22,8);await useThroughTutorial();await solveMemory('c3.memory');assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c3.memory')));
 await place(50,8);await use();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c3.lift')));
 await place(36,16);await use();await solveSoko();
 await place(45,16);await use();await solveMemory('boss.memory');
@@ -45,8 +46,8 @@ await place(14,0);await use();if(await page.locator('#tutorialOk').count())await
 await place(18,0);await use();await page.locator('#craft4').click();await page.locator('#craft3').click();assert.ok(await page.evaluate(()=>MMApp.state().owned[4]&&MMApp.state().owned[3]));await page.locator('#close').click();
 const solveRule=async(id)=>{const p=await page.evaluate(id=>MMRuntime.rulePuzzle(MMApp.state().seed,id),id);const i=p.options.findIndex(x=>x.correct);await page.locator('#rule'+i).click();await page.waitForTimeout(100);};
 const solveLaser=async()=>{for(let i=0;i<1;i++)await page.locator('#laser0').click();for(let i=0;i<3;i++)await page.locator('#laser1').click();for(let i=0;i<2;i++)await page.locator('#laser2').click();for(let i=0;i<1;i++)await page.locator('#laser3').click();await page.locator('#laserCheck').click();await page.waitForTimeout(100);};
-await place(34,0);await use();await solveRule('c4.rule');
-await place(18,8);await use();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c4.shield')));
+await place(34,0);await useThroughTutorial();await solveRule('c4.rule');
+await place(18,8);await useThroughTutorial();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c4.shield')));
 await place(44,8);await use();await solveLaser();
 await place(36,16);await use();await solveRule('boss.rule');
 await place(46,16);await use();await solveLaser();
