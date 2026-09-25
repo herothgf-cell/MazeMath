@@ -143,18 +143,18 @@ function interactCampaign(){
    if(!has(id)){MMRuntime.completeStep(campaign,id);s.items[0]+=2;s.items[2]+=2;s.items[3]+=1;done();if(!showTutorial('first-booster'))toast('작업대에서 점프 부스터를 만들어요.');}
    else toast('높은 창고를 가려면 점프 부스터가 필요해요.');return;
  }
- if(id==='c3.sokoban'||id==='boss.sokoban'){if(!has(id)){showTutorial('first-sokoban');sokobanUI(id);}else toast('이미 해결한 상자 퍼즐이에요.');return;}
- if(id==='c3.memory'||id==='boss.memory'){if(!has(id)){showTutorial('first-memory');memoryUI(id);}else toast('이미 해결한 기억 경로예요.');return;}
+ if(id==='c3.sokoban'||id==='boss.sokoban'){if(!has(id)){if(id==='c3.sokoban'&&showTutorial('first-sokoban'))return;sokobanUI(id);}else toast('이미 해결한 상자 퍼즐이에요.');return;}
+ if(id==='c3.memory'||id==='boss.memory'){if(!has(id)){if(id==='c3.memory'&&showTutorial('first-memory'))return;memoryUI(id);}else toast('이미 해결한 기억 경로예요.');return;}
  if(id==='c3.lift'){if(!C.tool(s,2)){toast('점프 부스터를 장착해 주세요.');showTutorial('first-booster');return;}if(!has(id)){MMRuntime.completeStep(campaign,id);done();toast('높은 리프트에 도착했어요! 3층으로 올라가요.');}return;}
  if(id==='boss.missing'){questionUI(id);return;}
  if(id==='c4.intro'){
    if(!has(id)){MMRuntime.completeStep(campaign,id);s.items[0]+=2;s.items[1]+=2;s.items[2]+=2;s.items[3]+=3;done();if(!showTutorial('first-sensor'))toast('작업대에서 탐험 센서를 만들어요.');}
    else toast('센서로 숨은 규칙 단서를 찾을 수 있어요.');return;
  }
- if(id==='c4.rule'||id==='boss.rule'){if(!has(id)){showTutorial('first-rule');ruleUI(id);}else toast('이미 해결한 규칙 기계예요.');return;}
+ if(id==='c4.rule'||id==='boss.rule'){if(!has(id)){if(id==='c4.rule'&&showTutorial('first-rule'))return;ruleUI(id);}else toast('이미 해결한 규칙 기계예요.');return;}
  if(id==='c4.shield'){
    if(!C.tool(s,3)){toast('전기 통로는 에너지 실드를 장착하면 안전해요. 작업대에서 제작해 보세요.');showTutorial('first-shield');return;}
-   if(!has(id)){MMRuntime.completeStep(campaign,id);done();toast('실드로 전기 구간을 안전하게 통과했어요!');}return;
+   if(!has(id)){if(showTutorial('first-shield'))return;MMRuntime.completeStep(campaign,id);done();toast('실드로 전기 구간을 안전하게 통과했어요!');}return;
  }
  if(id==='c4.laser'||id==='boss.laser'){if(!has(id))multiLaserUI(id);else toast('수정 빛이 이미 연결되어 있어요.');return;}
  if(id==='boss.switch'){if(!has(id))switchUI(id);else toast('조건 스위치가 이미 맞춰졌어요.');return;}
@@ -205,8 +205,16 @@ else if(k==='chest'){crate(x,y,0);rect(x-.08,y+.23,.16,.36,'#ffe09d');if(has('re
 else if(k==='golem'){let sh=C.shields(s);rect(x-.8,y,.55,.66,'#6e8670');rect(x+.23,y,.55,.66,'#6e8670');rect(x-.9,y+.62,1.8,1.6,'#7e967c');rect(x-1.2,y+.87,.38,1.35,'#97ad8b');rect(x+.82,y+.87,.38,1.35,'#97ad8b');rect(x-1,y+2.18,2,1.1,'#394f3a');rect(x-.9,y+2.28,1.8,.86,'#c3cfaa');rect(x-.6,y+2.65,.18,.24,'#354e39');rect(x+.42,y+2.65,.18,.24,'#354e39');rect(x-.16,y+2.44,.32,.1,'#69784c');rect(x-.24,y+1.16,.48,.55,'#ecc769');rect(x-.85,y+3.13,1.7,.2,'#668e49');label('◈'.repeat(sh)||'감사합니다!',x,y+3.85,18,'#ffe698');}
 else{rect(x-.055,y,.11,1,'#8e7250');rect(x-.5,y+1,1,.57,'#d9b879');label(id.includes('sequence')?'2·4·6':'↑',x,y+1.15,14);}
 if(near&&near[0]===id){ctx.strokeStyle='#fff4b6';ctx.lineWidth=2;ctx.strokeRect(X(x-.95),Y(y+2.1),1.9*U,2.2*U);}}
-function draw(){ctx.setTransform(DPR,0,0,DPR,0,0);ctx.clearRect(0,0,W,H);let sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#96b6b1');sky.addColorStop(.6,'#729789');sky.addColorStop(1,'#486b55');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
-let left=Math.max(0,Math.floor(cx-W/U/2)-1),right=Math.min(60,Math.ceil(cx+W/U/2)+1);for(let f=0;f<3;f++){let y=f*8;for(let x=left;x<right;x++){if((x+f)%6===0){rect(x,y+.6,.6,5.8,'#547763');rect(x+.1,y+.6,.14,5.8,'#648775');}if(f===0&&x>=47&&x<50&&!has('bridge'))continue;rect(x,y-.75,1,.75,f===0?'#8a7152':'#718369');rect(x+.04,y-.38,.91,.30,f===0?'#a58a61':'#93a183');rect(x,y-.06,1,.13,'#82a354');rect(x+.06,y-.01,.45,.1,'#afd080');if((x+f)%8===0){rect(x+.3,y+2,.14,.75,'#48583d');rect(x+.15,y+2.65,.46,.15,'#364935');rect(x+.21,y+2.2,.35,.5,'#dfba6b');}}}
+function draw(){ctx.setTransform(DPR,0,0,DPR,0,0);ctx.clearRect(0,0,W,H);
+let palettes={
+ 'chapter-01':['#96b6b1','#729789','#486b55','#8a7152','#82a354'],
+ 'chapter-02':['#6f493b','#8b4d35','#3d2f2c','#6d5748','#e47b36'],
+ 'chapter-03':['#a9d8e9','#7fb4cf','#688da6','#c7ba91','#e5cc70'],
+ 'chapter-04':['#535d7b','#40516c','#29354e','#66708a','#75d0c9'],
+ 'chapter-05':['#3d496b','#2d3858','#1d2742','#756e85','#f0d47b']
+},pal=palettes[campaign.chapter]||palettes['chapter-01'];
+let sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,pal[0]);sky.addColorStop(.6,pal[1]);sky.addColorStop(1,pal[2]);ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+let left=Math.max(0,Math.floor(cx-W/U/2)-1),right=Math.min(60,Math.ceil(cx+W/U/2)+1);for(let f=0;f<3;f++){let y=f*8;for(let x=left;x<right;x++){if((x+f)%6===0){rect(x,y+.6,.6,5.8,'#547763');rect(x+.1,y+.6,.14,5.8,'#648775');}if(f===0&&x>=47&&x<50&&!has('bridge'))continue;rect(x,y-.75,1,.75,pal[3]);rect(x+.04,y-.38,.91,.30,pal[3]);rect(x,y-.06,1,.13,pal[4]);rect(x+.06,y-.01,.45,.1,pal[4]);if((x+f)%8===0){rect(x+.3,y+2,.14,.75,'#48583d');rect(x+.15,y+2.65,.46,.15,'#364935');rect(x+.21,y+2.2,.35,.5,'#dfba6b');}}}
 for(let f of C.solids(s)){if(f[4]||f[0]<0||f[0]>=60)continue;for(let y=f[1];y<f[3];y+=.75){rect(f[0],y,f[2]-f[0],.71,'#596b56');rect(f[0]+.05,y+.08,Math.max(.1,f[2]-f[0]-.1),.52,'#a0a58b');}label('🔒',(f[0]+f[2])/2,f[1]+2.8,19);}
 for(let l of C.ladders(s)){rect(l[0]-.28,l[1],.10,l[2]-l[1],'#d1aa73');rect(l[0]+.18,l[1],.10,l[2]-l[1],'#d1aa73');for(let y=l[1]+.3;y<l[2];y+=.46)rect(l[0]-.2,y,.4,.1,'#ebc897');}
 for(let f of [1,2]){let id=f===1?'sequence':'boss.sequence';for(let p of plates(f)){rect(p.x-.65,p.y,1.3,.12,has(id)?'#b1d474':'#c7a261');label(p.n,p.x,p.y+.39,17,'#fff0b2');}}
