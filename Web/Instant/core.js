@@ -20,6 +20,27 @@ function hash(text){let h=2166136261;for(let c of String(text))h=Math.imul(h^c.c
 function question(seed,id,level){let r=rng(hash(seed+':'+id+':'+level)),a,b,answer,prompt,op=level===0?0:r(5);switch(op){case 0:a=11+r(17);b=3+r(8);answer=a+b;prompt=`${a} + ${b} = ?`;break;case 1:b=3+r(8);answer=5+r(20);a=answer+b;prompt=`${a} − ${b} = ?`;break;case 2:a=[2,3,5][r(3)];b=2+r(5);answer=a*b;prompt=`${a} × ${b} = ?`;break;case 3:b=[2,3,5][r(3)];answer=2+r(5);a=b*answer;prompt=`${a} ÷ ${b} = ?`;break;default:a=5+r(12);answer=3+r(10);b=a+answer;prompt=`${a} + □ = ${b}`;}
 return{id,prompt,answer,op,a,b,level,solved:false};}
 function check(q,text){return /^\d{1,3}$/.test(text)&&Number(text)===q.answer;}
+function chapterQuestion(seed,chapter,id,level){
+ let r=rng(hash(seed+':'+chapter+':'+id+':'+level)),a,b,answer,prompt,kind;
+ if(chapter==='chapter-02'){
+   let mode=r(3);
+   if(mode===0){a=[2,3,5][r(3)];b=2+r(6);answer=a*b;prompt=`${a} × ${b} = ?`;kind='mul';}
+   else if(mode===1){b=[2,3,5][r(3)];answer=2+r(6);a=b*answer;prompt=`${a} ÷ ${b} = ?`;kind='div';}
+   else{a=8+r(18);b=2+r(9);answer=a+b;prompt=`${a} + ${b} = ?`;kind='add';}
+ }else if(chapter==='chapter-03'){
+   a=4+r(12);answer=2+r(10);b=a+answer;prompt=`${a} + □ = ${b}`;kind='missing';
+ }else if(chapter==='chapter-04'){
+   if(r(2)){a=12+r(18);b=3+r(9);answer=a-b;prompt=`${a} − ${b} = ?`;kind='sub';}
+   else{a=[2,3,5][r(3)];b=2+r(5);answer=a*b;prompt=`${a} × ${b} = ?`;kind='mul';}
+ }else if(chapter==='chapter-05'){
+   let mode=r(4);if(mode===0){a=[2,3,5][r(3)];b=2+r(6);answer=a*b;prompt=`${a} × ${b} = ?`;kind='mul';}
+   else if(mode===1){b=[2,3,5][r(3)];answer=2+r(6);a=b*answer;prompt=`${a} ÷ ${b} = ?`;kind='div';}
+   else if(mode===2){a=10+r(20);b=2+r(10);answer=a+b;prompt=`${a} + ${b} = ?`;kind='add';}
+   else{a=6+r(12);answer=3+r(9);b=a+answer;prompt=`${a} + □ = ${b}`;kind='missing';}
+ }else return {...question(seed,id,level),kind:'basic'};
+ return{id,prompt,answer,a,b,kind,level,solved:false};
+}
+
 function claim(s,id,xp,items){if(has(s,'reward/'+id))return false;s.flags.push('reward/'+id);s.xp=Math.min(99999,s.xp+xp);items.forEach((n,i)=>s.items[i]=Math.min(9999,s.items[i]+n));return true;}
 function complete(s,k){if(!['math','bridge','laser','sequence','boss.math','boss.sequence','boss.laser'].includes(k)||has(s,k))return false;s.flags.push(k);claim(s,k,k.startsWith('boss.')?20:10,k==='math'?[2,0,0,0,0]:[2,1,1,1,0]);if(hasEnchant(s,3,0))s.shield=1;return true;}
 function craft(s,i,grid){if(!Number.isInteger(i)||i<0||i>4||s.owned[i]||(i!==0&&!s.owned[0]))return false;if(grid&&(i!==4||grid.length!==9||grid.some((v,n)=>v!==pattern[n])))return false;let c=costs[i];if(c.some((v,n)=>v>s.items[n]))return false;c.forEach((v,n)=>s.items[n]-=v);s.owned[i]=s.equipped[i]=true;return true;}
@@ -27,8 +48,8 @@ function enchant(s,i,v){if(!s.owned[i]||![0,1].includes(v))return false;let id=i
 function hasEnchant(s,i,v){return tool(s,i)&&s.ench[i]===v&&s.unlocked.includes(i*2+v);}
 function shields(s){return 3-['boss.math','boss.sequence','boss.laser'].filter(k=>has(s,k)).length;}
 function finish(s){if(shields(s)||has(s,'clear'))return false;s.flags.push('clear');claim(s,'clear',30,[0,0,0,0,1]);return true;}
-function solids(s){let a=[[0,-.5,47,0,1],[50,-.5,60,0,1],[0,7.5,60,8,1],[0,15.5,60,16,1],[-1,-4,0,26,0],[60,-4,61,26,0],[3,18.7,9,19,1]];if(has(s,'bridge'))a.push([47,-.25,50,0,1]);else a.push([46,0,46.5,6.8,0]);if(!has(s,'mined'))a.push([35.6,0,36.4,6.8,0]);if(!has(s,'laser'))a.push([35.6,8,36.4,14.8,0]);if(!has(s,'repaired'))a.push([11.6,8,12.4,14.8,0],[11.6,16,12.4,22.8,0]);return a;}
-function ladders(s){return has(s,'sequence')?[[54,0,8],[30,8,16],[18,0,8]]:[[54,0,8]];}
+function solids(s){if(s.chapterId&&s.chapterId!=='chapter-01')return[[0,-.5,60,0,1],[0,7.5,60,8,1],[0,15.5,60,16,1],[-1,-4,0,26,0],[60,-4,61,26,0],[3,18.7,9,19,1]];let a=[[0,-.5,47,0,1],[50,-.5,60,0,1],[0,7.5,60,8,1],[0,15.5,60,16,1],[-1,-4,0,26,0],[60,-4,61,26,0],[3,18.7,9,19,1]];if(has(s,'bridge'))a.push([47,-.25,50,0,1]);else a.push([46,0,46.5,6.8,0]);if(!has(s,'mined'))a.push([35.6,0,36.4,6.8,0]);if(!has(s,'laser'))a.push([35.6,8,36.4,14.8,0]);if(!has(s,'repaired'))a.push([11.6,8,12.4,14.8,0],[11.6,16,12.4,22.8,0]);return a;}
+function ladders(s){if(s.chapterId&&s.chapterId!=='chapter-01')return[[54,0,8],[30,8,16],[18,0,8]];return has(s,'sequence')?[[54,0,8],[30,8,16],[18,0,8]]:[[54,0,8]];}
 function move(s,h,v,jump,dt){dt=clamp(dt,0,.05);if(!dt)return;h=clamp(h,-1,1);v=clamp(v,-1,1);let list=solids(s),hw=.38,height=1.65;if(!s.climb&&s.vy<=0)s.grounded=list.some(f=>s.x+hw>f[0]&&s.x-hw<f[2]&&Math.abs(s.y-f[3])<.003);if(h){s.climb=null;s.face=h>0?1:-1;}
 if(v)for(let l of ladders(s)){if(Math.abs(s.x-l[0])>.7||s.y<l[1]-.1||s.y>l[2]+.1||v>0&&s.y>=l[2]-.001||v<0&&s.y<=l[1]+.001)continue;s.climb=l;s.x=l[0];break;}
 if(jump&&s.grounded&&!s.climb){s.vy=tool(s,2)?13:9.5;s.grounded=false;}
@@ -41,5 +62,5 @@ function goal(s){if(!has(s,'math'))return[30,0,'숫자 장치를 찾아 문제�
 function waypoint(s){let g=goal(s),f=clamp(Math.floor((s.y+.25)/8),0,2),t=g[1]/8;if(f===t)return g;if(t===2&&f===1)return[30,8,'가운데 사다리로 3층에 올라가요'];if(f===2)return[30,16,'가운데 사다리로 내려가요'];return[has(s,'sequence')&&g[0]<36?18:54,f*8,t>f?'사다리에서 ↑를 눌러 올라가요':'사다리에서 ↓를 눌러 내려가요'];}
 function validLegacy(s){if(!s||!Number.isInteger(s.seed)||!Number.isFinite(s.x)||!Number.isFinite(s.y)||s.x<0||s.x>72||s.y< -3||s.y>34||!Array.isArray(s.flags)||s.flags.some(k=>typeof k!=='string'||k.length>90))return false;for(let key of ['items','owned','equipped','ench'])if(!Array.isArray(s[key])||s[key].length!==5)return false;return !s.items.some(n=>!Number.isInteger(n)||n<0||n>9999)&&Number.isInteger(s.xp)&&s.xp>=0&&s.xp<=99999&&Array.isArray(s.visited)&&Array.isArray(s.unlocked)&&Array.isArray(s.checkpoint)&&s.checkpoint.length===2&&!s.checkpoint.some(n=>!Number.isFinite(n))&&(!s.question||(Number.isInteger(s.question.answer)&&typeof s.question.prompt==='string'));}
 function restore(raw){try{let s=JSON.parse(raw);if(s&&s.v===1){if(!validLegacy(s))return null;s.vy=0;s.climb=null;s.grounded=true;return campaignFromLegacy(s);}if(!s||s.v!==2||!chapterIds.includes(s.chapter)||!Array.isArray(s.unlockedChapters)||!Array.isArray(s.completedChapters))return null;let cs=s.chapterState&&s.chapterState!==s?s.chapterState:s;if(!validLegacy(cs))return null;if(!s.inventory||!['items','owned','equipped','ench','unlocked'].every(k=>Array.isArray(s.inventory[k])))return null;s.vy=cs.vy=0;s.climb=cs.climb=null;s.grounded=cs.grounded=true;if(s.chapterState!==s){Object.assign(s,{x:cs.x,y:cs.y,flags:cs.flags,items:s.inventory.items,owned:s.inventory.owned,equipped:s.inventory.equipped,ench:s.inventory.ench,unlocked:s.inventory.unlocked,xp:s.campaignXp??cs.xp,visited:cs.visited,question:cs.question,checkpoint:cs.checkpoint});}return s;}catch{return null;}}
-return{fresh,freshCampaign,markChapterComplete,unlocks,startChapter,syncCampaign,rng,hash,has,tool,costs,pattern,question,check,claim,complete,craft,enchant,hasEnchant,shields,finish,solids,ladders,move,goal,waypoint,restore};
+return{fresh,freshCampaign,markChapterComplete,unlocks,startChapter,syncCampaign,rng,hash,has,tool,costs,pattern,question,chapterQuestion,check,claim,complete,craft,enchant,hasEnchant,shields,finish,solids,ladders,move,goal,waypoint,restore};
 });
