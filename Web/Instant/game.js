@@ -37,6 +37,12 @@ function campaignThings(){
  ['boss.math',38,16,'곱셈 보호막','terminal'],['boss.power',48,16,'배관 보호막','mirror'],['boss.plates',46,16,'2 → 3 → 5','sign'],
  ['chapterBoss',57,16,'용광로 골렘','golem'],['checkpoint',52,8,'체크포인트','flag'],['checkpointTop',34,16,'체크포인트','flag']
  ];
+ if(ch==='chapter-03')return[
+ ['workshop',18,0,'작업대','bench'],['c3.intro',14,0,'높은 창고 입구','terminal'],['c3.sokoban',34,0,'상자 정리 퍼즐','sign'],
+ ['ladder',54,0,'2층 사다리','sign'],['c3.memory',22,8,'기억 경로','sign'],['c3.lift',50,8,'높은 리프트','terminal'],
+ ['boss.sokoban',36,16,'상자 보호막','sign'],['boss.memory',45,16,'기억 보호막','sign'],['boss.missing',54,16,'빈칸 보호막','terminal'],
+ ['chapterBoss',58,16,'창고 관리자 로봇','golem'],['checkpoint',52,8,'체크포인트','flag'],['checkpointTop',31,16,'체크포인트','flag']
+ ];
  return[];
 }
 function bossRemaining(){let d=MMChapters.get(campaign.chapter);return d?d.boss.phases.filter(k=>!has(k)).length:0;}
@@ -51,6 +57,20 @@ function pipeUI(id){
  const glyph=['┐','┘','└','┌'];
  rot.forEach((_,i)=>bind('pipe'+i,()=>{rot[i]=(rot[i]+1)%4;$('pipe'+i).textContent=glyph[rot[i]];}));
  bind('pipeCheck',()=>{if(rot.every((v,i)=>v===target[i])){MMRuntime.completeStep(campaign,id);done();hide();toast('배관 연결 성공! 남은 보호막 '+bossRemaining()+'개');}else $('pipeFeedback').textContent='아직 연결이 끊긴 곳이 있어요. 다시 돌려 보세요.';});
+}
+function sokobanUI(id){
+ let px=0,py=2,bx=1,by=1,gx=2,gy=1;
+ const cells=()=>{let out='';for(let y=2;y>=0;y--)for(let x=0;x<3;x++){let v=x===gx&&y===gy?'◎':x===bx&&y===by?'▣':x===px&&y===py?'●':'·';out+='<div class="room" id="soko-'+x+'-'+y+'">'+v+'</div>';}return out;};
+ open('sokoban','상자 밀기',`<p>● 탐험가가 ▣ 상자를 밀어서 ◎ 칸에 놓아요.</p><div class="map" id="sokoGrid" style="grid-template-columns:repeat(3,1fr)">${cells()}</div><div class="keys"><button class="btn" id="sUp">↑</button><button class="btn" id="sLeft">←</button><button class="btn" id="sRight">→</button><button class="btn" id="sDown">↓</button></div><button class="linklike" id="sReset">퍼즐만 다시 시작</button>`);
+ function render(){let g=$('sokoGrid');if(g)g.innerHTML=cells();}
+ function move(dx,dy){let nx=px+dx,ny=py+dy;if(nx<0||nx>2||ny<0||ny>2)return;if(nx===bx&&ny===by){let nbx=bx+dx,nby=by+dy;if(nbx<0||nbx>2||nby<0||nby>2)return;bx=nbx;by=nby;}px=nx;py=ny;render();if(bx===gx&&by===gy){MMRuntime.completeStep(campaign,id);done();hide();toast('상자 퍼즐 성공!');}}
+ bind('sUp',()=>move(0,1));bind('sDown',()=>move(0,-1));bind('sLeft',()=>move(-1,0));bind('sRight',()=>move(1,0));bind('sReset',()=>sokobanUI(id));
+}
+function memoryUI(id){
+ const sequence=MMRuntime.memorySequence(s.seed,id),symbols=['▲','■','●','◆'];let input=[],locked=true;
+ open('memory','기억 경로',`<p>잠깐 보이는 3개의 순서를 기억해요.</p><div class="equation" id="memoryShow">${sequence.map(i=>symbols[i]).join('  ')}</div><div class="keys">${symbols.map((v,i)=>'<button class="btn" id="mem'+i+'" disabled>'+v+'</button>').join('')}</div><div class="feedback" id="memoryFeedback">순서를 기억해 주세요...</div>`);
+ setTimeout(()=>{if(modal!=='memory')return;locked=false;$('memoryShow').textContent='?  ?  ?';symbols.forEach((_,i)=>$('mem'+i).disabled=false);$('memoryFeedback').textContent='같은 순서로 눌러 보세요.';},900);
+ symbols.forEach((_,i)=>bind('mem'+i,()=>{if(locked)return;input.push(i);if(input[input.length-1]!==sequence[input.length-1]){input=[];$('memoryFeedback').textContent='괜찮아요. 처음부터 다시 해요.';return;}if(input.length===sequence.length){MMRuntime.completeStep(campaign,id);done();hide();toast('기억 경로 성공!');}}));
 }
 function finishCampaignChapter(){
  if(bossRemaining()>0){toast('아직 보호막이 '+bossRemaining()+'개 남았어요. 상단 목표를 따라가요.');return;}
@@ -80,6 +100,14 @@ function interactCampaign(){
  if(id==='boss.math'){questionUI(id);return;}
  if(id==='boss.power'){if(has(id))toast('배관 보호막은 이미 풀렸어요.');else pipeUI(id);return;}
  if(id==='boss.plates'){toast('바닥의 2 → 3 → 5 발판을 순서대로 직접 밟아요.');return;}
+ if(id==='c3.intro'){
+   if(!has(id)){MMRuntime.completeStep(campaign,id);s.items[0]+=2;s.items[2]+=2;s.items[3]+=1;done();if(!showTutorial('first-booster'))toast('작업대에서 점프 부스터를 만들어요.');}
+   else toast('높은 창고를 가려면 점프 부스터가 필요해요.');return;
+ }
+ if(id==='c3.sokoban'||id==='boss.sokoban'){if(!has(id)){showTutorial('first-sokoban');sokobanUI(id);}else toast('이미 해결한 상자 퍼즐이에요.');return;}
+ if(id==='c3.memory'||id==='boss.memory'){if(!has(id)){showTutorial('first-memory');memoryUI(id);}else toast('이미 해결한 기억 경로예요.');return;}
+ if(id==='c3.lift'){if(!C.tool(s,2)){toast('점프 부스터를 장착해 주세요.');showTutorial('first-booster');return;}if(!has(id)){MMRuntime.completeStep(campaign,id);done();toast('높은 리프트에 도착했어요! 3층으로 올라가요.');}return;}
+ if(id==='boss.missing'){questionUI(id);return;}
  if(id==='chapterBoss'){finishCampaignChapter();return;}
 }
 
