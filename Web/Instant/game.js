@@ -158,7 +158,7 @@ function interactCampaign(){
  }
  if(id==='c4.laser'||id==='boss.laser'){if(!has(id))multiLaserUI(id);else toast('수정 빛이 이미 연결되어 있어요.');return;}
  if(id==='boss.switch'){if(!has(id))switchUI(id);else toast('조건 스위치가 이미 맞춰졌어요.');return;}
- if(id==='c5.number'||id==='boss.number'){questionUI(id);return;}
+ if(id==='c5.number'||id==='boss.number'){if(id==='boss.number'&&showTutorial('final-boss'))return;questionUI(id);return;}
  if(id==='c5.equipment'||id==='boss.equipment'){if(!has(id))equipmentTrialUI(id);else toast('장비 게이트는 이미 해결했어요.');return;}
  if(id==='c5.spatial'||id==='boss.spatial'){if(!has(id))sokobanUI(id);else toast('공간 퍼즐은 이미 해결했어요.');return;}
  if(id==='c5.memory'||id==='boss.memory'){if(!has(id))memoryUI(id);else toast('기억 퍼즐은 이미 해결했어요.');return;}
