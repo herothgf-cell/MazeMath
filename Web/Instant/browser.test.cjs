@@ -61,7 +61,7 @@ await place(14,0);await use();await solve();
 await place(30,0);await use();await solveEquipment([0,1,2,3,4]);
 await place(46,0);await use();await solveSoko();
 await place(20,8);await use();await solveMemory('c5.memory');
-await place(34,16);await use();await solve();
+await place(34,16);await useThroughTutorial();await solve();
 await place(40,16);await use();await solveEquipment([4,3,2,1,0]);
 await place(46,16);await use();await solveSoko();
 await place(52,16);await use();await solveMemory('boss.memory');
