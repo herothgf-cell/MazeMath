@@ -1,5 +1,6 @@
 const test=require('node:test'),a=require('node:assert/strict');
 let D;try{D=require('./chapter-data.js');}catch{}
+let R;try{R=require('./chapter-runtime.js');}catch{}
 let C;try {C=require('./core.js');}catch{};
 test('browser game core is available',()=>a.ok(C));
 test('seed creates reproducible solvable arithmetic',()=>{for(let n=1;n<500;n++){let q=C.question(n,'math',n%5);a.deepEqual(q,C.question(n,'math',n%5));a.ok(Number.isInteger(q.answer)&&q.answer>=0&&q.answer<=100);a.equal(C.check(q,String(q.answer)),true);a.equal(C.check(q,''),false);}});
@@ -17,3 +18,5 @@ test('first craft and final boss objectives tell a child the exact next action',
 test('five chapter definitions expose stable ids and starts',()=>{a.ok(D);a.deepEqual(D.list().map(x=>x.id),['chapter-01','chapter-02','chapter-03','chapter-04','chapter-05']);a.deepEqual(D.get('chapter-02').start,[8,0]);a.equal(D.get('chapter-02').boss.id,'furnace-golem');});
 test('v1 save migrates to campaign v2 without progress loss',()=>{let legacy=C.fresh(123);C.complete(legacy,'math');legacy.x=22;let restored=C.restore(JSON.stringify(legacy));a.equal(restored.v,2);a.equal(restored.chapter,'chapter-01');a.equal(restored.chapterState.x,22);a.ok(restored.chapterState.flags.includes('math'));});
 test('chapter clear unlock is idempotent',()=>{let s=C.freshCampaign(9);C.markChapterComplete(s,'chapter-01');C.markChapterComplete(s,'chapter-01');a.deepEqual(s.unlockedChapters,['chapter-01','chapter-02']);});
+
+test('data driven chapter one keeps current required route',()=>{a.ok(R);let s=C.freshCampaign(11);let o=R.objectiveFor(s);a.match(o.text,/숫자 장치/);R.completeStep(s,'math');o=R.objectiveFor(s);a.match(o.text,/곡괭이 팔/);s.inventory.owned[0]=s.inventory.equipped[0]=true;R.completeStep(s,'mined');a.match(R.objectiveFor(s).text,/8kg/);for(const k of ['bridge','laser','sequence','boss.math','boss.sequence','boss.laser'])R.completeStep(s,k);a.match(R.objectiveFor(s).text,/골렘/);a.match(R.objectiveFor(s).text,/조사/);});
