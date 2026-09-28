@@ -27,7 +27,7 @@ await place(38,16);await use();await solve();assert.ok(await page.evaluate(()=>M
 await place(48,16);await use();assert.match(await page.locator('#sheet').innerText(),/왼쪽.*불꽃|불꽃.*오른쪽/);assert.match(await page.locator('#pipeProgress').innerText(),/0\s*\/\s*3/);
 await page.locator('#pipe0').click();assert.match(await page.locator('#pipeProgress').innerText(),/1\s*\/\s*3/);
 await page.locator('#pipe1').click();await page.locator('#pipe1').click();assert.match(await page.locator('#pipeProgress').innerText(),/2\s*\/\s*3/);
-await page.locator('#pipe2').click();await page.waitForTimeout(120);assert.equal(await page.evaluate(()=>MMApp.modal),'');assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('boss.power')));
+await page.locator('#pipe2').click();await page.waitForTimeout(80);assert.match(await page.locator('#pipeProgress').innerText(),/3\s*\/\s*3/);await page.waitForTimeout(300);assert.equal(await page.evaluate(()=>MMApp.modal),'');assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('boss.power')));
 const xs2=await page.evaluate(()=>{let r=MM.rng(MMApp.state().seed+2*777),nums=[2,3,5];for(let i=2;i>0;i--){let j=r(i+1);[nums[i],nums[j]]=[nums[j],nums[i]];}return[2,3,5].map(n=>42+nums.indexOf(n)*4);});for(let x of xs2)await place(x,16);assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('boss.plates')));
 await place(57,16);await use();assert.equal(await page.evaluate(()=>MMApp.modal),'clear');assert.ok(await page.locator('#nextChapter').isVisible());
 
