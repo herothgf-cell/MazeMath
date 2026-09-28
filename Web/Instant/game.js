@@ -4,7 +4,7 @@ const C=window.MM,$=id=>document.getElementById(id),canvas=$('world'),ctx=canvas
 const KEY='mazemath.instant.v1',names=['철 조각','철판','기어','에너지석','코어'],icons=['⛏','⚒','⇧','◈','⌖','▣'],tools=['곡괭이 팔','파워 렌치','점프 부스터','에너지 실드','탐험 센서'];
 const desc=['균열벽을 부수어 새 길을 열어요','고장 난 보물 통로를 수리해요','더 높이 점프할 수 있어요','낙하할 때 한 번 보호해요','보물과 방문한 길을 찾아요'];
 let campaign=C.freshCampaign(1),s=campaign.chapterState,running=false,modal='title',seq=0,closeTimer=0,toastTimer=0,lastSave=0,storageOK=true,held=new Map(),keys=new Set(),jumpQueued=false,near=null,carry=-1,weights=[false,false,false],mirrors=[false,false,false],steps=[0,0],lastPlate='',repair=0,winNotified=false;
-let W=1,H=1,U=40,DPR=1,cx=14,cy=3.2,time=0,lastTime=0,acc=0,walk=0,lastUi='';
+let W=1,H=1,U=40,DPR=1,cx=14,cy=3.2,time=0,lastTime=0,acc=0,walk=0,lastUi='',fxTimer=0,worldPulse=null;
 const seed=()=>Date.now()^(Math.random()*0xffffffff),esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const has=k=>C.has(s,k),done=()=>{save();refresh();};
 function load(){try{return C.restore(localStorage.getItem(KEY));}catch{storageOK=false;return null;}}
@@ -12,6 +12,11 @@ function save(){if(!running)return;try{if(campaign&&campaign.v===2){campaign.cha
 function clearInput(){held.clear();keys.clear();jumpQueued=false;}
 function install(state){campaign=state&&state.v===2?state:(state?C.restore(JSON.stringify(state)):C.freshCampaign(seed()));if(!campaign)campaign=C.freshCampaign(seed());s=campaign.chapterState||campaign;s.chapterId=campaign.chapter;s.items=campaign.inventory.items;s.owned=campaign.inventory.owned;s.equipped=campaign.inventory.equipped;s.ench=campaign.inventory.ench;s.unlocked=campaign.inventory.unlocked;s.xp=campaign.campaignXp??s.xp;carry=-1;weights=[false,false,false];mirrors=[has('laser'),has('laser'),has('boss.laser')];steps=[0,0];lastPlate='';repair=0;cx=s.x;cy=s.y+3.2;winNotified=has('clear');lastUi='';refresh();}
 function toast(text){$('toast').textContent=text;$('toast').style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').style.display='none',3400);}
+function worldSuccessEffect(sourceId){
+ const src=things().find(t=>t[0]===sourceId)||near||[sourceId,s.x,s.y],goal=MMRuntime&&campaign&&campaign.v===2?MMRuntime.objectiveFor(campaign):null;
+ worldPulse={x:src[1]??s.x,y:src[2]??s.y,goalX:goal&&Number.isFinite(goal.x)?goal.x:null,goalY:goal&&Number.isFinite(goal.y)?goal.y:null,until:time+1.7};
+ const el=$('worldfx');if(!el)return;el.innerHTML='✓ 장치 해제!'+(goal?'<small>다음 목표 · '+esc(goal.text)+'</small>':'');el.classList.add('show');clearTimeout(fxTimer);fxTimer=setTimeout(()=>el.classList.remove('show'),1700);
+}
 function open(kind,title,html){clearInput();clearTimeout(closeTimer);seq++;modal=kind;veil.classList.add('open');sheet.innerHTML=(title?`<button class="btn x" id="close" aria-label="닫기">×</button><h2>${esc(title)}</h2>`:'')+html;if($('close'))$('close').onclick=hide;sheet.scrollTop=0;}
 function hide(){clearTimeout(closeTimer);seq++;if(!running){title();return;}modal='';veil.classList.remove('open');clearInput();save();}
 function bind(id,fn){let e=$(id);if(e)e.onclick=fn;}
@@ -69,7 +74,7 @@ function patternUI(){craftingTable(4);}
 const enchantNames=[['메아리','행운'],['빠른 수리','회로 감지'],['착지 보호','경로 탐색'],['재충전','튼튼한 실드'],['기억','길잡이']];
 function enchantUI(){open('enchant','도구에 특별한 능력',resources()+'<p class="sub">최초 해금 10 XP · 해금한 인챈트로 바꾸기는 무료</p>'+tools.map((n,i)=>`<div class="item"><div class="itembody"><b>${icons[i]} ${n}</b><div class="tabs">${enchantNames[i].map((v,j)=>`<button class="btn small ${s.ench[i]===j?'primary':''}" id="ench${i}${j}" ${s.owned[i]?'':'disabled'}>${v}${s.unlocked.includes(i*2+j)?' ✓':''}</button>`).join('')}</div></div></div>`).join(''));tools.forEach((n,i)=>[0,1].forEach(j=>bind('ench'+i+j,()=>{if(!atBench())return;if(C.enchant(s,i,j)){if(i===3)s.shield=j===1?2:1;done();enchantUI();toast(enchantNames[i][j]+' 적용!');}else toast('문제와 퍼즐을 풀어 10 XP를 모아주세요.');})));}
 function mapUI(){open('map','지나온 길과 다음 목표',`<p class="sub">${esc(C.goal(s)[2])}<br>지도를 눌러도 순간이동하지 않습니다. 사다리를 찾아 이동해요.</p>`+[2,1,0].map(f=>`<b>${f+1}층 ${['작업대와 저울','거울과 발판','수호 골렘'][f]}</b><div class="map">${Array.from({length:5},(_,i)=>{let id=f*5+i,here=Math.floor((s.y+.25)/8)===f&&Math.floor(s.x/12)===i;return`<div class="room ${here?'here':s.visited.includes(id)?'':'unknown'}">${here?'모모':s.visited.includes(id)?['보물','작업대','장치','갈림길','사다리'][i]:'?'}</div>`;}).join('')}</div>`).join('')+`<p class="help">${esc(C.waypoint(s)[2])}<br>다음 방향: ${C.waypoint(s)[0]<s.x?'← 왼쪽':'오른쪽 →'}</p>`);}
-function questionUI(id){if(!s.question||s.question.id!==id||s.question.solved)s.question=campaign.chapter==='chapter-01'?C.question(s.seed,id,has(id)?1+(s.flags.length%5):id==='math'?0:2):C.chapterQuestion(s.seed,campaign.chapter,id,2);save();let q=s.question,answer='',locked=false,stamp;open('question','숫자 장치',`<div class="quizrow"><div><span class="tag">${id.startsWith('boss')?'골렘 보호막':'모모의 숫자 탐험'}</span><div class="equation">${esc(q.prompt)}</div><div class="answer" id="answer" aria-live="polite">?</div><div class="feedback" id="feedback">숫자를 입력해 주세요</div><button class="linklike" id="hint">모모의 힌트</button></div><div class="keys">${['1','2','3','4','5','6','7','8','9','⌫','0','확인'].map((v,i)=>`<button class="btn ${i===11?'primary':''}" id="key${i}">${v}</button>`).join('')}</div></div>`);stamp=seq;function render(){$('answer').textContent=answer||'?';}function submit(){if(locked||!answer)return;if(C.check(q,answer)){locked=true;q.solved=true;if(campaign.chapter==='chapter-01')C.complete(s,id);else MMRuntime.completeStep(campaign,id);done();$('feedback').textContent='정답이에요! 잘했어요.';sheet.querySelectorAll('.keys button').forEach(b=>b.disabled=true);closeTimer=setTimeout(()=>{if(seq===stamp){if(id==='math'&&!s.owned[0]){open('craft-guide','첫 제작 미션',`<div class="help"><b>지금 만들 것: ⛏ 곡괭이 팔</b><br><br>필요한 재료: 철 조각 2 + 철판 1<br>방금 문제를 풀어서 재료가 준비됐어요.<br><br><b>← 왼쪽 작업대</b>로 돌아가서 <b>지금 만들기</b>를 눌러보세요.</div><div class="stack"><button class="btn primary wide" id="craftGuideClose">작업대로 가기 ←</button></div>`);bind('craftGuideClose',hide);}else{hide();toast('정답! 탐험을 계속해요.');}}},650);}else{$('feedback').textContent='괜찮아요. 다시 생각해 볼까요?';answer='';render();}}
+function questionUI(id){if(!s.question||s.question.id!==id||s.question.solved)s.question=campaign.chapter==='chapter-01'?C.question(s.seed,id,has(id)?1+(s.flags.length%5):id==='math'?0:2):C.chapterQuestion(s.seed,campaign.chapter,id,2);save();let q=s.question,answer='',locked=false,stamp;open('question','숫자 장치',`<div class="quizrow"><div><span class="tag">${id.startsWith('boss')?'골렘 보호막':'모모의 숫자 탐험'}</span><div class="equation">${esc(q.prompt)}</div><div class="answer" id="answer" aria-live="polite">?</div><div class="feedback" id="feedback">숫자를 입력해 주세요</div><button class="linklike" id="hint">모모의 힌트</button></div><div class="keys">${['1','2','3','4','5','6','7','8','9','⌫','0','확인'].map((v,i)=>`<button class="btn ${i===11?'primary':''}" id="key${i}">${v}</button>`).join('')}</div></div>`);stamp=seq;function render(){$('answer').textContent=answer||'?';}function submit(){if(locked||!answer)return;if(C.check(q,answer)){locked=true;q.solved=true;if(campaign.chapter==='chapter-01')C.complete(s,id);else MMRuntime.completeStep(campaign,id);done();worldSuccessEffect(id);$('feedback').textContent='정답이에요! 잘했어요.';sheet.querySelectorAll('.keys button').forEach(b=>b.disabled=true);closeTimer=setTimeout(()=>{if(seq===stamp){if(id==='math'&&!s.owned[0]){open('craft-guide','첫 제작 미션',`<div class="help"><b>지금 만들 것: ⛏ 곡괭이 팔</b><br><br>필요한 재료: 철 조각 2 + 철판 1<br>방금 문제를 풀어서 재료가 준비됐어요.<br><br><b>← 왼쪽 작업대</b>로 돌아가서 <b>지금 만들기</b>를 눌러보세요.</div><div class="stack"><button class="btn primary wide" id="craftGuideClose">작업대로 가기 ←</button></div>`);bind('craftGuideClose',hide);}else{hide();toast('정답! 탐험을 계속해요.');}}},650);}else{$('feedback').textContent='괜찮아요. 다시 생각해 볼까요?';answer='';render();}}
 for(let i=0;i<12;i++)bind('key'+i,()=>{if(locked)return;if(i<9&&answer.length<3)answer+=i+1;else if(i===9)answer=answer.slice(0,-1);else if(i===10&&answer.length<3)answer+='0';else if(i===11)submit();if(seq===stamp)render();});let hints=0;bind('hint',()=>{if(locked)return;hints++;$('feedback').textContent=hints>1?'함께 확인해요: '+q.answer:q.op===0?'10을 먼저 만들고 더해 보세요.':q.op===3?'같은 크기의 묶음으로 나눠 보세요.':'숫자를 작은 묶음으로 나눠 생각해요.';});}
 function campaignThings(){
  const ch=campaign.chapter;
@@ -106,11 +111,18 @@ function showTutorial(eventId){
  bind('tutorialOk',()=>{MMRuntime.ackTutorial(campaign,eventId);hide();});return true;
 }
 function pipeUI(id){
- let rot=[0,0,0],target=[1,2,1];
- open('pipe','배관 연결',`<p>파이프를 눌러 돌려서 <b>용광로까지 한 줄로 연결</b>해 주세요.</p><div class="recipe">${rot.map((v,i)=>`<button class="btn" id="pipe${i}">┐</button>`).join('')}</div><button class="btn primary wide" id="pipeCheck">연결 확인</button><div class="feedback" id="pipeFeedback"></div>`);
+ let rot=[0,0,0],target=[1,2,1],finished=false;
  const glyph=['┐','┘','└','┌'];
- rot.forEach((_,i)=>bind('pipe'+i,()=>{rot[i]=(rot[i]+1)%4;$('pipe'+i).textContent=glyph[rot[i]];}));
- bind('pipeCheck',()=>{if(rot.every((v,i)=>v===target[i])){MMRuntime.completeStep(campaign,id);done();hide();toast('배관 연결 성공! 남은 보호막 '+bossRemaining()+'개');}else $('pipeFeedback').textContent='아직 연결이 끊긴 곳이 있어요. 다시 돌려 보세요.';});
+ open('pipe','용광로 배관 연결',`<div class="help"><b>목표: 왼쪽 🔥 불꽃을 오른쪽 용광로까지 연결해요.</b><br>파이프를 하나씩 눌러 돌리세요. <b>왼쪽부터 제대로 연결된 칸은 노란색</b>으로 켜져요.</div><div class="pipeflow"><div class="pipeend">🔥<br>불꽃</div>${rot.map((v,i)=>`<button class="btn pipepiece" id="pipe${i}" aria-label="배관 ${i+1}">${glyph[v]}</button>`).join('')}<div class="pipeend">🏭<br>용광로</div></div><div class="feedback" id="pipeProgress">연결 0 / 3 · 왼쪽 파이프부터 돌려보세요.</div><p class="sub center">연결된 칸이 노랗게 켜지면 다음 파이프로 넘어가면 됩니다.</p>`);
+ function connectedCount(){let n=0;while(n<target.length&&rot[n]===target[n])n++;return n;}
+ function render(){
+   const n=connectedCount();
+   for(let i=0;i<rot.length;i++){let b=$('pipe'+i);if(!b)continue;b.textContent=glyph[rot[i]];b.classList.toggle('connected',i<n);}
+   let p=$('pipeProgress');if(p)p.textContent=n===3?'연결 3 / 3 · 용광로에 불이 들어왔어요!':`연결 ${n} / 3 · ${n+1}번째 파이프를 돌려보세요.`;
+   if(n===3&&!finished){finished=true;MMRuntime.completeStep(campaign,id);done();worldSuccessEffect(id);setTimeout(()=>{if(modal==='pipe'){hide();toast('배관 연결 성공! 다음 보호막으로 가요.');}},260);}
+ }
+ rot.forEach((_,i)=>bind('pipe'+i,()=>{if(finished)return;rot[i]=(rot[i]+1)%4;render();}));
+ render();
 }
 function sokobanUI(id){
  let px=0,py=2,bx=1,by=1,gx=2,gy=1;
@@ -167,11 +179,11 @@ function interactCampaign(){
  if(id==='ladder'){toast('사다리 앞에서 ↑ 또는 ↓를 누르고 있어요.');return;}
  if(id.startsWith('checkpoint')){s.checkpoint=[near[1],near[2]];s.health=5;done();toast('체크포인트 저장!');return;}
  if(id==='c2.intro'){
-   if(!has(id)){MMRuntime.completeStep(campaign,id);s.items[0]+=2;s.items[2]+=1;s.items[3]+=1;done();if(!showTutorial('first-wrench'))toast('작업대에서 파워 렌치를 만들어요.');}
-   else toast('발전기가 멈췄어요. 파워 렌치로 수리해요.');return;
+   if(!has(id)){MMRuntime.completeStep(campaign,id);s.items[0]+=2;s.items[2]+=1;s.items[3]+=1;done();if(s.owned[1]){toast(C.tool(s,1)?'파워 렌치가 이미 준비됐어요! 오른쪽 발전기 A를 수리해요.':'파워 렌치는 이미 있어요. 가방에서 장착하고 발전기 A로 가요.');}else if(!showTutorial('first-wrench'))toast('작업대에서 파워 렌치를 만들어요.');}
+   else toast(s.owned[1]?'파워 렌치로 발전기를 수리해요.':'발전기가 멈췄어요. 파워 렌치가 필요해요.');return;
  }
  if(id==='c2.genA'||id==='c2.genB'){
-   if(!C.tool(s,1)){toast('파워 렌치를 장착해야 발전기를 고칠 수 있어요.');showTutorial('first-wrench');return;}
+   if(!C.tool(s,1)){if(s.owned[1])toast('파워 렌치는 이미 있어요. 가방에서 장착해 주세요.');else{toast('파워 렌치를 만들어 장착해야 발전기를 고칠 수 있어요.');showTutorial('first-wrench');}return;}
    if(!has(id)){MMRuntime.completeStep(campaign,id);s.xp+=10;done();toast((id.endsWith('A')?'발전기 A':'발전기 B')+' 수리 완료!');}else toast('이미 수리한 발전기예요.');return;
  }
  if(id==='c2.bridge'){
@@ -263,6 +275,12 @@ for(let f of [1,2]){let id=f===1?'sequence':'boss.sequence';for(let p of plates(
 line([[44,8.5],[44,11]],'#ffe894');if(mirrors[0]){line([[44,11],[48,11]],'#ffe894');line(mirrors[1]?[[48,11],[48,8.5]]:[[48,11],[48,14]],'#ffe894');}else line([[44,11],[40,11]],'#ffe894');rect(47.7,8.1,.6,.4,has('laser')?'#c3e977':'#b17959');
 line([[51.5,17],[54,17]],'#ffe894');line(mirrors[2]?[[54,17],[54,20]]:[[54,17],[54,16.2]],'#ffe894');rect(53.7,20,.6,.3,has('boss.laser')?'#cced78':'#ad8163');
 for(let t of things())if(Math.abs(t[1]-cx)<W/U/2+3&&Math.abs(t[2]-cy)<H/U/2+5)drawThing(t);
+if(worldPulse&&time<worldPulse.until){
+ const remain=Math.max(0,worldPulse.until-time),phase=1-remain/1.7,r=.65+phase*1.15;
+ ctx.save();ctx.globalAlpha=Math.min(1,remain*1.2);ctx.strokeStyle='#ffe56f';ctx.lineWidth=Math.max(3,U*.07);ctx.beginPath();ctx.arc(X(worldPulse.x),Y(worldPulse.y+1),r*U,0,Math.PI*2);ctx.stroke();
+ if(Number.isFinite(worldPulse.goalX)&&Number.isFinite(worldPulse.goalY)){ctx.setLineDash([7,6]);ctx.strokeStyle='#fff1a8';ctx.beginPath();ctx.moveTo(X(worldPulse.x),Y(worldPulse.y+1));ctx.lineTo(X(worldPulse.goalX),Y(worldPulse.goalY+1));ctx.stroke();ctx.setLineDash([]);label('다음!',worldPulse.goalX,worldPulse.goalY+1.7,15,'#fff5a8');}
+ ctx.restore();
+}else if(worldPulse)worldPulse=null;
 robot(s.x,s.y);let mx=s.x-1.1,my=s.y+2+Math.sin(time*3)*.09;rect(mx-.29,my,.58,.52,'#344f3c');rect(mx-.23,my+.06,.46,.40,'#c5d99e');rect(mx-.16,my+.18,.09,.13,'#374f40');rect(mx+.07,my+.18,.09,.13,'#374f40');rect(mx-.03,my+.52,.06,.2,'#d8ad67');if(carry>=0)crate(s.x,s.y+1.8,[3,5,2][carry]);
 if(running&&!modal){let g=C.waypoint(s),dx=g[0]-s.x;if(Math.abs(dx)>2.3){let px=dx<0?26:W-26;ctx.fillStyle='#f8efc1';ctx.font='bold 22px sans-serif';ctx.textAlign='center';ctx.fillText(dx<0?'◀':'▶',px,H/2);ctx.font='600 12px sans-serif';ctx.fillText(Math.round(Math.abs(dx))+'m',px,H/2+19);}}
 }
