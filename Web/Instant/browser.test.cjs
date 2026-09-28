@@ -15,15 +15,19 @@ await place(34);await use();assert.ok(await page.evaluate(()=>MMApp.state().flag
 await place(38);await use();await place(44);await use();await place(40);await use();await place(44);await use();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('bridge')));
 await place(44,8);await use();await place(48,8);await use();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('laser')));
 for(const f of [1,2]){if(f===2){await place(38,16);await use();await solve();}const xs=await page.evaluate(f=>{let r=MM.rng(MMApp.state().seed+f*777),nums=[2,4,6];for(let i=2;i>0;i--){let j=r(i+1);[nums[i],nums[j]]=[nums[j],nums[i]];}return [2,4,6].map(n=>(f===1?16:42)+nums.indexOf(n)*4);},f);for(let x of xs)await place(x,8*f);assert.ok(await page.evaluate(k=>MMApp.state().flags.includes(k),f===1?'sequence':'boss.sequence'));}
-await place(54,16);await use();assert.match(await page.locator('#goal').innerText(),/골렘/);assert.match(await page.locator('#goal').innerText(),/조사/);assert.match(await page.locator('#toast').innerText(),/보호막 0개/);await place(57,16);await use();assert.equal(await page.evaluate(()=>MMApp.modal),'clear');assert.ok(await page.locator('#nextChapter').isVisible());await page.locator('#nextChapter').click();assert.equal(await page.evaluate(()=>MMApp.campaign().chapter),'chapter-02');await page.evaluate(()=>MMApp.save());await page.reload();await page.locator('#continue').click();assert.equal(await page.evaluate(()=>MMApp.campaign().chapter),'chapter-02');
-// Chapter 2 full route
-await place(14,0);await use();if(await page.locator('#tutorialOk').count())await page.locator('#tutorialOk').click();
+await place(54,16);await use();assert.match(await page.locator('#goal').innerText(),/골렘/);assert.match(await page.locator('#goal').innerText(),/조사/);assert.match(await page.locator('#toast').innerText(),/보호막 0개/);
 await place(18,0);await use();await craftTool(1);assert.ok(await page.evaluate(()=>MMApp.state().owned[1]));await page.locator('#close').click();
+await place(57,16);await use();assert.equal(await page.evaluate(()=>MMApp.modal),'clear');assert.ok(await page.locator('#nextChapter').isVisible());await page.locator('#nextChapter').click();assert.equal(await page.evaluate(()=>MMApp.campaign().chapter),'chapter-02');await page.evaluate(()=>MMApp.save());await page.reload();await page.locator('#continue').click();assert.equal(await page.evaluate(()=>MMApp.campaign().chapter),'chapter-02');
+// Chapter 2 full route
+await place(14,0);await use();assert.equal(await page.locator('#tutorialOk').count(),0);assert.doesNotMatch(await page.locator('#goal').innerText(),/렌치.*만들/);assert.match(await page.locator('#goal').innerText(),/발전기 A/);
 await place(30,0);await use();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c2.genA')));
 await place(10,8);await use();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c2.genB')));
 await place(46,8);await use();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('c2.bridge')));
-await place(38,16);await use();await solve();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('boss.math')));
-await place(48,16);await use();await page.locator('#pipe0').click();await page.locator('#pipe1').click();await page.locator('#pipe1').click();await page.locator('#pipe2').click();await page.locator('#pipeCheck').click();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('boss.power')));
+await place(38,16);await use();await solve();assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('boss.math')));assert.equal(await page.locator('#worldfx').isVisible(),true);assert.match(await page.locator('#worldfx').innerText(),/장치 해제|다음 목표/);
+await place(48,16);await use();assert.match(await page.locator('#sheet').innerText(),/왼쪽.*불꽃|불꽃.*오른쪽/);assert.match(await page.locator('#pipeProgress').innerText(),/0\s*\/\s*3/);
+await page.locator('#pipe0').click();assert.match(await page.locator('#pipeProgress').innerText(),/1\s*\/\s*3/);
+await page.locator('#pipe1').click();await page.locator('#pipe1').click();assert.match(await page.locator('#pipeProgress').innerText(),/2\s*\/\s*3/);
+await page.locator('#pipe2').click();await page.waitForTimeout(120);assert.equal(await page.evaluate(()=>MMApp.modal),'');assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('boss.power')));
 const xs2=await page.evaluate(()=>{let r=MM.rng(MMApp.state().seed+2*777),nums=[2,3,5];for(let i=2;i>0;i--){let j=r(i+1);[nums[i],nums[j]]=[nums[j],nums[i]];}return[2,3,5].map(n=>42+nums.indexOf(n)*4);});for(let x of xs2)await place(x,16);assert.ok(await page.evaluate(()=>MMApp.state().flags.includes('boss.plates')));
 await place(57,16);await use();assert.equal(await page.evaluate(()=>MMApp.modal),'clear');assert.ok(await page.locator('#nextChapter').isVisible());
 
