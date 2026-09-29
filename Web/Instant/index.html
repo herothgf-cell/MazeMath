@@ -1,8 +1,1180 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#304732"><meta name="apple-mobile-web-app-capable" content="yes"><title>모모의 블록 탐험 · 10장 모험</title><link rel="stylesheet" href="style.css?v=10.1"></head>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#2f6771"><meta name="apple-mobile-web-app-capable" content="yes"><title>모모의 공방 모험 · 15.1 PC 미리보기</title><style>
+:root{--paper:#f6efd9;--ink:#304431;--grass:#648b43;--wood:#9b7045;--edge:#405439;--gold:#e6bf66}*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#283e30;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif}button{font:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}button:focus-visible{outline:3px solid #e5a935;outline-offset:2px}button:disabled{opacity:.5;cursor:default}button svg{pointer-events:none}[hidden]{display:none!important}#app{height:100vh;height:100dvh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}header{flex:none;display:flex;align-items:center;gap:8px;padding:8px 10px;min-height:76px;background:var(--paper);border-bottom:4px solid #6c8151}.emblem{width:32px;height:34px;flex:none;display:grid;place-items:center;font-weight:900;background:#a7caae;border:3px solid #465a3d;box-shadow:inset 2px 2px #e3ecc9}.headtext{flex:1;min-width:0}.eyebrow{font-size:10px;color:#596c48;letter-spacing:.7px;font-weight:800;margin-bottom:3px}#goal{font-size:16px;line-height:1.32;font-weight:750;overflow-wrap:anywhere}#sequenceInfo{font-size:13px;line-height:1.3;color:#6a541a;font-weight:800}.btn{min-height:44px;padding:8px 10px;border:2px solid var(--edge);border-radius:3px;background:#e5ddc4;color:var(--ink);box-shadow:inset 0 3px #fff8e5,inset 0 -3px #bdb498,0 2px #263f2d;font-weight:750}.btn:active{transform:translateY(1px);box-shadow:inset 0 2px #9ea57e}.btn.primary{background:#668f44;color:#fff9e4;box-shadow:inset 0 3px #99bc73,inset 0 -3px #415e2f,0 2px #2c472e}.btn.small{font-size:14px;padding:5px 9px}.btn.wide{width:100%}.btn.chosen{outline:3px solid #e4ac39;outline-offset:1px}.btn[aria-pressed=true]{border-color:#e6bb54;background:#e6daae}#stage{flex:1;min-height:95px;position:relative;overflow:hidden}canvas{width:100%;height:100%;display:block;touch-action:none}#status{position:absolute;left:8px;top:7px;font-size:12px;font-weight:700;padding:5px 8px;background:#293f33db;color:#f6edcc;border:1px solid #acbf87;pointer-events:none}#worldfx{position:absolute;top:16%;left:50%;transform:translateX(-50%);max-width:88%;width:max-content;background:#263f32ee;border:2px solid #e9cb81;color:#fff5cb;text-align:center;padding:9px 13px;font-size:17px;font-weight:850;pointer-events:none;box-shadow:0 4px #22352b66}#worldfx small{display:block;font-size:13px;line-height:1.35;margin-top:4px;font-weight:650}footer{flex:none;background:#d9d0b2;border-top:4px solid #688149;padding:3px 8px 7px;user-select:none;-webkit-user-select:none;touch-action:none}#near{height:20px;text-align:center;font-size:13px;font-weight:750;line-height:20px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hotbar{display:flex;justify-content:center;gap:5px;margin:3px auto 6px}.slot{width:43px;height:38px;flex:none;border:2px solid #334c37;background:#596d50;box-shadow:inset 2px 2px #95aa7c;color:#fbf3d2;position:relative;font-size:20px}.slot.on{border:3px solid #ffefab;background:#81a853;transform:translateY(-2px)}.slot.dim{opacity:.5}.slot svg{width:25px;height:25px}.slot .num{position:absolute;font-size:9px;left:2px;bottom:0}.pad{display:flex;align-items:center;justify-content:space-between;gap:6px;max-width:700px;margin:auto}.arrows,.acts{display:flex;gap:5px}.hold{width:44px;min-height:48px;padding:3px;font-size:23px;touch-action:none}.acts .btn{min-width:58px;min-height:48px;font-size:15px;max-width:112px;line-height:1.12;padding:5px 8px;touch-action:none}#use{min-width:70px}#toast{position:fixed;top:max(82px,calc(env(safe-area-inset-top) + 80px));left:50%;transform:translateX(-50%);max-width:92%;width:max-content;padding:9px 13px;font-size:15px;line-height:1.4;font-weight:700;background:#fff3cbf5;border:2px solid #627649;box-shadow:0 3px #22382a44;pointer-events:none;z-index:15}#veil{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:#20362dcc;z-index:20;padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}#veil.open{display:flex}.sheet{max-width:560px;width:100%;max-height:100%;overflow:auto;overscroll-behavior:contain;background:var(--paper);border:3px solid #3c553c;box-shadow:inset 0 5px #fff9e7,0 6px #1b2d24aa;border-radius:4px}.dialog-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--paper);padding:10px 13px;border-bottom:2px solid #ccd1ae;z-index:3}.dialog-head h2{font-size:20px;line-height:1.3;margin:0}.dialog-head .btn{flex:none;width:40px;min-height:40px;padding:0;font-size:22px}.dialog-body{padding:14px}.sheet p{font-size:16px;line-height:1.6;margin:6px 0 12px}.sheet h1{font-size:28px;line-height:1.25;margin:8px 0}.sheet .sub{font-size:13px;color:#657451;line-height:1.5}.center{text-align:center}.stack{display:grid;gap:9px;margin:13px 0}.tag{display:inline-block;background:#dce3c5;border:1px solid #a7b185;padding:4px 8px;font-size:12px;font-weight:750}.help{padding:10px;background:#e3e8d3;border:1px solid #bac59d;font-size:15px;line-height:1.6}.feedback{min-height:26px;text-align:center;font-size:16px;color:#3e6b39;font-weight:750;margin:8px 0}.feedback.bad{color:#a45337}.hero{width:95px;height:90px;position:relative;margin:10px auto}.hero .face{position:absolute;top:13px;left:3px;width:90px;height:59px;background:#e8e8c4;border:5px solid #3d5841;box-shadow:inset 4px 4px #fbf4d5}.hero .face:before{content:'';position:absolute;left:16px;top:18px;width:9px;height:13px;background:#426254;box-shadow:34px 0 #426254}.hero .face:after{content:'';position:absolute;left:33px;top:36px;width:10px;height:5px;background:#63794e}.hero:after{content:'';position:absolute;left:28px;bottom:0;width:39px;height:22px;border:4px solid #486348;background:#a5b982}.hero.golem{transform:scale(1.08)}.hero.golem:before{content:'';position:absolute;left:8px;right:8px;top:5px;height:16px;background:#759859}.boss-line{border-left:5px solid #80a354;background:#e8e7cf;padding:11px 13px;line-height:1.65;font-size:17px;font-weight:700}.boss-progress{display:flex;justify-content:center;gap:8px;margin:10px}.rune{width:24px;height:24px;border:2px solid #b39555;background:#edce7b;display:grid;place-items:center;font-size:14px}.rune.done{background:#9cc77f;border-color:#618855}.chapter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.chapter-card{display:grid;gap:7px;align-content:start;min-width:0;background:#e5e8d1;border:2px solid #a9b78e;padding:10px}.chapter-card h3{font-size:16px;line-height:1.35;margin:0}.chapter-card p{font-size:12px;margin:0}.chapter-card .btn{font-size:14px;padding:5px}.tabs,.recipe-list{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}.tabs .btn{flex:1}.recipe-list .btn{flex:1 1 calc(33% - 8px);font-size:14px;min-height:53px;padding:5px}.recipe-list svg{width:21px;height:21px;vertical-align:middle}.resources{font-size:14px;line-height:1.75;border:1px solid #b5bd99;background:#dfe7cf;padding:8px}.pickers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:10px 0}.pickers .btn{font-size:14px}.craft-layout{display:flex;justify-content:center;align-items:center;gap:8px;margin:12px 0}.recipe{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;width:177px;flex:none}.recipe .btn{height:53px;min-height:53px;padding:1px;font-size:23px}.ghost{opacity:.38}.craft-arrow{font-size:22px}.result-slot{width:61px;min-height:67px;background:#dce5c9;border:3px inset #839670;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3px}.result-slot svg{width:34px;height:34px}.result-slot small{font-size:11px;text-align:center}.equation{font-size:30px;font-weight:800;text-align:center;margin:12px 0;line-height:1.35}.answer{height:49px;max-width:275px;display:grid;place-items:center;border:3px inset #95a781;background:#e3e8d6;font-size:27px;font-weight:850;margin:10px auto}.keys{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;max-width:290px;margin:9px auto}.keys .btn{min-height:49px;font-size:22px}.feedback{min-height:26px;text-align:center;font-size:16px;color:#3e6b39;font-weight:750;margin:8px 0}.memory-keys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.memory-keys .btn{font-size:25px;min-height:59px}.problem-tools{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap}.problem-tools .btn{flex:1;font-size:14px}.pipe-layout{display:grid;grid-template-columns:37px minmax(0,1fr) 42px;align-items:center;gap:5px;max-width:380px;margin:12px auto}.pipe-end{font-size:13px;text-align:center;font-weight:800}.pipe-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;aspect-ratio:1}.pipe-cell{width:100%;aspect-ratio:1;border:1px solid #98a27d;background:#e0dfc4;padding:0;min-height:49px}.pipe-cell:disabled{opacity:1;cursor:default;background:#c9d2b5}.pipe-cell.flowing{background:#eed599}.pipe-cell svg{display:block;width:100%;height:100%}.laser-board{position:relative;max-width:320px;margin:10px auto}.laser-board svg{display:block;width:100%;background:#dbe8de;border:2px solid #668c80}.mirror-button{position:absolute;transform:translate(-50%,-50%);width:16%;height:16%;padding:0;min-height:0;border:2px solid #4a7776;background:#c6e2da;font-size:24px;box-shadow:inset 0 2px #f6fae5}.mirror-button.hint{outline:3px solid #e4b64e}.soko-grid{display:grid;gap:2px;max-width:310px;margin:10px auto;background:#687758;border:3px solid #687758}.soko-cell{aspect-ratio:1;display:grid;place-items:center;background:#edf0d9;font-size:23px;position:relative}.soko-cell.wall{background:#8c9a7d;box-shadow:inset 2px 2px #b1be96,inset -2px -2px #63734f}.soko-cell.goal{background:#f0df98}.soko-pad{display:flex;gap:7px;justify-content:center}.soko-pad .btn{width:54px;min-height:48px;font-size:24px}.inventory-list{display:grid;gap:8px}.inventory-row{display:flex;align-items:center;gap:9px;background:#e4e6d0;border:1px solid #b1bc97;padding:9px}.inventory-row svg{width:34px;height:34px;flex:none}.inventory-row .body{flex:1;min-width:0}.inventory-row b{font-size:15px}.inventory-row small{font-size:12px;display:block;color:#687356;margin-top:3px}.inventory-row .btn{font-size:14px}.map-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:10px 0}.map-room{min-height:45px;display:grid;place-items:center;background:#526e50;color:#a0b591;border:2px solid #435c41;font-size:13px}.map-room.visited{background:#d9e4bd;color:#4a603b}.map-room.here{background:#ecd790;border-color:#d49b37}.warning{color:#93572f}noscript{position:fixed;inset:0;z-index:30;padding:25px;background:#fff}
+@media(max-width:370px){.emblem{display:none}header{padding:6px;gap:5px}#goal{font-size:15px}.hold{width:37px}.arrows,.acts{gap:4px}.acts .btn{min-width:51px;padding:4px}#use{min-width:64px}footer{padding:3px 5px 6px}.slot{width:40px}.dialog-body{padding:11px}.recipe-list .btn{font-size:13px}.craft-layout{gap:6px}}
+@media(orientation:landscape) and (max-height:530px){header{padding:4px 10px;min-height:51px}.eyebrow,.emblem{display:none}#goal{font-size:15px}#sequenceInfo{font-size:12px}.btn.small{min-height:38px}footer{padding:2px 10px 4px;position:relative;min-height:76px}#near{font-size:12px;height:18px;line-height:18px}.hotbar{position:absolute;left:50%;top:27px;transform:translateX(-50%);gap:4px;margin:0}.slot{width:34px;height:34px}.slot svg{width:22px;height:22px}.hold{width:40px;min-height:44px}.pad{max-width:none}.acts .btn{min-height:44px}.sheet{max-width:580px}.dialog-head{padding:6px 12px}.dialog-head h2{font-size:19px}.dialog-body{padding:10px 13px}.sheet .hero{display:none}.sheet p{font-size:15px;line-height:1.45}.quizrow{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:center}.keys{margin:0;width:100%;gap:5px}.keys .btn{min-height:42px;font-size:21px}.equation{font-size:27px}.chapter-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.pipe-layout{max-width:285px}.laser-board,.soko-grid{max-width:220px}#toast{top:60px}.craft-layout{margin:8px}.recipe-list{margin:6px}.recipe-list .btn{min-height:44px}.mirror-button{font-size:20px}}
+@media(orientation:landscape) and (max-width:735px){footer{min-height:112px}.hotbar{position:static;transform:none;margin:3px auto 5px}.slot{width:35px;height:30px}.slot svg{width:20px;height:20px}.pad{max-width:650px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+/* Mechanical close-up panels: large touch handles, no forced viewport scrolling. */
+.mechanism-board{width:100%;max-width:600px;margin:8px auto;background:#dce9df;border:3px solid #57735d;overflow:hidden}
+#mechanismBoard{display:block;width:100%;height:auto;touch-action:none;user-select:none;-webkit-user-select:none}
+#mechanismBoard [data-plank],#mechanismBoard [data-rotate]{cursor:grab;pointer-events:all}
+#machineStatus{min-height:38px;line-height:1.4;font-size:16px;background:#eef0d6;padding:8px;color:#264933}
+#machineStatus.ready{background:#c8e6b5;color:#244833}
+.mech-tools,.mech-nudge{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.mech-nudge .btn{min-width:48px;font-size:21px}
+.mech-slider{display:grid;grid-template-columns:48px 48px 1fr;align-items:center;gap:5px;font-weight:800;margin:7px 0}
+.mech-slider input{width:100%;min-width:0;height:36px;touch-action:pan-y;accent-color:#638f52}
+.mech-help{font-size:15px;line-height:1.5}.mech-tools [aria-pressed=true]{background:#d4deb0;outline:2px solid #638b51}
+@media(max-width:360px){.mech-tools .btn{padding:8px;font-size:14px}.mech-help{font-size:14px}}
+
+/* 15.1 — illustrated workshop. Grid play remains; the surrounding chrome is not pixel art. */
+:root{--paper:#fff9ed;--ink:#284f58;--grass:#377b7c;--wood:#c49d6c;--edge:#7caaa6;--gold:#edc17d;--scene-accent:#e8b576}
+html,body{background:#254e59;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif}
+header{background:linear-gradient(110deg,#fffaf0,#f1f3e5);border-bottom:2px solid #aac7b8;box-shadow:0 3px 9px #224e5720;z-index:2}
+.emblem{background:#79b4ad;color:#edfce8;border:2px solid #2d6670;border-radius:11px;box-shadow:inset 0 2px #b4dbca,0 2px 0 #396c7020;font-size:17px;letter-spacing:1px}
+.eyebrow{color:#527575;letter-spacing:.3px;font-size:11px;font-weight:750}
+#goal{font-size:16px;font-weight:750;letter-spacing:-.28px;color:#274f59}
+#sequenceInfo{color:#735321;font-size:14px}#status{font-size:12px;line-height:1.25;border:1px solid #fff4d255;background:#315e67ed;border-radius:8px;padding:6px 10px;max-width:calc(100% - 16px)}
+.btn{border:1.5px solid #91b2a8;border-radius:11px;background:linear-gradient(#fffcf2,#f2ebd7);color:#305760;box-shadow:inset 0 1px #ffffff,0 3px 0 #748e7633;font-weight:750;transition:background-color .15s,box-shadow .15s,transform .10s}
+.btn:active{transform:translateY(2px);box-shadow:inset 0 1px #6f947522}
+.btn.primary{background:linear-gradient(#438b8a,#34737b);border-color:#2b616c;box-shadow:inset 0 1px #8cbcb455,0 3px 0 #214c5629;color:#fffae9}
+.btn:focus-visible{outline:3px solid #dd9844;outline-offset:2px}.btn.chosen{outline:2px solid #d4a354;outline-offset:1px;background:#faebc9}
+.btn[aria-pressed=true]{border-color:#478b8b;background:#e0efdf;color:#284e59}
+footer{background:linear-gradient(#fcf7e9,#ece5cf);border-top:2px solid #a8c6b6}#near{color:#426b70;font-size:13px}
+.slot{border:1.5px solid #9eada0;border-radius:7px;background:linear-gradient(145deg,#658e8e,#416c76);box-shadow:inset 0 1px #bddace66,0 2px 0 #274e5020;color:#fff4d7}
+.slot.on{background:linear-gradient(145deg,#72aaa0,#487f85);border:3px solid #f6d295;box-shadow:0 0 0 1px #aa834a,inset 0 1px #eaffdc66;transform:translateY(-2px)}
+.slot.dim{opacity:.55}.slot .num{color:#fff4d7;font-size:10px;font-weight:750}.slot svg{filter:none}
+#bagbtn{background:#c99c63;border-color:#8f7557;color:#fff5dc}
+#toast{background:#fffaecef;border:1px solid #a3b9aa;box-shadow:0 4px 13px #254d5124;border-radius:11px;font-size:15px;color:#30545f}
+#worldfx{top:12px;max-width:calc(100% - 24px);border:1px solid #ebc48c;border-radius:12px;background:#fff7dfed;color:#345c5d;box-shadow:0 4px 16px #31515326;font-size:16px;animation:reward-appear .24s ease-out}
+#worldfx small{font-size:13px;color:#52746a}#veil{background:#183f48b0}.sheet{max-width:610px;background:#fff9ed;border:1px solid #aac4b4;border-radius:19px;box-shadow:0 15px 55px #163f4b55,inset 0 1px #fffdf4}
+.dialog-head{background:#fff9edf7;border-bottom:1px solid #d7dfca;padding:11px 15px}.dialog-head h2{font-size:20px;color:#2a5861;letter-spacing:-.35px}
+.dialog-head .btn{border-radius:11px;background:#f2edda;border-color:#c2cdb8;color:#486d6e}.dialog-body{padding:16px}.sheet .sub{color:#567475;font-size:13px}.sheet h1{letter-spacing:-.7px;font-size:30px;color:#28505b}
+.title-accent{color:#388385}.tag{background:#e4efdf;border:1px solid #c3d5b9;border-radius:20px;padding:5px 10px;color:#446b66;font-size:12px}
+.help{background:#edf2e4;border:1px solid #c9d7c0;border-radius:12px;color:#335b5f}.feedback{color:#347361;font-size:16px}.feedback.bad{color:#a04e39}
+.sheet[data-feedback=success] .feedback{background:#dfefd7;border-radius:8px;padding:8px;color:#356348}
+.hero{width:240px;height:170px;margin:8px auto 10px;max-width:100%}.hero:before,.hero:after{display:none!important;content:none!important}.hero.golem{transform:none}.portrait-art{width:100%;height:100%;display:block}
+#veil[data-kind=title] .sheet{max-width:480px;background:linear-gradient(150deg,#fffaf0,#edf3e5)}
+#veil[data-kind=title] .dialog-head{background:transparent}#veil[data-kind=title] .hero{margin:6px auto}
+#veil[data-kind=title] .stack{margin:17px 0}#veil[data-kind=title] .btn.primary{min-height:50px;font-size:17px}
+.boss-line{border-left:4px solid #84b4a5;background:#ecf1e1;border-radius:0 13px 13px 0;font-size:17px;color:#355d60}.boss-progress{gap:9px}.rune{border:1px solid #d1ab69;background:#f5dca6;border-radius:8px;width:29px;height:29px;color:#836741}.rune.done{background:#b9d8b1;border-color:#7bab8e;color:#356755}
+.chapter-card{background:#fffaf0;border:1px solid #c9d4bd;border-radius:13px;overflow:hidden;padding:10px;box-shadow:0 3px 8px #2c5a5810;gap:8px}.chapter-card h3{font-size:16px;color:#315b64}.chapter-card p{color:#587879}
+.chapter-swatch{height:64px;position:relative;overflow:hidden;border-radius:8px;background:linear-gradient(var(--scene-top),var(--scene-bottom))}.chapter-swatch:before,.chapter-swatch:after{content:'';position:absolute;width:100px;height:55px;border-radius:55% 55% 0 0;bottom:-17px;background:#46657924;transform:rotate(-12deg);left:-12px}.chapter-swatch:after{left:auto;right:-5px;bottom:-24px;background:#67876a30}.chapter-swatch i{position:absolute;right:14px;top:12px;width:18px;height:18px;border-radius:50%;background:#fff7deaa}.chapter-swatch b{position:absolute;left:12px;top:12px;border-radius:10px;padding:6px 10px;font-size:18px;color:#30545e;background:#fff9eac4;z-index:1}
+.resources{background:#edf2e4;border:1px solid #c9d6bd;border-radius:10px;line-height:1.8;color:#486869}.resources b{color:#244f59}.material-art{width:22px;height:24px;vertical-align:middle;display:inline-block}
+.recipe-list .btn{background:#f4eddc;border-color:#c6cdb8;border-radius:9px}.recipe-list .btn[aria-pressed=true]{border-color:#4a9290;background:#dcefe2}
+.craft-layout{background:#e6e1cc;border:1px solid #bdbfa5;box-shadow:inset 0 2px 6px #61715e13;border-radius:12px;padding:12px 7px;gap:8px}
+.recipe .btn{border-radius:6px;border:1.5px solid #a6b7a7;background:#fbf8e9;box-shadow:inset 0 -2px #dde5d266;color:#446d70}.recipe .material-art{width:35px;height:38px}.ghost{opacity:.36}
+.result-slot{border:2px solid #8ca894;border-radius:9px;background:#f9f3de;width:64px;min-height:78px;box-shadow:inset 0 2px 5px #b1c09b33;color:#3e6b70}
+.result-slot.ready{background:#e9f2cc;border-color:#c29c55;box-shadow:0 0 0 4px #e9cc8129}.result-slot small{font-size:12px;font-weight:750}.craft-arrow{color:#8b946f;font-weight:800}
+.keys .btn{border-radius:12px;color:#2a555e;border-color:#aebdad;background:#fcf5e3;box-shadow:0 3px 0 #cad2b7;font-weight:750}.keys .btn.primary{background:#3c8183;color:#fff9e4;border-color:#316c77;box-shadow:0 3px 0 #214e5829}
+.answer{border:2px solid #9cbaaa;border-radius:12px;background:#edf2df;box-shadow:inset 0 2px 4px #b5c49a22;color:#2a545d}.equation{color:#2a545d;letter-spacing:.3px}
+.memory-keys .btn{border-radius:13px;background:#eff2e2}.pipe-layout{padding:5px;background:#f8f1dd;border-radius:12px}.pipe-cell{border-color:#a7bdb0;background:#eee8d2}.pipe-cell:disabled{background:#e0e7d5}.pipe-cell.flowing{background:#f8dc9c}.pipe-grid{border-radius:9px;overflow:hidden;border:1px solid #89afa7}
+.laser-board svg{border-radius:12px;background:#e7f2e9;border:1.5px solid #87b8b0}.mirror-button{border-radius:7px;background:#cce6dc;border:1.5px solid #52898e;color:#275e69}
+.soko-grid{border-radius:10px;overflow:hidden;background:#b3c4af;border-color:#9bb4a3}.soko-cell{background:#f5f1df;color:#84653d}.soko-cell.wall{background:#88a7a3;box-shadow:inset 0 2px #b9cdc166}.soko-cell.goal{background:#dcebc9;color:#3b765c}
+.inventory-row{background:#f4f1df;border:1px solid #c8d6bf;border-radius:12px}.map-room{border-radius:8px;border-color:#9eb7a3;background:#dde4d2}.map-room.visited{background:#edf4d5}.map-room.here{background:#efce90;color:#315962}
+.mechanism-board{border-radius:12px;border:1.5px solid #93b7af;background:#e4efdf;box-shadow:inset 0 2px 8px #466e7122}
+#machineStatus{border-radius:11px;background:#edf3e1;font-size:16px;color:#315e66}#machineStatus.ready{background:#d7ebca;color:#2c684f}.mech-slider input{accent-color:#4c9894}.mech-tools [aria-pressed=true]{background:#d5eadd;outline-color:#659d95}
+.display-settings{display:grid;gap:9px;border:1px solid #c0d1bb;border-radius:12px;padding:12px;margin:13px 0;color:#456e70}.display-settings legend{padding:0 6px;font-size:14px;font-weight:750}.display-settings small{font-size:13px;line-height:1.5;color:#5c7a74}
+@keyframes reward-appear{from{opacity:0;transform:translate(-50%,5px)}to{opacity:1;transform:translate(-50%,0)}}
+@media(max-width:370px){#goal{font-size:15px}.dialog-body{padding:11px}.sheet h1{font-size:27px}.craft-layout{padding:10px 3px;gap:5px}.recipe{width:165px}.recipe .btn{height:50px;min-height:50px}.result-slot{width:59px}.craft-arrow{font-size:18px}.hero{width:212px;height:150px}.chapter-card h3{font-size:15px}}
+@media(orientation:landscape) and (max-height:530px){
+ #goal{font-size:15px}.dialog-head{padding:7px 12px}.dialog-body{padding:11px 13px}.sheet{max-width:650px}.sheet .hero{display:none}#veil[data-kind=title] .sheet{max-width:620px}#veil[data-kind=title] .dialog-body{display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:10px}#veil[data-kind=title] .dialog-body>.sub{grid-column:1/-1;margin:0;font-size:12px}#veil[data-kind=title] h1{font-size:25px}#veil[data-kind=title] p{font-size:14px;margin:5px 0}#veil[data-kind=title] .stack{margin:0}#worldfx{top:8px;font-size:15px;padding:7px 12px}#worldfx small{font-size:12px}.craft-layout{padding:8px;margin:8px 0}.chapter-swatch{height:45px}.keys .btn{min-height:43px}.display-settings{grid-template-columns:1fr 1fr}.display-settings small{grid-column:1/-1}
+}
+@media(prefers-reduced-motion:reduce){.btn,#worldfx{animation:none!important;transition:none!important}}
+html[data-motion=reduced] *,html[data-effects=lite] #worldfx{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+/* The actual 3×3 station comes first; the recipe book never pushes it below the fold. */
+.workshop-content{display:flex;flex-direction:column;gap:15px}.craft-station{min-width:0}.craft-book{min-width:0;border-top:1px solid #d5ddc7;padding-top:10px}.craft-book h3{font-size:17px;margin:0 0 5px;color:#386771}.craft-tabs{margin:0 0 12px}.craft-station>.help{font-size:14px;line-height:1.4;padding:9px}.craft-station .pickers{margin:10px 0}.craft-station .tabs{margin:10px 0}.craft-station .feedback{font-size:14px;min-height:20px;margin:7px 0}.craft-station .craft-layout{margin:10px 0}.craft-station .craft-arrow{flex:none}
+@media(min-width:620px){#veil[data-kind=workshop] .sheet{max-width:730px}.workshop-content{display:grid;grid-template-columns:minmax(285px,1.3fr) minmax(190px,1fr);align-items:start;gap:18px}.craft-book{border-top:0;border-left:1px solid #d5ddc7;padding:0 0 0 16px}.craft-book .recipe-list{display:grid;grid-template-columns:1fr}.craft-book .recipe-list .btn{min-height:43px;text-align:left;padding:7px}.craft-station .craft-layout{padding:10px 6px}.craft-tabs{margin-bottom:10px}}
+
+</style></head>
 <body><main id="app">
-<header><div class="emblem" aria-hidden="true">••</div><div class="headtext"><div class="eyebrow">모모의 블록 탐험 · 10장 업데이트</div><div id="goal">모모와 모험을 시작해요</div><div id="sequenceInfo" aria-live="polite"></div></div><button class="btn small" id="mapbtn">지도</button><button class="btn small" id="pausebtn" aria-label="일시정지">Ⅱ</button></header>
-<section id="stage" aria-label="탐험 화면"><canvas id="world" aria-label="블록 미로와 캐릭터"></canvas><div id="status"></div><div id="worldfx" role="status" aria-live="polite" hidden></div></section>
+<header><div class="emblem" aria-hidden="true">••</div><div class="headtext"><div class="eyebrow">모모의 공방 모험 · 15.1</div><div id="goal">모모와 모험을 시작해요</div><div id="sequenceInfo" aria-live="polite"></div></div><button class="btn small" id="mapbtn">지도</button><button class="btn small" id="pausebtn" aria-label="일시정지">Ⅱ</button></header>
+<section id="stage" aria-label="탐험 화면"><canvas id="world" aria-label="공방 모험의 미로와 로봇 탐험가"></canvas><div id="status"></div><div id="worldfx" role="status" aria-live="polite" hidden></div></section>
 <footer><div id="near" aria-live="polite">← → 이동 · ↑ ↓ 사다리 · 조사</div><div class="hotbar" id="hotbar" aria-label="도구 선택"></div><div class="pad"><div class="arrows"><button class="btn hold" data-hold="left" aria-label="왼쪽 이동">←</button><button class="btn hold" data-hold="right" aria-label="오른쪽 이동">→</button><button class="btn hold" data-hold="up" aria-label="사다리 올라가기">↑</button><button class="btn hold" data-hold="down" aria-label="사다리 내려가기">↓</button></div><div class="acts"><button class="btn" id="jump">점프</button><button class="btn primary" id="use">조사</button></div></div></footer>
 </main><div id="toast" role="status" aria-live="polite" hidden></div><div id="veil"><section id="sheet" class="sheet" role="dialog" aria-modal="true" aria-labelledby="dialogTitle"></section></div><noscript>이 게임은 JavaScript가 필요합니다.</noscript>
-<script src="chapter-data.js?v=10.1"></script><script src="puzzles.js?v=10.1"></script><script src="core.js?v=10.1"></script><script src="chapter-runtime.js?v=10.1"></script><script src="world-renderer.js?v=10.1"></script><script src="game.js?v=10.1"></script></body></html>
+<script>
+/* Original chapter content. Shared by the browser and Node verification. */
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MMChapters=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+'use strict';
+const tools=['곡괭이 팔','파워 렌치','점프 부스터','에너지 실드','탐험 센서'];
+const task=(id,type,label,x,floor,extra={})=>({id,type,label,x,floor,kind:({repair:'generator',mine:'ore',jump:'lift',shield:'hazard',scan:'scanner',sequence:'plates',laser:'laser',pipe:'pipe',weight:'scale',sokoban:'cratePuzzle',memory:'memory',supply:'chest',number:'terminal',rule:'scanner',equipment:'toolGate'})[type]||type,...extra});
+const q=(id,type,prompt,extra={})=>({id,type,prompt,...extra});
+const chapter=(n,title,theme,bossName,requiredTools,tasks,questions)=>({id:'chapter-'+String(n).padStart(2,'0'),order:n,title,theme,width:60,floors:3,start:[8,0],bench:{id:'workshop',kind:'bench',label:'3×3 작업대',x:18,floor:0},requiredTools,tasks,boss:{id:'golem',kind:'golem',label:bossName,x:53,floor:2,questions},ladders:[[54,0,8],[12,8,16]],gateX:[51,16],optional:[task('cache.lower','cache','숨은 재료 상자',5,0),task('cache.upper','cache','탐험 보물',6,2)]});
+const intro=(id)=>task(id,'supply','탐험 준비 상자',14,0,{text:'상자를 열어 필요한 재료와 다음 목표를 확인해요.'});
+const chapters=[
+chapter(1,'광산 입구','mine','광산 수호 골렘',[0],[
+ task('math','number','숫자 잠금 장치',30,0,{problem:'add',text:'오른쪽 숫자 장치에서 문제를 풀어요.'}),
+ task('mined','mine','균열 광석벽',34,0,{tool:0,hits:3,text:'곡괭이 팔로 균열벽을 세 번 두드려요.'}),
+ task('bridge','weight','8kg 저울 다리',44,0,{numbers:[3,5,2],target:8,text:'상자를 들고 저울에 올려 8kg을 만들어요.'}),
+ task('laser','laser','광산 거울 장치',44,1,{text:'거울을 돌려 빛을 오른쪽 수정에 보내요.'}),
+ task('sequence','sequence','숫자 발판',24,1,{sequence:[2,4,6],guided:true,text:'2 → 4 → 6 순서로 발판을 밟아요.'})
+],[q('boss.math','number','광산 문을 지킬 수 있겠니? 이 덧셈을 풀어 줘.',{problem:'add'}),q('boss.sequence','order','이번에는 2, 4, 6 순서대로 눌러 줄래?',{sequence:[2,4,6]}),q('boss.laser','laser','마지막 문제야. 빛이 수정에 닿도록 거울을 돌려 줘.')]),
+chapter(2,'용암 제련소','lava','용광로 골렘',[0,1],[intro('c2.intro'),
+ task('c2.genA','repair','발전기 A',30,0,{tool:1,hits:3,text:'파워 렌치로 발전기 A를 수리해요.'}),
+ task('c2.genB','repair','발전기 B',44,1,{tool:1,hits:3,text:'2층 발전기 B를 렌치로 수리해요.'}),
+ task('c2.bridge','pipe','용암 배관',24,1,{text:'불꽃에서 용광로까지 배관을 연결해요.'})
+],[q('boss.math','number','발전기에 전기를 모으자. 같은 묶음은 모두 몇 개일까?',{problem:'mul'}),q('boss.power','pipe','내 용광로로 불꽃이 흐르도록 배관을 이어 줘.'),q('boss.plates','order','2 → 3 → 5 순서로 신호를 보내 줘.',{sequence:[2,3,5]})]),
+chapter(3,'하늘 창고','sky','창고 관리자 골렘',[0,1,2],[intro('c3.intro'),
+ task('c3.sokoban','sokoban','화물 정리대',34,0,{text:'상자를 밀어 별 표시 칸에 놓아요.'}),
+ task('c3.lift','jump','부스터 리프트',44,0,{tool:2,text:'점프 부스터를 장착하고 리프트 옆에서 점프해요.'}),
+ task('c3.memory','memory','창고 기억 패널',28,1,{length:3,text:'빛난 순서를 기억해서 같은 순서로 눌러요.'})
+],[q('boss.sokoban','sokoban','상자가 제자리에 있어야 출발할 수 있어. 별 칸으로 밀어 줄래?'),q('boss.memory','memory','내가 보여 주는 세 신호를 기억해 줘.',{length:3}),q('boss.missing','number','빈칸에 어떤 수가 들어갈까?',{problem:'missing'})]),
+chapter(4,'수정 회로 연구소','crystal','수정 코어 골렘',[0,1,2,3,4],[intro('c4.intro'),
+ task('c4.rule','rule','숨은 규칙 스캐너',34,0,{tool:4,text:'탐험 센서로 단서를 읽고 규칙 문제를 풀어요.'}),
+ task('c4.shield','shield','전기 보호 통로',44,0,{tool:3,text:'실드를 선택해 전기장을 안전하게 끊어요.'}),
+ task('c4.laser','laser','수정 거울 회로',28,1,{level:4,text:'거울을 돌려 실제 빛의 경로를 연결해요.'})
+],[q('boss.rule','rule','내 수정들의 공통 규칙을 찾아 줄래?'),q('boss.laser','laser','빛을 코어로 보내면 다음 문제를 줄게.',{level:4}),q('boss.switch','rule','두 조건을 모두 만족하는 신호를 골라 줘.',{level:4})]),
+chapter(5,'별빛 코어 타워','star','별빛 코어 골렘',[0,1,2,3,4],[
+ task('c5.number','number','별빛 숫자 엔진',14,0,{problem:'twoStep',text:'별빛 엔진의 두 단계 계산을 풀어요.'}),
+ task('c5.equipment','equipment','도구 시험문',30,0,{text:'상황에 맞는 다섯 도구를 선택해요.'}),
+ task('c5.spatial','sokoban','코어 운반대',44,0,{text:'상자를 목표 칸으로 옮겨요.'}),
+ task('c5.memory','memory','별빛 기억 회로',28,1,{length:4,text:'네 개의 별빛 순서를 기억해요.'})
+],[q('boss.number','number','지금까지 배운 계산을 써 볼까?',{problem:'div'}),q('boss.equipment','equipment','내가 말하는 상황에 알맞은 도구를 골라 줘.'),q('boss.spatial','sokoban','코어 상자를 제자리로 밀어 줘.'),q('boss.memory','memory','네 빛의 순서를 기억할 수 있겠니?',{length:4}),q('boss.core','number','마지막 빈칸을 채우면 더 먼 세계로 보내 줄게.',{problem:'missing'})]),
+chapter(6,'초록 물레방아 숲','forest','숲의 물레 골렘',[0,1,2,3,4],[intro('c6.intro'),
+ task('c6.water','pipe','물레방아 수로',32,0,{text:'물 입구에서 물레방아까지 관을 이어 주세요.'}),
+ task('c6.wheel','repair','물레 발전기',44,0,{tool:1,hits:3,text:'렌치로 물레 발전기의 축을 고쳐요.'}),
+ task('c6.balance','weight','숲의 저울',40,1,{numbers:[4,6,3],target:10,text:'4kg와 6kg를 골라 10kg을 맞춰요.'}),
+ task('c6.pattern','number','잎사귀 규칙문',24,1,{problem:'pattern',text:'잎사귀 숫자의 규칙을 찾아요.'})
+],[q('boss.divide','number','열매를 같은 수로 나누어 줄래?',{problem:'div'}),q('boss.water','pipe','내 나무까지 물이 흐르게 해 줘.'),q('boss.leaves','memory','네 잎사귀의 순서를 기억해 줘.',{length:4})]),
+chapter(7,'얼음 기계 동굴','ice','빙하 수호 골렘',[0,1,2,3,4],[intro('c7.intro'),
+ task('c7.ore','mine','얼어붙은 광석',32,0,{tool:0,hits:3,text:'곡괭이 팔로 얼음 광석을 세 번 캐요.'}),
+ task('c7.lift','jump','빙하 리프트',44,0,{tool:2,text:'부스터로 뛰어 얼음 리프트를 켜요.'}),
+ task('c7.order','sequence','얼음 숫자 발판',40,1,{sequence:[3,6,9],text:'3 → 6 → 9 순서로 직접 밟아요.'}),
+ task('c7.beam','laser','얼음 거울',24,1,{level:5,text:'세 거울로 빛을 수정에 연결해요.'})
+],[q('boss.ice.rule','rule','얼음 결정 중 조건에 맞는 것을 골라 줘.'),q('boss.ice.missing','number','사라진 숫자를 찾아 줄래?',{problem:'missing'}),q('boss.ice.light','laser','마지막 빛을 코어에 보내 줘.',{level:5})]),
+chapter(8,'사막 태양 발전소','sun','태양 엔진 골렘',[0,1,2,3,4],[intro('c8.intro'),
+ task('c8.solar','repair','태양 발전기',32,0,{tool:1,hits:3,text:'렌치로 태양 발전기를 수리해요.'}),
+ task('c8.scan','rule','태양 신호 스캐너',44,0,{tool:4,level:5,text:'센서로 두 조건을 읽고 알맞은 신호를 골라요.'}),
+ task('c8.shield','shield','열기 보호막',42,1,{tool:3,text:'실드로 뜨거운 전기장을 끊어요.'}),
+ task('c8.laser','laser','태양 반사판',24,1,{level:6,text:'반사판으로 빛을 축전기에 모아요.'})
+],[q('boss.sun.mul','number','태양 전지의 묶음 수를 세어 줘.',{problem:'mul'}),q('boss.sun.pipe','pipe','엔진 냉각관을 이어 줘.'),q('boss.sun.rule','rule','두 조건을 모두 지키는 숫자는 무엇일까?',{level:6})]),
+chapter(9,'구름 시계 공방','clock','시계 장인 골렘',[0,1,2,3,4],[intro('c9.intro'),
+ task('c9.clock','repair','시계 발전기',32,0,{tool:1,hits:3,text:'렌치로 시계의 동력축을 고쳐요.'}),
+ task('c9.crates','sokoban','기어 정리실',44,0,{level:7,text:'두 상자를 각각 별 표시 칸으로 밀어요.'}),
+ task('c9.memory','memory','시계 신호기',40,1,{length:4,text:'다시 보기로 확인하며 네 신호를 기억해요.'}),
+ task('c9.number','number','시간 계산문',24,1,{problem:'twoStep',text:'두 단계 계산으로 시계문을 열어요.'})
+],[q('boss.clock.sum','number','먼저 묶음을 나누고 남은 것을 더해 볼까?',{problem:'divideAdd'}),q('boss.clock.memory','memory','다섯 신호를 기억해 줘. 다시 보아도 괜찮아.',{length:5}),q('boss.clock.crates','sokoban','마지막 기어 상자들을 옮겨 줘.',{level:7})]),
+chapter(10,'별빛 세계수 성채','aurora','세계수 코어 골렘',[0,1,2,3,4],[intro('c10.intro'),
+ task('c10.core','repair','세계수 발전기',32,0,{tool:1,hits:3,text:'렌치로 세계수 발전기를 다시 켜요.'}),
+ task('c10.tools','equipment','다섯 도구 문',44,0,{text:'다섯 상황에 맞는 도구를 모두 사용해요.'}),
+ task('c10.pipe','pipe','별빛 에너지 관',42,1,{text:'입구와 코어를 실제 배관으로 연결해요.'}),
+ task('c10.memory','memory','세계수 기억 회로',24,1,{length:5,text:'다섯 빛을 기억해 같은 순서로 눌러요.'})
+],[q('boss.world.number','number','첫 번째 문제! 묶음과 덧셈을 함께 생각해 줘.',{problem:'divideAdd'}),q('boss.world.pattern','number','두 번째 문제! 숫자의 규칙을 찾아 줘.',{problem:'pattern'}),q('boss.world.rule','rule','세 번째 문제! 두 조건을 모두 만족하는 것을 찾아 줘.',{level:8}),q('boss.world.light','laser','네 번째 문제! 빛을 세계수 코어까지 보내 줘.',{level:8}),q('boss.world.memory','memory','마지막 문제야! 다섯 빛을 기억해서 보내 줘.',{length:5})])
+];
+
+// Chapters 11–15: one new action at a time, with the existing equipment and golem format.
+chapters[9].tasks.push(task('c10.assembly','platform','세계수 연결 발판',22,1,{angle:0,text:'발판을 옮기고 돌려 두 초록 기둥을 연결해요.'}));
+chapters.push(
+chapter(11,'이끼 다리 숲','forest','이끼 다리 골렘',[0,1,2,3,4],[intro('c11.intro'),
+ task('c11.bridge','platform','숲의 조립 발판',32,0,{angle:15,text:'발판을 자유롭게 옮기고 돌려 초록 기둥에 맞춰요.'}),
+ task('c11.number','number','나뭇잎 잠금',44,0,{problem:'add',text:'작은 덧셈으로 숲의 문을 열어요.'}),
+ task('c11.water','repair','숲의 동력 발전기',42,1,{tool:1,hits:3,text:'렌치로 숲의 발전기를 수리해요.'}),
+ task('c11.memory','memory','잎사귀 기억판',24,1,{length:4,text:'네 신호를 기억해요. 다시 봐도 괜찮아요.'})
+],[q('boss.forest.add','number','함께 나뭇잎을 세어 보자.',{problem:'add'}),q('boss.forest.pattern','number','숫자가 어떻게 늘어날까?',{problem:'pattern'}),q('boss.forest.pipe','pipe','숲의 수로를 이어 줄래?')]),
+chapter(12,'추와 도르래 광산','mine','균형 광산 골렘',[0,1,2,3,4],[intro('c12.intro'),
+ task('c12.pulley','pulley','광석 운반 도르래',32,0,{load:4,targetHeight:2.8,text:'추를 더해 화물을 올리고, 초록 높이에서 멈춰 무게를 맞춰요.'}),
+ task('c12.pipe','pipe','광산 냉각관',44,0,{text:'두 관의 끝을 마주 보게 연결해요.'}),
+ task('c12.number','number','묶음 계산문',42,1,{problem:'div',text:'같은 수로 나누어 문을 열어요.'}),
+ task('c12.platform','platform','광산 연결 발판',24,1,{angle:0,length:4.5,text:'발판 길이와 위치를 맞춰 화물 길을 이어요.'})
+],[q('boss.balance.div','number','광석을 같은 수로 나누어 줘.',{problem:'div'}),q('boss.balance.missing','number','모자란 숫자는 무엇일까?',{problem:'missing'}),q('boss.balance.memory','memory','네 신호를 천천히 기억해 줘.',{length:4})]),
+chapter(13,'멈춤 시계 공방','clock','정지 시계 골렘',[0,1,2,3,4],[intro('c13.intro'),
+ task('c13.stop','stop','회전 발판 기계',32,0,{text:'움직이는 끝이 초록 구역에 오면 정지 버튼을 눌러요.'}),
+ task('c13.generator','repair','시계 공방 발전기',44,0,{tool:1,hits:3,text:'렌치로 시계 발전기를 세 번 수리해요.'}),
+ task('c13.pulley','pulley','시계추 도르래',40,1,{load:4,targetHeight:3.1,text:'추로 발판을 올린 뒤 정지하고 양쪽 무게를 같게 해요.'}),
+ task('c13.rule','rule','시계 숫자 규칙',24,1,{text:'조건을 하나씩 살펴 알맞은 수를 골라요.'})
+],[q('boss.stop.sum','number','먼저 더하고 조금 빼 볼까?',{problem:'twoStep'}),q('boss.stop.rule','rule','조건에 맞는 기어 번호를 골라 줘.'),q('boss.stop.add','number','마지막 작은 덧셈이야.',{problem:'add'})]),
+chapter(14,'바람개비 하늘길','sky','하늘 풍차 골렘',[0,1,2,3,4],[intro('c14.intro'),
+ task('c14.platform','platform','기울어진 하늘 발판',32,0,{angle:30,text:'발판의 각도와 위치를 바꿔 두 기둥을 연결해요.'}),
+ task('c14.stop','stop','풍차 정지 장치',44,0,{text:'천천히 모드를 써도 괜찮아요. 초록 구역에서 멈춰요.'}),
+ task('c14.pulley','pulley','바람 화물 도르래',42,1,{load:5,targetHeight:3.2,text:'화물보다 무거운 추로 올리고, 멈춘 뒤 5kg으로 맞춰요.'}),
+ task('c14.memory','memory','하늘 신호등',24,1,{length:4,text:'네 신호 순서를 다시 보며 맞춰요.'})
+],[q('boss.wind.number','number','묶음을 나누고 더해 줘.',{problem:'divideAdd'}),q('boss.wind.memory','memory','네 빛을 기억해 줘.',{length:4}),q('boss.wind.light','laser','풍차의 빛을 수정으로 보내 줘.',{level:4})]),
+chapter(15,'기계 세계수 정상','aurora','기계 세계수 골렘',[0,1,2,3,4],[intro('c15.intro'),
+ task('c15.platform','platform','두 개의 연결 발판',32,0,{angle:15,count:2,text:'발판 A와 B를 각각 옮기고 돌려 같은 색 기둥에 맞춰요.'}),
+ task('c15.pulley','pulley','세계수 코어 도르래',44,0,{load:5,targetHeight:3.4,text:'코어를 초록 높이에 올리고, 정지한 뒤 양쪽 무게를 같게 해요.'}),
+ task('c15.stop','stop','세계수 회전 기계',42,1,{text:'초록 연결 구역에서 기계를 멈춰요.'}),
+ task('c15.number','number','정상의 숫자문',24,1,{problem:'twoStep',text:'두 단계를 차근차근 계산해 마지막 문을 열어요.'})
+],[q('boss.summit.add','number','첫 문제는 작은 덧셈이야.',{problem:'add'}),q('boss.summit.missing','number','빈칸 숫자를 찾아 줘.',{problem:'missing'}),q('boss.summit.div','number','같은 묶음으로 나눠 줘.',{problem:'div'}),q('boss.summit.memory','memory','다시 보며 다섯 신호를 기억해 줘.',{length:5}),q('boss.summit.pattern','number','마지막 숫자 규칙이야!',{problem:'pattern'})])
+);
+for(const d of chapters){
+ d.encounters=[];
+ if(d.order>10){const count=d.order>=14?2:1;for(let i=0;i<count;i++)d.encounters.push(task('friend.'+i,'monster',i?'꼬마 기어 몬스터':'말랑 블록 슬라임',i?35:24,i?1:0,{kind:'monster',species:i?'gear':'slime',range:1.1,speed:.65,phase:i,problem:d.order<=12?'add':i?'sub':'missing',chapterOrder:d.order,text:'가까이서 말을 걸어 작은 숫자 문제를 함께 풀어요.'}));
+  for(const t of [...d.tasks,...d.boss.questions])t.chapterOrder=d.order;
+ }
+}
+
+function freeze(o){Object.freeze(o);Object.values(o).forEach(v=>{if(v&&typeof v==='object'&&!Object.isFrozen(v))freeze(v);});return o;}
+chapters.forEach(freeze);const byId=Object.fromEntries(chapters.map(d=>[d.id,d]));
+return{tools,get:id=>byId[id]||null,list:()=>chapters.slice(),firstId:'chapter-01',lastId:'chapter-15'};
+});
+
+</script><script>
+/* Pure mechanical geometry/simulation. Same values drive SVG controls and world collision. */
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.MMMechanics=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+'use strict';
+const types=['platform','pulley','stop'],finite=Number.isFinite,clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),copy=x=>JSON.parse(JSON.stringify(x));
+function isType(t){return types.includes(t);}
+function profile(chapter){const n=typeof chapter==='string'?Number(chapter.slice(-2)):Number(chapter),d=clamp((n||10)-10,0,5);return{addMax:27+d,smallMax:8,tables:[2,3,5],factorMax:8,memoryMax:5,monsters:n<=10?0:n<=13?1:2};}
+function endpoints(b){const a=b.angle*Math.PI/180,dx=Math.cos(a)*b.length/2,dy=Math.sin(a)*b.length/2;return[[b.x-dx,b.y-dy],[b.x+dx,b.y+dy]];}
+function normalize(b){b.angle=((b.angle+180)%360+360)%360-180;b.length=clamp(b.length,2,5);const a=b.angle*Math.PI/180,dx=Math.abs(Math.cos(a)*b.length/2),dy=Math.abs(Math.sin(a)*b.length/2);b.x=clamp(b.x,.1+dx,11.9-dx);b.y=clamp(b.y,.1+dy,5.9-dy);return b;}
+function create(type,seed=1,opts={}){
+ if(!isType(type))throw Error('Unknown mechanical puzzle '+type);
+ const p={type,seed,attempts:0,solved:false};
+ if(type==='platform'){
+  const angle=finite(opts.angle)?clamp(opts.angle,-45,45):0,length=finite(opts.length)?clamp(opts.length,2,5):4,count=opts.count===2?2:1;
+  const targets=Array.from({length:count},(_,i)=>({x:count===1?6:3.25+i*5.5,y:count===1?1.6:2+i*.7,angle:i?-angle:angle,length:count===1?length:3.5}));
+  p.docks=targets.map(normalize).map(endpoints);p.planks=targets.map((_,i)=>normalize({x:count===1?4.5:3+i*5.5,y:4.3,angle:40-i*65,length:3}));p.initial=copy(p.planks);p.selected=0;
+ }else if(type==='pulley'){
+  p.load=clamp(Number(opts.load)||4,3,6);p.targetHeight=clamp(Number(opts.targetHeight)||3,1.8,4);p.height=.8;p.velocity=0;p.mass=0;p.braked=true;p.minHeight=.7;p.maxHeight=4.9;
+ }else{p.phase=0;p.speed=.095;p.stopped=false;p.slow=false;p.targetPhase=finite(opts.targetPhase)?clamp(opts.targetPhase,.3,.75):.5;p.band=.055;}
+ return p;
+}
+function docked(p,i){const end=endpoints(p.planks[i]),dock=p.docks[i],dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);return Math.min(Math.max(dist(end[0],dock[0]),dist(end[1],dock[1])),Math.max(dist(end[0],dock[1]),dist(end[1],dock[0])))<=.23;}
+function phaseDistance(a,b){const d=Math.abs(a-b)%1;return Math.min(d,1-d);}
+function ready(p){if(p.type==='platform')return p.planks.every((_,i)=>docked(p,i));if(p.type==='pulley')return Math.abs(p.height-p.targetHeight)<=.28;if(p.type==='stop')return phaseDistance(p.phase,p.targetPhase)<=p.band;return false;}
+function solved(p){return !!p&&(p.type==='platform'?ready(p):p.type==='pulley'?ready(p)&&p.braked&&p.mass===p.load:p.type==='stop'?ready(p)&&p.stopped:false);}
+function press(p,a){
+ if(!p||!isType(p.type)||!a||typeof a!=='object')return{ok:false,solved:false};let ok=false;
+ if(a.kind==='reset'){reset(p);return{ok:true,solved:false};}
+ if(p.type==='platform'){
+  const i=a.index??p.selected,b=p.planks[i];if(!Number.isInteger(i)||!b)return{ok:false,solved:solved(p)};
+  if(a.kind==='select'){p.selected=i;ok=true;}
+  if(a.kind==='move'&&finite(a.x)&&finite(a.y)){b.x=a.x;b.y=a.y;normalize(b);ok=true;}
+  if(a.kind==='rotate'&&finite(a.angle)){b.angle=a.angle;normalize(b);ok=true;}
+  if(a.kind==='length'&&finite(a.length)){b.length=a.length;normalize(b);ok=true;}
+ }else if(p.type==='pulley'){
+  if(a.kind==='weight'&&Number.isInteger(a.delta)&&Math.abs(a.delta)<=2){p.mass=clamp(p.mass+a.delta,0,10);ok=true;}
+  if(a.kind==='brake'){p.braked=!p.braked;p.velocity=0;ok=true;}
+ }else if(p.type==='stop'){
+  if(a.kind==='brake'){p.stopped=!p.stopped;ok=true;}
+  if(a.kind==='slow'){p.slow=!p.slow;ok=true;}
+ }
+ p.solved=solved(p);return{ok,solved:p.solved};
+}
+function tick(p,dt){
+ if(!p||!finite(dt)||dt<=0)return;p.solved=solved(p);dt=Math.min(dt,.05);
+ if(p.type==='pulley'&&!p.braked){const acceleration=(p.mass-p.load)*1.35-p.velocity*2.2;p.velocity=clamp(p.velocity+acceleration*dt,-1.25,1.25);p.height=clamp(p.height+p.velocity*dt,p.minHeight,p.maxHeight);if(p.height===p.minHeight||p.height===p.maxHeight)p.velocity=0;}
+ if(p.type==='stop'&&!p.stopped)p.phase=(p.phase+dt*p.speed*(p.slow?.3:1))%1;
+}
+function reset(p){if(p.type==='platform'){p.planks=copy(p.initial);p.selected=0;}else if(p.type==='pulley'){p.mass=0;p.height=.8;p.velocity=0;p.braked=true;}else if(p.type==='stop'){p.phase=0;p.stopped=false;p.slow=false;}p.solved=false;}
+function hydrate(base,raw){
+ if(!raw||typeof raw!=='object')return base;
+ if(base.type==='platform'&&Array.isArray(raw.planks)&&raw.planks.length===base.planks.length&&raw.planks.every(b=>b&&[b.x,b.y,b.angle,b.length].every(finite)&&b.x>=0&&b.x<=12&&b.y>=0&&b.y<=6&&b.length>=2&&b.length<=5&&Math.abs(b.angle)<=360)){
+  base.planks=raw.planks.map(b=>normalize({x:b.x,y:b.y,angle:b.angle,length:b.length}));base.selected=Number.isInteger(raw.selected)&&base.planks[raw.selected]?raw.selected:0;
+ }
+ if(base.type==='pulley'&&finite(raw.height)&&raw.height>=base.minHeight&&raw.height<=base.maxHeight&&Number.isInteger(raw.mass)&&raw.mass>=0&&raw.mass<=10){base.height=raw.height;base.mass=raw.mass;base.braked=typeof raw.braked==='boolean'?raw.braked:true;base.velocity=finite(raw.velocity)?clamp(raw.velocity,-1.25,1.25):0;}
+ if(base.type==='stop'&&finite(raw.phase)&&raw.phase>=0&&raw.phase<1){base.phase=raw.phase;base.stopped=!!raw.stopped;base.slow=!!raw.slow;}
+ base.solved=solved(base);return base;
+}
+function markCompleted(p){if(p.type==='platform')p.planks=p.docks.map(([a,b])=>({x:(a[0]+b[0])/2,y:(a[1]+b[1])/2,length:Math.hypot(b[0]-a[0],b[1]-a[1]),angle:Math.atan2(b[1]-a[1],b[0]-a[0])*180/Math.PI}));else if(p.type==='pulley'){p.height=p.targetHeight;p.mass=p.load;p.velocity=0;p.braked=true;}else if(p.type==='stop'){p.phase=p.targetPhase;p.stopped=true;}p.solved=true;}
+function surfaces(p){if(p.type==='platform')return p.planks.map(endpoints);if(p.type==='pulley')return[[[2,p.height],[5,p.height]]];if(p.type==='stop'){const a=(p.phase-.5)*Math.PI*2;return[endpoints({x:6,y:2.6,length:4,angle:a*180/Math.PI})];}return[];}
+function surfaceY(segment,x){const [[ax,ay],[bx,by]]=segment,dx=bx-ax;if(Math.abs(dx)<.35||x<Math.min(ax,bx)||x>Math.max(ax,bx))return null;return ay+(by-ay)*(x-ax)/dx;}
+function monsterX(t,clock){return t.x+Math.sin(clock*(t.speed||.7)+(t.phase||0))*(t.range||1.2);}
+return{isType,create,markCompleted,press,tick,ready,solved,reset,hydrate,endpoints,docked,surfaces,surfaceY,profile,monsterX};
+});
+
+</script><script>
+/* Deterministic puzzles: rule evaluation never depends on UI or hidden target rotations. */
+(function(root,factory){const api=factory(typeof module==='object'&&module.exports?require('./mechanics.js'):root.MMMechanics);if(typeof module==='object'&&module.exports)module.exports=api;else root.MMPuzzles=api;})(typeof globalThis!=='undefined'?globalThis:this,function(M){
+'use strict';
+const dirs=[[0,-1],[1,0],[0,1],[-1,0]];
+function hash(text){let h=2166136261;for(const c of String(text))h=Math.imul(h^c.charCodeAt(0),16777619);return h>>>0;}
+function rng(seed){let x=(seed>>>0)||1831565813;return n=>{x^=x<<13;x^=x>>>17;x^=x<<5;return(x>>>0)%n;};}
+function copy(x){return JSON.parse(JSON.stringify(x));}
+function number(seed,mode='add',chapter=10){
+ const r=rng(seed),profile=M.profile(chapter),delta=profile.addMax-27,small=()=>2+r(7);let a,b,c,answer,prompt,hint;
+ if(mode==='mul'){a=[2,3,5][r(3)];b=small();answer=a*b;prompt=`${a} × ${b} = ?`;hint=`${a}개씩 ${b}묶음을 생각해요.`;}
+ else if(mode==='div'){b=[2,3,5][r(3)];answer=small();a=b*answer;prompt=`${a} ÷ ${b} = ?`;hint=`${a}개를 ${b}개씩 묶어 보세요.`;}
+ else if(mode==='missing'){a=4+r(12);answer=small();b=a+answer;prompt=`${a} + □ = ${b}`;hint=`${a}에서 ${b}가 되려면 몇 개 더 필요할까요?`;}
+ else if(mode==='pattern'){a=1+r(5);b=[2,3,5][r(3)];answer=a+3*b;prompt=`${a}, ${a+b}, ${a+2*b}, □`;hint=`앞뒤 숫자가 ${b}씩 늘어나요.`;}
+ else if(mode==='twoStep'){a=8+r(12+delta);b=small();c=2+r(5);answer=a+b-c;prompt=`${a} + ${b} − ${c} = ?`;hint=`먼저 ${a} + ${b}를 구하고 ${c}를 빼요.`;}
+ else if(mode==='divideAdd'){b=[2,3,5][r(3)];c=small();a=b*small();answer=a/b+c;prompt=`(${a} ÷ ${b}) + ${c} = ?`;hint=`먼저 ${a} ÷ ${b}를 구한 뒤 ${c}를 더해요.`;}
+ else if(mode==='sub'){b=small();answer=small();a=answer+b;prompt=`${a} − ${b} = ?`;hint=`${a}에서 ${b}를 빼요.`;}
+ else{a=11+r(17+delta);b=3+r(8);answer=a+b;prompt=`${a} + ${b} = ?`;hint='10을 먼저 만들고 남은 수를 더해요.';}
+ return{type:'number',mode,prompt,answer,a,b,c,hint,solved:false,attempts:0};
+}
+function create(type,seed=1,opts={}){
+ const r=rng(seed),p={type,seed,attempts:0,solved:false};
+ if(M.isType(type))return M.create(type,seed,opts);
+ if(type==='monster')return {...number(seed,opts.problem||'add',opts.chapterOrder),encounter:true};
+ if(type==='number')return number(seed,opts.problem||'add',opts.chapterOrder);
+ if(type==='rule'){
+  const sets=[{prompt:'10보다 크고 20보다 작은 짝수를 골라요.',options:[9,16,21],answer:16,hint:'짝수는 2개씩 나누어 남지 않는 수예요.'},{prompt:'3씩 커져요: 3, 6, 9, □. 다음 수는?',options:[10,12,14],answer:12,hint:'앞의 수에 3을 더해 보세요.'},{prompt:'2개씩 묶어도 남지 않고, 15보다 작은 수는?',options:[11,14,18],answer:14,hint:'짝수인지 먼저 보고, 15보다 작은지 확인해요.'}];
+  Object.assign(p,copy(sets[r(sets.length)]));for(let i=2;i>0;i--){const j=r(i+1);[p.options[i],p.options[j]]=[p.options[j],p.options[i]];}return p;
+ }
+ if(type==='memory'||type==='order'||type==='sequence'){p.sequence=opts.sequence?opts.sequence.slice():Array.from({length:Math.max(3,Math.min(5,opts.length||3))},()=>r(4));p.input=[];p.last=null;return p;}
+ if(type==='equipment'){p.sequence=[0,1,2,3,4];p.input=[];return p;}
+ if(type==='weight'){p.numbers=(opts.numbers||[3,5,2]).slice();p.target=opts.target||8;p.placed=[];return p;}
+ if(type==='sokoban'){
+  const hard=(opts.level||0)>=6;p.width=hard?6:5;p.height=5;p.walls=[];
+  for(let y=0;y<p.height;y++)for(let x=0;x<p.width;x++)if(!x||!y||x===p.width-1||y===p.height-1)p.walls.push([x,y]);
+  p.player=hard?[1,2]:[1,3];p.boxes=hard?[[2,2],[2,3]]:[[2,2]];p.goals=hard?[[4,2],[4,3]]:[[3,2]];p.initial={player:copy(p.player),boxes:copy(p.boxes)};p.history=[];return p;
+ }
+ if(type==='pipe'){
+  p.width=p.height=3;p.source=[-1,1];p.target=[3,1];p.cells=Array(9).fill(0);
+  const bottom=!!(seed%2),indices=bottom?[3,6,7,8,5]:[3,0,1,2,5];
+  for(const i of indices)p.cells[i]=i===indices[2]?5:3;
+  p.rotations=Array.from({length:9},()=>r(4));if(pipeTrace(p).solved)p.rotations[3]=(p.rotations[3]+1)%4;return p;
+ }
+ if(type==='laser'){
+  p.width=p.height=5;const advanced=(opts.level||0)>=4;
+  p.source=advanced?[-1,4]:[-1,3];p.direction=1;p.target=advanced?[4,0]:[4,1];p.mirrors=advanced?[[2,4],[2,2],[4,2]]:[[2,3],[2,1]];p.walls=[];p.rotations=p.mirrors.map(()=>r(2));if(laserTrace(p).solved)p.rotations[0]^=1;return p;
+ }
+ throw new Error('Unknown puzzle type: '+type);
+}
+function ports(mask,rotation){for(let i=0;i<rotation;i++)mask=((mask<<1)&15)|(mask>>3);return mask;}
+function pipeTrace(p){
+ if(!p||p.type!=='pipe'||!Array.isArray(p.rotations)||p.rotations.length!==9)return{solved:false,reached:[]};
+ const reached=[],queue=[];const first=p.source[1]*p.width;
+ if(!(ports(p.cells[first],p.rotations[first])&8))return{solved:false,reached};queue.push(first);let ok=false;
+ while(queue.length){const i=queue.shift();if(reached.includes(i))continue;reached.push(i);const x=i%p.width,y=Math.floor(i/p.width),mask=ports(p.cells[i],p.rotations[i]);
+  for(let d=0;d<4;d++){if(!(mask&(1<<d)))continue;const nx=x+dirs[d][0],ny=y+dirs[d][1];
+   if(nx===p.target[0]&&ny===p.target[1]){ok=true;continue;}
+   if(nx<0||nx>=p.width||ny<0||ny>=p.height)continue;const j=ny*p.width+nx;
+   if(ports(p.cells[j],p.rotations[j])&(1<<((d+2)%4)))queue.push(j);
+  }
+ }
+ return{solved:ok,reached};
+}
+function laserTrace(p){
+ if(!p||p.type!=='laser')return{solved:false,path:[]};let[x,y]=p.source,d=p.direction;const path=[[x,y]],seen=new Set();
+ for(let n=0;n<p.width*p.height*4+4;n++){
+  x+=dirs[d][0];y+=dirs[d][1];path.push([x,y]);if(x<0||x>=p.width||y<0||y>=p.height)return{solved:false,path};
+  if(x===p.target[0]&&y===p.target[1])return{solved:true,path};
+  if(p.walls.some(w=>w[0]===x&&w[1]===y))return{solved:false,path};const key=x+','+y+','+d;if(seen.has(key))return{solved:false,path};seen.add(key);
+  const i=p.mirrors.findIndex(m=>m[0]===x&&m[1]===y);if(i>=0)d=(p.rotations[i]===0?[1,0,3,2]:[3,2,1,0])[d];
+ }
+ return{solved:false,path};
+}
+function same(a,b){return a[0]===b[0]&&a[1]===b[1];}
+function solved(p){
+ if(!p)return false;
+ if(M.isType(p.type))return M.solved(p);
+ if(p.type==='pipe')return pipeTrace(p).solved;
+ if(p.type==='laser')return laserTrace(p).solved;
+ if(p.type==='sokoban')return p.goals.every(g=>p.boxes.some(b=>same(b,g)));
+ if(p.type==='weight')return p.placed.reduce((n,i)=>n+p.numbers[i],0)===p.target;
+ if(['memory','order','sequence','equipment'].includes(p.type))return p.input.length===p.sequence.length&&p.input.every((v,i)=>v===p.sequence[i]);
+ return !!p.solved;
+}
+function press(p,value){
+ if(M.isType(p?.type))return M.press(p,value);
+ if(solved(p))return{ok:false,duplicate:true};
+ if(['number','rule'].includes(p.type)){const text=String(value);if(!/^\d{1,3}$/.test(text))return{ok:false};const ok=Number(text)===p.answer;p.solved=ok;if(!ok)p.attempts++;return{ok,solved:ok};}
+ if(['memory','order','sequence','equipment'].includes(p.type)){const ok=value===p.sequence[p.input.length];if(ok)p.input.push(value);else{p.input=[];p.attempts++;}p.last={value,ok};return{ok,solved:solved(p),progress:p.input.length,next:p.sequence[p.input.length]};}
+ return{ok:false};
+}
+function rotate(p,index){if(solved(p))return false;if(p.type==='pipe'&&p.cells[index]){p.rotations[index]=(p.rotations[index]+1)%4;return true;}if(p.type==='laser'&&Number.isInteger(index)&&index>=0&&index<p.rotations.length){p.rotations[index]^=1;return true;}return false;}
+function sokobanMove(p,direction){
+ if(p.type!=='sokoban'||solved(p)||!dirs[direction])return false;const delta=dirs[direction],next=[p.player[0]+delta[0],p.player[1]+delta[1]],inside=v=>v[0]>=0&&v[0]<p.width&&v[1]>=0&&v[1]<p.height&&!p.walls.some(w=>same(w,v));
+ if(!inside(next))return false;const idx=p.boxes.findIndex(b=>same(b,next)),after=[next[0]+delta[0],next[1]+delta[1]];
+ if(idx>=0&&(!inside(after)||p.boxes.some(b=>same(b,after))))return false;
+ p.history.push({player:copy(p.player),boxes:copy(p.boxes)});if(p.history.length>150)p.history.shift();if(idx>=0)p.boxes[idx]=after;p.player=next;return true;
+}
+function reset(p){if(M.isType(p.type)){M.reset(p);return;}if(p.type==='sokoban'){p.player=copy(p.initial.player);p.boxes=copy(p.initial.boxes);p.history=[];}else if(p.input)p.input=[];else if(p.placed)p.placed=[];p.solved=false;}
+function undo(p){if(p.type!=='sokoban'||!p.history.length||solved(p))return false;const s=p.history.pop();p.player=s.player;p.boxes=s.boxes;return true;}
+function solvePipe(p){const xs=p.cells.map((m,i)=>m?i:-1).filter(i=>i>=0),trial=copy(p);function visit(n){if(n===xs.length)return pipeTrace(trial).solved?trial.rotations.slice():null;for(let r=0;r<4;r++){trial.rotations[xs[n]]=r;const a=visit(n+1);if(a)return a;}return null;}return visit(0);}
+function solveLaser(p){const t=copy(p);for(let mask=0;mask<1<<t.mirrors.length;mask++){t.rotations=t.mirrors.map((_,i)=>(mask>>i)&1);if(laserTrace(t).solved)return t.rotations.slice();}return null;}
+function solveSokoban(p){const queue=[{p:copy(p),moves:[]}],seen=new Set();while(queue.length&&seen.size<12000){const s=queue.shift(),key=JSON.stringify([s.p.player,s.p.boxes.slice().sort((a,b)=>a[0]*10+a[1]-b[0]*10-b[1])]);if(seen.has(key))continue;seen.add(key);if(solved(s.p))return s.moves;for(let d=0;d<4;d++){const t=copy(s.p);t.history=[];if(sokobanMove(t,d))queue.push({p:t,moves:s.moves.concat(d)});}}return null;}
+return{hash,rng,create,number,solved,press,rotate,ports,pipeTrace,laserTrace,sokobanMove,reset,undo,solvePipe,solveLaser,solveSokoban};
+});
+
+</script><script>
+/* Campaign rules and save migration. No DOM, animation frames or browser storage here. */
+(function(root,factory){const node=typeof module==='object'&&module.exports;const api=factory(node?require('./chapter-data.js'):root.MMChapters,node?require('./puzzles.js'):root.MMPuzzles,node?require('./mechanics.js'):root.MMMechanics);if(node)module.exports=api;else root.MM=api;})(typeof globalThis!=='undefined'?globalThis:this,function(D,P,M){
+'use strict';
+const costs=[[2,1,0,0,0],[2,0,1,1,0],[2,0,2,1,0],[0,2,0,2,0],[2,0,2,1,0]].map(Object.freeze);
+const recipes=[[-1,1,-1,-1,0,-1,-1,0,-1],[2,-1,-1,-1,0,3,-1,-1,0],[2,-1,2,0,3,0,-1,-1,-1],[-1,1,-1,3,-1,3,-1,1,-1],[2,-1,2,-1,3,-1,0,-1,0]].map(Object.freeze);
+Object.freeze(costs);Object.freeze(recipes);
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n)),clone=x=>JSON.parse(JSON.stringify(x));
+const ids=D.list().map(d=>d.id),numeric=n=>typeof n==='number'&&Number.isFinite(n);
+function freshState(seed,id){const d=D.get(id);return{chapterId:id,seed:P.hash(seed+':'+id),x:d.start[0],y:d.start[1],vy:0,face:1,grounded:true,climb:null,checkpoint:d.start.slice(),flags:[],visited:[],puzzles:{},toolHits:{},selectedHotbar:0,health:5,shield:1,lastPlate:null,action:null,clock:0};}
+function fresh(seed){return{v:3,seed:seed>>>0,chapter:ids[0],inventory:{items:[0,1,2,1,0],owned:Array(5).fill(false),equipped:Array(5).fill(false),ench:Array(5).fill(-1),unlocked:[]},xp:0,completedChapters:[],unlockedChapters:[ids[0]],states:{[ids[0]]:freshState(seed,ids[0])}};}
+function session(s){return s.states[s.chapter];}
+function definition(s){return D.get(s.chapter);}
+function has(s,id){return session(s).flags.includes(id);}
+function flag(s,id){if(has(s,id))return false;session(s).flags.push(id);return true;}
+function owned(s,i){return !!s.inventory.owned[i];}
+function tool(s,i){return owned(s,i)&&!!s.inventory.equipped[i];}
+function nextUnlocks(s){const done=new Set(s.completedChapters);s.unlockedChapters=ids.filter((id,i)=>i===0||done.has(ids[i-1]));}
+function startChapter(s,id){if(!D.get(id)||!s.unlockedChapters.includes(id))return false;session(s).action=null;s.chapter=id;if(!s.states[id])s.states[id]=freshState(s.seed,id);session(s).climb=null;session(s).vy=0;session(s).lastPlate=null;session(s).action=null;return true;}
+function reward(s,id,xp=10,items=[0,0,0,0,0]){if(!flag(s,'reward/'+id))return false;s.xp=clamp(s.xp+xp,0,99999);items.forEach((n,i)=>s.inventory.items[i]=clamp(s.inventory.items[i]+n,0,9999));return true;}
+function complete(s,id){if(!flag(s,id))return false;reward(s,id,id.startsWith('boss.')?20:10,id==='math'?[2,0,0,0,0]:[1,0,0,0,0]);if(tool(s,3)&&s.inventory.ench[3]===0)session(s).shield=1;return true;}
+function craft(s,i,grid){
+ if(!Number.isInteger(i)||i<0||i>=5)return{ok:false,code:'invalid'};
+ if(owned(s,i))return{ok:false,code:'owned'};
+ if(i!==0&&!owned(s,0))return{ok:false,code:'first-tool'};
+ if(!Array.isArray(grid)||grid.length!==9)return{ok:false,code:'pattern'};
+ for(let n=0;n<9;n++)if(grid[n]!==recipes[i][n])return{ok:false,code:'pattern'};
+ if(costs[i].some((n,k)=>s.inventory.items[k]<n))return{ok:false,code:'materials'};
+ costs[i].forEach((n,k)=>s.inventory.items[k]-=n);s.inventory.owned[i]=s.inventory.equipped[i]=true;session(s).selectedHotbar=i;
+ return{ok:true,code:'crafted'};
+}
+function equip(s,i){if(!owned(s,i))return false;s.inventory.equipped[i]=true;session(s).selectedHotbar=i;return true;}
+function enchant(s,i,v){if(!owned(s,i)||![0,1].includes(v))return false;const id=i*2+v;if(!s.inventory.unlocked.includes(id)){if(s.xp<10)return false;s.xp-=10;s.inventory.unlocked.push(id);}s.inventory.ench[i]=v;s.inventory.equipped[i]=true;return true;}
+function ensureSupplies(s){const remaining=definition(s).requiredTools.filter(i=>!owned(s,i)),needs=Array(5).fill(0);remaining.forEach(i=>costs[i].forEach((v,j)=>needs[j]+=v));needs.forEach((v,j)=>s.inventory.items[j]=Math.max(s.inventory.items[j],v));}
+function currentTask(s){return definition(s).tasks.find(t=>!has(s,t.id))||null;}
+function fieldDone(s){return !currentTask(s);}
+function bossInfo(s){const d=definition(s),done=d.boss.questions.filter(q=>has(s,q.id)).length;return{available:fieldDone(s),done,total:d.boss.questions.length,next:d.boss.questions.find(q=>!has(s,q.id))||null,cleared:has(s,'clear')};}
+function objective(s){
+ const d=definition(s),t=currentTask(s),st=session(s);
+ if(t){if(t.type!=='supply'&&t.id!=='math'){
+   const missing=d.requiredTools.find(i=>!owned(s,i));
+   if(missing!==undefined)return{kind:'craft',tool:missing,x:18,floor:0,id:'craft'+missing,text:`작업대에서 ${D.tools[missing]}을 3×3으로 만들어요.`};
+   if(t.tool!==undefined&&!tool(s,t.tool))return{kind:'equip',tool:t.tool,x:st.x,floor:Math.floor((st.y+.2)/8),id:'equip'+t.tool,text:`가방에서 이미 만든 ${D.tools[t.tool]}을 장착해요.`};
+  }
+  let text=t.text||`${t.label}을 조사해요.`;
+  if(t.type==='sequence'){const p=puzzle(s,t.id),n=p.input.length;text=`발판 ${n}/${p.sequence.length} · 다음은 ${p.sequence[n]} — 직접 밟아요.`;}
+  return{kind:t.type,id:t.id,x:t.x,floor:t.floor,text,tool:t.tool};
+ }
+ const b=bossInfo(s);return{kind:b.cleared?'clear':'boss',id:'golem',x:d.boss.x,floor:d.boss.floor,text:b.cleared?'탐험 완료! 다음 챕터로 떠나요.':`${d.boss.label}에게 말해 ${b.done+1}/${b.total}번째 문제를 받아요.`};
+}
+function floorDone(s,f){return definition(s).tasks.filter(t=>t.floor===f).every(t=>has(s,t.id));}
+function solids(s){const d=definition(s),a=[];for(let f=0;f<d.floors;f++)a.push([0,f*8-.5,d.width,f*8,1,0]);for(let f=0;f<2;f++)if(!floorDone(s,f)){const x=d.gateX[f];a.push([x-.32,f*8,x+.32,f*8+6.5,0,f===0?1:-1]);}a.push([-1,-4,0,26,0,0],[d.width,-4,d.width+1,26,0,0]);return a;}
+function ladders(s){return definition(s).ladders;}
+function waypoint(s){const o=objective(s),st=session(s),f=clamp(Math.floor((st.y+.2)/8),0,2);if(f===o.floor)return o;const l=ladders(s).find(v=>o.floor>f?v[1]===f*8:v[2]===f*8);return l?{kind:'ladder',id:'ladder',x:l[0],floor:f,text:o.floor>f?'사다리 앞에서 ↑를 누르고 올라가요.':'사다리 앞에서 ↓를 누르고 내려가요.'}:o;}
+function descriptor(s,id){const d=definition(s);return d.tasks.find(t=>t.id===id)||d.boss.questions.find(t=>t.id===id)||(d.encounters||[]).find(t=>t.id===id)||null;}
+function puzzle(s,id){const st=session(s),desc=descriptor(s,id);if(!desc)return null;if(!st.puzzles[id]){st.puzzles[id]=P.create(desc.type,P.hash(st.seed+':'+id),desc);if(has(s,id)&&M.isType(desc.type))M.markCompleted(st.puzzles[id]);}return st.puzzles[id];}
+function canUse(s,t){if(t?.type==='monster')return{ok:!has(s,t.id),code:has(s,t.id)?'complete':'encounter'};if(!t)return{ok:false,code:'missing'};if(has(s,t.id))return{ok:false,code:'complete'};const o=objective(s);if(o.kind==='craft')return{ok:false,code:'craft',tool:o.tool};if(o.kind==='equip')return{ok:false,code:'equip',tool:o.tool};if(currentTask(s)?.id!==t.id)return{ok:false,code:'order',text:o.text};if(t.tool!==undefined&&!tool(s,t.tool))return{ok:false,code:owned(s,t.tool)?'equip':'craft',tool:t.tool};return{ok:true};}
+function nearTask(s,id,reach=1.9){const d=objects(s).find(t=>t.id===id)||descriptor(s,id),st=session(s);return !!d&&Math.abs(st.x-d.x)<=reach&&Math.abs(st.y-d.floor*8)<2.2;}
+function interact(s,id){
+ const st=session(s);if(id==='drop'&&st.carried){st.carried=null;return{ok:true,code:'putdown'};}if(st.action&&st.clock<st.action.until)return{ok:false,code:'busy'};
+ if(id==='golem'){if(!nearTask(s,'golem',2.5))return{ok:false,code:'far'};const b=bossInfo(s);if(b.cleared)return{ok:true,code:'clear'};if(!b.available)return{ok:false,code:'order',text:objective(s).text};return{ok:true,code:'boss',question:b.next};}
+ if(id==='workshop')return nearTask(s,id,2)?{ok:true,code:'workshop'}:{ok:false,code:'far'};
+ const encounter=(definition(s).encounters||[]).find(t=>t.id===id);if(encounter){if(!nearTask(s,id,2.1))return{ok:false,code:'far'};if(has(s,id))return{ok:false,code:'complete'};return{ok:true,code:'puzzle',id};}
+ const optional=definition(s).optional.find(t=>t.id===id);if(optional){if(!nearTask(s,id))return{ok:false,code:'far'};return{ok:reward(s,id,5,[2,1,1,1,0]),code:'cache'};}
+ const crate=objects(s).find(t=>t.id===id&&t.kind==='weightCrate');if(crate){if(!nearTask(s,id,1.5))return{ok:false,code:'far'};const t=descriptor(s,crate.parent),check=canUse(s,t);if(!check.ok)return check;if(st.carried)return{ok:false,code:'carrying'};st.carried={id:t.id,index:crate.index};return{ok:true,code:'carried'};}
+ const t=definition(s).tasks.find(t=>t.id===id);if(!t||!nearTask(s,id))return{ok:false,code:'far'};const check=canUse(s,t);if(!check.ok)return check;
+ if(t.type==='supply'){ensureSupplies(s);complete(s,id);return{ok:true,code:'supply'};}
+ if(['repair','mine','shield'].includes(t.type)){
+  const selected=st.selectedHotbar;
+  if(selected!==t.tool)return{ok:false,code:'select',tool:t.tool};
+  if(Math.abs(st.x-t.x)<1.1){const side=st.x<t.x?1:st.x>t.x?-1:st.face;st.face=side;st.x=t.x-side*1.45;}else st.face=t.x>=st.x?1:-1;const hits=(st.toolHits[id]||0)+1;st.toolHits[id]=hits;st.action={id,tool:t.tool,kind:t.type,x:t.x,y:t.floor*8,started:st.clock,until:st.clock+.45};
+  if(hits>=(t.hits||1))complete(s,id);return{ok:true,code:has(s,id)?'done':'working',hits,total:t.hits||1};
+ }
+ if(t.type==='weight'){const p=puzzle(s,id);if(st.carried?.id===id){if(!p.placed.includes(st.carried.index))p.placed.push(st.carried.index);st.carried=null;if(P.solved(p)){completeProblem(s,id);return{ok:true,code:'done'};}return{ok:true,code:'placed'};}if(p.placed.length){st.carried={id,index:p.placed.pop()};return{ok:true,code:'carried'};}return{ok:true,code:'weight',id};}
+ if(t.type==='rule'&&t.tool===4){if(st.selectedHotbar!==4)return{ok:false,code:'select',tool:4};st.action={id,tool:4,kind:'scan',x:t.x,y:t.floor*8,started:st.clock,until:st.clock+.65};return{ok:true,code:'puzzle',id,delay:650};}
+ if(t.type==='jump'){if(st.selectedHotbar!==2)return{ok:false,code:'select',tool:2};return{ok:true,code:'jump'};}
+ return{ok:true,code:t.type==='sequence'?'sequence':'puzzle',id};
+}
+function submit(s,id,value){const desc=descriptor(s,id),st=session(s);if(!desc||has(s,id))return{ok:false,code:'complete'};const isBoss=id.startsWith('boss.');if(isBoss){const b=bossInfo(s);if(!b.available||b.next?.id!==id)return{ok:false,code:'order'};}else if(!canUse(s,desc).ok)return{ok:false,code:'order'};
+ const p=puzzle(s,id);if(p.type==='equipment'){if(!Number.isInteger(value)||!owned(s,value))return{ok:false,code:'craft',tool:value};equip(s,value);}const result=P.press(p,value);if(result.solved)completeProblem(s,id);return result;
+}
+function completeProblem(s,id){
+ const d=descriptor(s,id);if(!d||has(s,id))return false;
+ if(id.startsWith('boss.')){const b=bossInfo(s);if(!b.available||b.next?.id!==id)return false;}else if(!canUse(s,d).ok)return false;
+ if(!P.solved(puzzle(s,id)))return false;complete(s,id);
+ const st=session(s);st.action={id,kind:'success',x:definition(s).boss.x,y:16,started:st.clock,until:st.clock+.65};
+ if(id.startsWith('boss.')&&!bossInfo(s).next)finish(s);return true;
+}
+function finish(s){if(!fieldDone(s)||bossInfo(s).next||has(s,'clear'))return false;flag(s,'clear');reward(s,'clear',30,[0,0,0,0,1]);if(!s.completedChapters.includes(s.chapter))s.completedChapters.push(s.chapter);nextUnlocks(s);return true;}
+function plateLayout(s,t){const p=puzzle(s,t.id),nums=p.sequence.slice(),r=P.rng(P.hash(session(s).seed+':plate:'+t.id));if(t.guided)nums.reverse();else for(let i=nums.length-1;i>0;i--){const j=r(i+1);[nums[i],nums[j]]=[nums[j],nums[i]];}return nums.map((n,i)=>({n,x:t.x+(i-1)*3,y:t.floor*8}));}
+function move(s,h=0,v=0,jump=false,dt=1/60){
+ const st=session(s),d=definition(s);dt=clamp(dt,0,.05);if(!dt)return;h=clamp(h,-1,1);v=clamp(v,-1,1);st.clock+=dt;
+ const previousSurfaces=mechanicalSurfaces(s);for(const t of d.tasks)if(M.isType(t.type)&&session(s).puzzles[t.id])M.tick(session(s).puzzles[t.id],dt);
+ const machineSurfaces=mechanicalSurfaces(s),riding=previousSurfaces.findIndex(seg=>{const y=M.surfaceY(seg,st.x);return y!==null&&Math.abs(st.y-y)<.035&&st.vy<=0&&!st.climb;});
+ const list=solids(s),hw=.38,height=1.65;st.grounded=!st.climb&&st.vy<=0&&list.some(f=>st.x+hw>f[0]&&st.x-hw<f[2]&&Math.abs(st.y-f[3])<.004);
+ if(riding>=0)st.grounded=true;
+ if(h){st.climb=null;st.face=h>0?1:-1;}
+ if(v)for(const l of ladders(s)){if(Math.abs(st.x-l[0])>.7||st.y<l[1]-.1||st.y>l[2]+.1||(v>0&&st.y>=l[2]-.001)||(v<0&&st.y<=l[1]+.001))continue;st.climb=l;st.x=l[0];break;}
+ if(jump&&st.grounded&&!st.climb){st.vy=tool(s,2)?13:9.5;st.grounded=false;if(tool(s,2))st.action={kind:'jump',tool:2,x:st.x,y:st.y,started:st.clock,until:st.clock+.6};}
+ let tx=st.x+h*6*dt;
+ for(const f of list){if(f[4]||st.y+height<=f[1]+.001||st.y>=f[3]-.001||(f[5]&&Math.sign(h)!==f[5]))continue;if(h>0&&st.x+hw<=f[0]+.001&&tx+hw>f[0])tx=Math.min(tx,f[0]-hw);if(h<0&&st.x-hw>=f[2]-.001&&tx-hw<f[2])tx=Math.max(tx,f[2]+hw);}
+ st.x=clamp(tx,.4,d.width-.4);
+ if(riding>=0&&!jump&&!st.climb){const y=M.surfaceY(machineSurfaces[riding],st.x);if(y!==null&&Math.abs(st.y-y)<.4)st.y=y;}
+ if(st.climb){const l=st.climb;st.vy=0;st.grounded=false;st.y=clamp(st.y+v*4.5*dt,l[1],l[2]);if(st.y>=l[2]&&v>0||st.y<=l[1]&&v<0){st.climb=null;st.grounded=true;st.checkpoint=[st.x,st.y];}}
+ else{st.vy=Math.max(-18,st.vy-24*dt);let ny=st.y+st.vy*dt;st.grounded=false;for(const f of list){if(st.x+hw<=f[0]||st.x-hw>=f[2])continue;if(st.vy<=0&&st.y>=f[3]-.002&&ny<=f[3]){ny=Math.max(ny,f[3]);st.grounded=true;st.vy=0;}}if(st.vy<=0)for(const seg of machineSurfaces){const sy=M.surfaceY(seg,st.x);if(sy!==null&&st.y>=sy-.002&&ny<=sy){ny=Math.max(ny,sy);st.vy=0;st.grounded=true;}}st.y=ny;}
+ if(st.y< -3){[st.x,st.y]=st.checkpoint;st.vy=0;st.grounded=true;st.climb=null;}
+ const room=clamp(Math.floor((st.y+.2)/8),0,d.floors-1)*5+clamp(Math.floor(st.x/12),0,4);if(!st.visited.includes(room))st.visited.push(room);
+ const active=currentTask(s);
+ if(active?.type==='jump'&&tool(s,2)&&Math.abs(st.x-active.x)<1.9&&st.y>active.floor*8+1.8&&st.y<active.floor*8+5){complete(s,active.id);}
+ if(active?.type==='sequence'&&canUse(s,active).ok){let contact=null;if(st.grounded)contact=plateLayout(s,active).find(p=>Math.abs(st.y-p.y)<.12&&Math.abs(st.x-p.x)<.62);const key=contact?active.id+':'+contact.n:null;
+  if(contact&&key!==st.lastPlate){const p=puzzle(s,active.id),r=P.press(p,contact.n);st.plateEvent={id:active.id,n:contact.n,x:contact.x,y:contact.y,ok:r.ok,progress:p.input.length,started:st.clock,until:st.clock+1.1};if(r.solved)complete(s,active.id);}
+  st.lastPlate=key;
+ }else st.lastPlate=null;
+}
+function mechanicalSurfaces(s){const st=session(s),out=[];for(const t of definition(s).tasks){if(!M.isType(t.type)||!st.puzzles[t.id])continue;for(const seg of M.surfaces(st.puzzles[t.id]))out.push(seg.map(([x,y])=>[t.x-3.6+x*.6,t.floor*8+.2+y*.5]));}return out;}
+function objects(s){const d=definition(s),st=session(s),all=[d.bench,...d.tasks,d.boss,...d.optional,...(d.encounters||[]).map(t=>({...t,x:M.monsterX(t,st.clock),calm:has(s,t.id)}))];for(const t of d.tasks.filter(t=>t.type==='weight'&&!has(s,t.id))){const p=puzzle(s,t.id);p.numbers.forEach((n,i)=>{if(!p.placed.includes(i)&&!(st.carried?.id===t.id&&st.carried.index===i))all.push({id:t.id+'.weight.'+i,kind:'weightCrate',label:n+'kg 상자',x:t.x-4+i*1.25,floor:t.floor,weight:n,index:i,parent:t.id});});}return all;}
+function sanitizeInventory(raw){
+ if(!raw||!Array.isArray(raw.items)||raw.items.length!==5||raw.items.some(n=>!Number.isInteger(n)||n<0||n>9999))return null;
+ for(const k of ['owned','equipped'])if(!Array.isArray(raw[k])||raw[k].length!==5||raw[k].some(v=>typeof v!=='boolean'))return null;
+ return{items:raw.items.slice(),owned:raw.owned.slice(),equipped:raw.equipped.map((v,i)=>v&&raw.owned[i]),ench:Array.from({length:5},(_,i)=>[-1,0,1].includes(raw.ench?.[i])?raw.ench[i]:-1),unlocked:Array.isArray(raw.unlocked)?[...new Set(raw.unlocked.filter(v=>Number.isInteger(v)&&v>=0&&v<10))]:[]};
+}
+function finiteClock(v){return numeric(v)&&v>=0&&v<1e9?v:0;}
+function validFlags(raw){return Array.isArray(raw)&&raw.length<300&&raw.every(k=>typeof k==='string'&&k.length<100);}
+function normalizeState(raw,seed,id){
+ if(!raw||!numeric(raw.x)||!numeric(raw.y)||raw.x<0||raw.x>D.get(id).width||raw.y< -3||raw.y>26||!validFlags(raw.flags))return null;
+ const out=freshState(seed,id);out.x=raw.x;out.y=Math.max(0,raw.y);out.seed=Number.isInteger(raw.seed)?raw.seed>>>0:out.seed;out.face=raw.face===-1?-1:1;out.flags=[...new Set(raw.flags)];out.visited=Array.isArray(raw.visited)?raw.visited.filter(v=>Number.isInteger(v)&&v>=0&&v<15):[];
+ if(Array.isArray(raw.checkpoint)&&raw.checkpoint.length===2&&raw.checkpoint.every(n=>numeric(n))&&raw.checkpoint[0]>=.4&&raw.checkpoint[0]<59.6&&[0,8,16].includes(raw.checkpoint[1]))out.checkpoint=raw.checkpoint.slice();
+ out.clock=finiteClock(raw.clock);
+ out.selectedHotbar=Number.isInteger(raw.selectedHotbar)&&raw.selectedHotbar>=0&&raw.selectedHotbar<5?raw.selectedHotbar:0;
+ const desc=[...D.get(id).tasks,...D.get(id).boss.questions,...(D.get(id).encounters||[])];
+ for(const def of desc){if(['supply','repair','mine','shield','jump'].includes(def.type))continue;
+  const r=raw.puzzles?.[def.id];if(!r)continue;const p=P.create(def.type,P.hash(out.seed+':'+def.id),def);
+  if(M.isType(p.type))M.hydrate(p,r);
+  if(p.rotations&&Array.isArray(r.rotations)&&r.rotations.length===p.rotations.length&&r.rotations.every(n=>Number.isInteger(n)&&n>=0&&n<(p.type==='laser'?2:4)))p.rotations=r.rotations.slice();
+  if(p.input&&Array.isArray(r.input)&&r.input.length<=p.sequence.length&&r.input.every((n,i)=>n===p.sequence[i]))p.input=r.input.slice();
+  if(p.placed&&Array.isArray(r.placed))p.placed=[...new Set(r.placed.filter(i=>Number.isInteger(i)&&i>=0&&i<p.numbers.length))];
+  if(p.type==='number'&&r.type==='number'&&typeof r.prompt==='string'&&r.prompt.length<=160&&Number.isInteger(r.answer)&&r.answer>=0&&r.answer<=999){p.prompt=r.prompt;p.answer=r.answer;p.hint=typeof r.hint==='string'?r.hint.slice(0,160):p.hint;}
+  if(p.type==='sokoban'){
+   const validPoint=v=>Array.isArray(v)&&v.length===2&&v.every(Number.isInteger)&&v[0]>=0&&v[0]<p.width&&v[1]>=0&&v[1]<p.height&&!p.walls.some(w=>w[0]===v[0]&&w[1]===v[1]);
+   const validBoard=b=>b&&validPoint(b.player)&&Array.isArray(b.boxes)&&b.boxes.length===p.boxes.length&&b.boxes.every(validPoint)&&new Set(b.boxes.map(v=>v.join(','))).size===p.boxes.length&&!b.boxes.some(v=>v[0]===b.player[0]&&v[1]===b.player[1]);
+   if(validBoard(r)){p.player=r.player.slice();p.boxes=r.boxes.map(v=>v.slice());p.history=Array.isArray(r.history)?r.history.slice(-150).filter(validBoard).map(b=>({player:b.player.slice(),boxes:b.boxes.map(v=>v.slice())})):[];}
+  }
+  // Solved flags are authoritative; malformed unfinished layouts use the safe authored board.
+  if(out.flags.includes(def.id))p.solved=true;out.puzzles[def.id]=p;
+ }
+ if(raw.toolHits&&typeof raw.toolHits==='object')for(const t of desc){if(t.hits&&Number.isInteger(raw.toolHits[t.id]))out.toolHits[t.id]=clamp(raw.toolHits[t.id],0,t.hits);}
+ // Legacy numeric prompt is retained instead of rerolled after a reload.
+ if(raw.question&&!raw.question.solved&&typeof raw.question.id==='string'){
+  const q=raw.question,def=desc.find(t=>t.id===q.id);if(def?.type==='number'&&typeof q.prompt==='string'&&q.prompt.length<=160&&Number.isInteger(q.answer)&&q.answer>=0&&q.answer<=999)out.puzzles[q.id]={...P.create('number',P.hash(out.seed+':'+q.id),def),prompt:q.prompt,answer:q.answer};
+ }
+ return out;
+}
+function restore(text){
+ try{if(typeof text!=='string'||text.length>500000)return null;const raw=JSON.parse(text);if(!raw||![1,2,3].includes(raw.v)||!Number.isInteger(raw.seed))return null;
+  const id=raw.v===1?ids[0]:raw.chapter;if(!D.get(id))return null;const inv=sanitizeInventory(raw.v===1?raw:raw.inventory);if(!inv)return null;
+  const s=fresh(raw.seed);s.chapter=id;s.inventory=inv;s.xp=raw.v===2?raw.campaignXp:raw.xp;if(!Number.isInteger(s.xp)||s.xp<0||s.xp>99999)return null;
+  s.completedChapters=Array.isArray(raw.completedChapters)?[...new Set(raw.completedChapters.filter(x=>ids.includes(x)))]:[];
+  s.states={};
+  if(raw.v===3){for(const c of ids){if(raw.states?.[c]){const st=normalizeState(raw.states[c],s.seed,c);if(!st)return null;s.states[c]=st;}}if(!s.states[id])return null;}
+  else{const st=normalizeState(raw.v===1?raw:raw.chapterState||raw,s.seed,id);if(!st)return null;s.states[id]=st;}
+  if(s.states[id].flags.includes('clear')&&!s.completedChapters.includes(id))s.completedChapters.push(id);
+  // Old saves only retained the currently played chapter. Recover completed worlds from completion records.
+  for(const c of s.completedChapters){if(!s.states[c]){const st=freshState(s.seed,c);st.flags=D.get(c).tasks.map(t=>t.id).concat(D.get(c).boss.questions.map(q=>q.id),'clear');s.states[c]=st;}}
+  for(const c of s.completedChapters){const st=s.states[c];for(const k of D.get(c).tasks.map(t=>t.id).concat(D.get(c).boss.questions.map(q=>q.id),'clear'))if(!st.flags.includes(k))st.flags.push(k);}nextUnlocks(s);if(!s.unlockedChapters.includes(id))return null;return s;
+ }catch{return null;}
+}
+function serialize(s){return JSON.stringify(s,(key,value)=>['action','plateEvent','lastPlate','climb','carried'].includes(key)?null:value);}
+return{fresh,freshCampaign:fresh,session,definition,has,tool,owned,costs,recipes,startChapter,reward,craft,equip,enchant,objective,waypoint,currentTask,fieldDone,bossInfo,descriptor,puzzle,canUse,interact,submit,completeProblem,finish,objects,mechanicalSurfaces,plateLayout,move,solids,ladders,restore,serialize,rng:P.rng,hash:P.hash};
+});
+
+</script><script>
+/* Compatibility facade: one authoritative objective/runtime lives in MM. */
+(function(root){const node=typeof module==='object'&&module.exports;const C=node?require('./core.js'):root.MM;const api={objectiveFor:C.objective,waypoint:C.waypoint,bossInfo:C.bossInfo};if(node)module.exports=api;else root.MMRuntime=api;})(typeof globalThis!=='undefined'?globalThis:this);
+
+</script><script>
+/* Original illustrated art primitives. No imported game assets or embedded fonts. */
+(function (root) {
+  'use strict';
+  const themes = {
+    mine:    { sky:'#dcece4', horizon:'#aacdba', far:'#7cab95', near:'#416f64', soil:'#927b60', edge:'#5b5849', grass:'#9abe72', accent:'#eeb76c', light:'#fff3c6', kind:'cave' },
+    lava:    { sky:'#eed5bb', horizon:'#cf9980', far:'#af7868', near:'#755b59', soil:'#8b7a70', edge:'#4c5255', grass:'#c4a381', accent:'#ed925c', light:'#ffe7b3', kind:'foundry' },
+    sky:     { sky:'#d8eff5', horizon:'#a1cddd', far:'#91b1c5', near:'#638c9d', soil:'#b89f7c', edge:'#75674d', grass:'#ead59c', accent:'#eeb46a', light:'#fff4d0', kind:'islands' },
+    crystal: { sky:'#d9e2f1', horizon:'#b2a7d1', far:'#918bab', near:'#596e8e', soil:'#9393af', edge:'#595d77', grass:'#a9ded8', accent:'#72c8c5', light:'#e3fff3', kind:'crystal' },
+    star:    { sky:'#6d829e', horizon:'#4b607e', far:'#405975', near:'#30445c', soil:'#9b91a5', edge:'#56536c', grass:'#eed39a', accent:'#f1bf78', light:'#fff0be', kind:'stars' },
+    forest:  { sky:'#e1edce', horizon:'#b2cba2', far:'#91b396', near:'#567d6f', soil:'#9a8065', edge:'#625744', grass:'#9fc57c', accent:'#e6b06c', light:'#fff4c9', kind:'forest' },
+    ice:     { sky:'#e2f4f6', horizon:'#afd9e5', far:'#93b9ce', near:'#6c94b5', soil:'#afccd6', edge:'#698997', grass:'#ecf9ef', accent:'#80c8df', light:'#ffffff', kind:'ice' },
+    sun:     { sky:'#fff0ce', horizon:'#e9c596', far:'#c3a187', near:'#ad8a75', soil:'#d4b98c', edge:'#9a7c59', grass:'#f0dca8', accent:'#e6a853', light:'#fff9e3', kind:'desert' },
+    clock:   { sky:'#d6e9e6', horizon:'#a7c6cc', far:'#8babbb', near:'#667c94', soil:'#b09a7e', edge:'#705e50', grass:'#dec594', accent:'#dd9d66', light:'#ffebca', kind:'clock' },
+    aurora:  { sky:'#bddedb', horizon:'#8bb6bb', far:'#7396b0', near:'#506985', soil:'#9998b1', edge:'#565e7c', grass:'#acd4b4', accent:'#e4b66e', light:'#fff0ce', kind:'aurora' }
+  };
+  Object.values(themes).forEach(Object.freeze); Object.freeze(themes);
+  function theme(name) { return themes[name] || themes.mine; }
+  function rounded(c, x, y, w, h, r, fill, stroke, sw=1) {
+    if(w<=0||h<=0)return;
+    r=Math.max(0,Math.min(r,w/2,h/2)); c.beginPath();
+    c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);
+    c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);
+    c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath();
+    if(fill){c.fillStyle=fill;c.fill();}if(stroke){c.strokeStyle=stroke;c.lineWidth=sw;c.stroke();}
+  }
+  function ellipse(c,x,y,rx,ry,fill,stroke,sw=1) {
+    if(rx<=0||ry<=0)return;c.beginPath();c.ellipse(x,y,rx,ry,0,0,Math.PI*2);
+    if(fill){c.fillStyle=fill;c.fill();}if(stroke){c.lineWidth=sw;c.strokeStyle=stroke;c.stroke();}
+  }
+  function polygon(c,points,fill,stroke,sw=1){
+    if(!points.length)return;c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();
+    if(fill){c.fillStyle=fill;c.fill();}if(stroke){c.strokeStyle=stroke;c.lineWidth=sw;c.stroke();}
+  }
+  function line(c,points,color,width=1){c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.strokeStyle=color;c.lineWidth=width;c.lineCap='round';c.lineJoin='round';c.stroke();}
+  function gradient(c,x,y,w,h,top,bottom){const g=c.createLinearGradient(x,y,x+w,y+h);g.addColorStop(0,top);g.addColorStop(1,bottom);return g;}
+  function star(c,x,y,size,color,rotation=0){const points=[];for(let i=0;i<8;i++){const a=rotation+i*Math.PI/4,r=i%2?size*.28:size;points.push([x+Math.cos(a)*r,y+Math.sin(a)*r]);}polygon(c,points,color);}
+  function pose(st,ui={}){
+    const reduced=!!ui.reducedMotion,t=reduced?0:(ui.time??st.clock??0),moving=!!ui.moving&&!reduced&&st.grounded;
+    return {bob:reduced?0:Math.sin(t*(moving?13:2.3))*(moving?.032:.017),leg:moving?Math.sin(t*13)*.13:0,
+      blink:reduced?1:(t%6.2>5.99?.16:1),scarf:reduced?0:Math.sin(t*6)*.065,breath:reduced?0:Math.sin(t*2)*.022};
+  }
+  function hash(n){const x=Math.sin(n*91.717+7.34)*43758.5453;return x-Math.floor(x);}
+  root.MMArt={theme,themes,rounded,ellipse,polygon,line,gradient,star,pose,hash};
+})(typeof globalThis!=='undefined'?globalThis:this);
+
+</script><script>
+/* Illustrated workshop world. Presentation only: never changes a puzzle, coordinate or save. */
+(function(root){
+'use strict';
+const A=root.MMArt,INK='#284f53',CREAM='#fff1d2',TEAL='#4e9e9c',CORAL='#e58b6c';
+class Renderer {
+  static styleId='storybook-workshop-15.1';
+  constructor(canvas){
+    this.canvas=canvas;this.ctx=canvas.getContext('2d');this.cx=8;this.cy=3;this.last=0;
+    this.options={reducedMotion:false,liteEffects:false};this.particles=[];this.effectKey='';
+    this.puzzleCache=new Map();this.cacheKey='';this.stats={particles:0,drawnObjects:0};this.ui={};
+  }
+  setOptions(options={}){for(const k of ['reducedMotion','liteEffects'])if(typeof options[k]==='boolean')this.options[k]=options[k];if(this.options.reducedMotion)this.particles=[];}
+  resize(){
+    const r=this.canvas.getBoundingClientRect(),dpr=Math.min(root.devicePixelRatio||1,2);
+    this.w=Math.max(1,r.width);this.h=Math.max(1,r.height);this.u=Math.max(30,Math.min(48,this.w/14));
+    const w=Math.round(this.w*dpr),h=Math.round(this.h*dpr);
+    if(this.canvas.width!==w||this.canvas.height!==h){this.canvas.width=w;this.canvas.height=h;}
+    this.ctx.setTransform(dpr,0,0,dpr,0,0);this.ctx.imageSmoothingEnabled=true;
+    this.ctx.globalAlpha=1;this.ctx.lineCap='round';this.ctx.lineJoin='round';
+  }
+  X(x){return this.w/2+(x-this.cx)*this.u;} Y(y){return this.h/2-(y-this.cy)*this.u;}
+  rect(x,y,w,h,color){const c=this.ctx;c.fillStyle=color;c.fillRect(this.X(x),this.Y(y+h),w*this.u,h*this.u);}
+  round(x,y,w,h,r,fill,stroke=null,sw=.035){A.rounded(this.ctx,this.X(x),this.Y(y+h),w*this.u,h*this.u,r*this.u,fill,stroke,sw*this.u);}
+  ellipse(x,y,rx,ry,fill,stroke=null,sw=.03){A.ellipse(this.ctx,this.X(x),this.Y(y),rx*this.u,ry*this.u,fill,stroke,sw*this.u);}
+  line(points,color,width=.07){A.line(this.ctx,points.map(([x,y])=>[this.X(x),this.Y(y)]),color,Math.max(1,width*this.u));}
+  text(value,x,y,size=14,color=CREAM){
+    const c=this.ctx;c.save();c.font=`750 ${size}px -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif`;
+    c.textAlign='center';c.textBaseline='middle';c.lineWidth=3;c.strokeStyle='#2c4c50c9';
+    c.strokeText(String(value),Math.round(this.X(x)),Math.round(this.Y(y)));c.fillStyle=color;c.fillText(String(value),Math.round(this.X(x)),Math.round(this.Y(y)));c.restore();
+  }
+  pill(value,x,y,size=13,fill='#fff8e9f0',ink=INK){
+    const c=this.ctx;c.save();c.font=`750 ${size}px -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif`;
+    const w=c.measureText(String(value)).width+20,h=size+14,px=Math.round(this.X(x)),py=Math.round(this.Y(y));
+    A.rounded(c,px-w/2,py-h/2+2,w,h,7,'#244f5024');A.rounded(c,px-w/2,py-h/2,w,h,7,fill,'#698e8428');
+    c.textAlign='center';c.textBaseline='middle';c.fillStyle=ink;c.fillText(String(value),px,py+1);c.restore();
+  }
+  readPuzzle(s,t){
+    const st=root.MM.session(s);if(st.puzzles[t.id])return st.puzzles[t.id];
+    const key=st.seed+':'+t.id;if(!this.puzzleCache.has(key)){
+      if(this.puzzleCache.size>=32)this.puzzleCache.clear();
+      this.puzzleCache.set(key,root.MMPuzzles.create(t.type,root.MMPuzzles.hash(st.seed+':'+t.id),t));
+    }return this.puzzleCache.get(key);
+  }
+  objects(s){
+    const C=root.MM,M=root.MMMechanics,d=C.definition(s),st=C.session(s);
+    const all=[d.bench,...d.tasks,d.boss,...d.optional,...(d.encounters||[]).map(t=>({...t,x:M.monsterX(t,st.clock),calm:C.has(s,t.id)}))];
+    for(const t of d.tasks.filter(t=>t.type==='weight'&&!C.has(s,t.id))){const p=this.readPuzzle(s,t);p.numbers.forEach((n,i)=>{
+      if(!p.placed.includes(i)&&!(st.carried?.id===t.id&&st.carried.index===i))all.push({id:t.id+'.weight.'+i,kind:'weightCrate',label:n+'kg 상자',x:t.x-4+i*1.25,floor:t.floor,weight:n,index:i,parent:t.id});
+    });}return all;
+  }
+  plateLayout(s,t){const p=this.readPuzzle(s,t),nums=p.sequence.slice(),r=root.MMPuzzles.rng(root.MMPuzzles.hash(root.MM.session(s).seed+':plate:'+t.id));
+    if(t.guided)nums.reverse();else for(let i=nums.length-1;i>0;i--){const j=r(i+1);[nums[i],nums[j]]=[nums[j],nums[i]];}
+    return nums.map((n,i)=>({n,x:t.x+(i-1)*3,y:t.floor*8}));
+  }
+  readWaypoint(s){
+    const C=root.MM,d=C.definition(s),st=C.session(s),t=d.tasks.find(t=>!C.has(s,t.id));let o=t?{x:t.x,floor:t.floor}:{x:d.boss.x,floor:d.boss.floor};
+    if(t&&t.type!=='supply'&&t.id!=='math'&&d.requiredTools.some(i=>!C.owned(s,i)))o={x:d.bench.x,floor:0};
+    const f=Math.max(0,Math.min(d.floors-1,Math.floor((st.y+.2)/8)));
+    if(f!==o.floor){const l=d.ladders.find(l=>o.floor>f?l[1]===f*8:l[2]===f*8);if(l)o={x:l[0],floor:f};}return o;
+  }
+  background(d,p,time){
+    const c=this.ctx,w=this.w,h=this.h;c.fillStyle=A.gradient(c,0,0,0,h,p.sky,p.horizon);c.fillRect(0,0,w,h);
+    const drift=this.options.reducedMotion?0:this.cx*this.u*.075;
+    c.save();
+    // Deliberately low contrast distant silhouettes keep nearby objects legible.
+    if(['stars','aurora','crystal'].includes(p.kind)){
+      for(let i=0;i<17;i++){const x=(A.hash(i+13)*w*1.4-drift*.5+w*2)%(w+30),y=A.hash(i+44)*h*.72;
+        A.star(c,x,y,1.5+A.hash(i+67)*2.2,'#fff6ceaa');}
+      if(p.kind==='aurora')for(let i=0;i<3;i++){c.globalAlpha=.09;c.strokeStyle=['#b7f7d3','#f0d5ef','#fff9d3'][i];c.lineWidth=35;c.beginPath();c.moveTo(-20,40+i*26);c.bezierCurveTo(w*.3,10+i*20,w*.48,h*.38,w+30,35+i*34);c.stroke();}c.globalAlpha=1;
+    }
+    for(let layer=0;layer<2;layer++){
+      c.globalAlpha=layer?.18:.2;const points=[[-40,h]];
+      for(let i=-1;i<10;i++){const x=i*(w/7)+((drift*(layer+1))%(w/7));points.push([x,h*(.32+layer*.18)-A.hash(i+layer*41+d.order)*h*.19]);}
+      points.push([w+50,h]);A.polygon(c,points,layer?p.near:p.far);
+    }c.globalAlpha=1;
+    if(['forest','cave','aurora'].includes(p.kind)){
+      for(let i=-1;i<7;i++){const x=i*150-drift%150,y=h*.48+(i%2)*26;
+        A.rounded(c,x+39,y,12,h,6,p.near+'24');
+        A.ellipse(c,x+42,y-15,46,55,p.far+'50');A.ellipse(c,x+7,y+9,29,34,p.far+'35');
+        A.ellipse(c,x+77,y+4,34,41,p.far+'3b');}
+    }else if(['foundry','clock'].includes(p.kind)){
+      for(let i=-1;i<8;i++){const x=i*115-drift%115,y=h*.38+(i%3)*19;
+        A.rounded(c,x,y,80,h,10,p.near+'23');A.rounded(c,x+15,y-49,13,53,4,p.near+'1f');
+        for(let k=0;k<3;k++)A.rounded(c,x+12+k*21,y+24,12,21,5,p.light+'35');
+        if(p.kind==='clock'){A.ellipse(c,x+41,y-5,26,26,p.far+'38',p.near+'28',3);A.line(c,[[x+41,y-20],[x+41,y-5],[x+55,y+2]],p.near+'30',3);}}
+    }else if(['islands','desert','ice'].includes(p.kind)){
+      for(let i=0;i<5;i++){const x=(i*193-drift+w*3)%(w+130)-60,y=38+A.hash(i+6)*h*.38;
+        c.globalAlpha=.56;A.ellipse(c,x,y,43,13,'#ffffff');A.ellipse(c,x+24,y-8,27,17,'#ffffff');A.ellipse(c,x-17,y-9,20,15,'#ffffff');c.globalAlpha=1;
+        if(p.kind==='islands'){A.polygon(c,[[x-35,y+72],[x+32,y+72],[x+4,y+102]],p.far+'4a');A.rounded(c,x-35,y+63,67,13,6,p.grass+'8c');}
+      }
+    }
+    if(!this.options.liteEffects)for(let i=0;i<9;i++){const x=(A.hash(i+121)*w+(this.options.reducedMotion?0:time*3*(i%2?1:-1))+w*4)%w,y=A.hash(i+18)*h;
+      A.ellipse(c,x,y,1.3,1.3,p.light+'9c');}
+    c.restore();
+  }
+  block(x,y,p,index){
+    const fill=A.gradient(this.ctx,this.X(x),this.Y(y+.66),0,this.u*.7,p.soil,p.edge);
+    this.round(x,y,1,.63,.06,fill);this.round(x+.018,y+.49,.963,.18,.04,p.grass);
+    this.line([[x+.08,y+.6],[x+.92,y+.6]],'#fff9dd5c',.035);
+    this.line([[x+.03,y+.06],[x+.96,y+.06]],'#223e3b22',.035);
+    if(index%3===0)this.round(x+.22,y+.2,.3,.12,.04,'#fff5d718');
+    if(index%5===0)this.round(x+.67,y+.28,.13,.085,.03,'#243d4220');
+  }
+  shadow(x,y,r=.55){this.ellipse(x,y+.02,r,.11,'#27494b28');}
+  tool(i,x,y,size=28,angle=-.5){    const c=this.ctx;c.save();c.translate(x,y);c.rotate(angle);c.scale(size/30,size/30);
+    if(i===0){A.rounded(c,-3,-1,6,26,2,'#9d754d',INK,1.2);A.polygon(c,[[-16,-4],[-12,-10],[10,-10],[17,-3],[16,4],[11,0],[-9,-1],[-15,6]],A.gradient(c,0,-10,0,16,'#f4f3da','#8baeb3'),INK,1.2);A.rounded(c,-4,-6,8,7,2,'#dfae65');}
+    else if(i===1){A.rounded(c,-4,-3,8,29,3,A.gradient(c,0,0,8,0,'#d9eee4','#7fabb0'),INK,1.2);
+      A.polygon(c,[[-12,-17],[-7,-19],[-6,-8],[6,-8],[7,-19],[12,-17],[12,-4],[5,2],[-5,2],[-12,-4]],'#dceadb',INK,1.4);A.rounded(c,-5,15,10,10,3,CORAL,INK,1);A.ellipse(c,0,4,2,2,CREAM);}
+    else if(i===2){A.rounded(c,-10,-11,20,28,7,TEAL,INK,1.5);A.rounded(c,-6,-7,12,11,3,CREAM);A.rounded(c,-12,13,24,7,3,'#dcad65',INK,1.2);A.polygon(c,[[-7,20],[-2,31],[1,20],[6,29],[8,20]],'#f3bd65');}
+    else if(i===3){A.polygon(c,[[-13,-15],[0,-19],[13,-15],[13,1],[8,12],[0,19],[-8,12],[-13,1]],A.gradient(c,0,-19,0,38,'#d7f4e4','#6eb4b2'),INK,1.5);A.polygon(c,[[0,-13],[8,-10],[8,0],[0,11],[-8,0],[-8,-10]],'#77b4b3');A.star(c,0,-1,7,CREAM);}
+    else{A.rounded(c,-10,-11,20,29,5,'#ecb579',INK,1.5);A.rounded(c,-7,-7,14,14,4,'#2e7379');A.ellipse(c,0,0,4,4,'#b5efc5');A.line(c,[[0,-11],[0,-22]],INK,3);A.ellipse(c,0,-24,3,3,CORAL);A.rounded(c,-5,11,10,3,1,CREAM);}
+    c.restore();
+  }
+  robot(s,time,moving){
+    const C=root.MM,st=C.session(s),x=st.x,y=st.y,c=this.ctx,u=this.u,f=st.face;
+    const pose=A.pose(st,{moving,time,reducedMotion:this.options.reducedMotion}),a=st.action&&st.clock<st.action.until?st.action:null;
+    this.shadow(x,y,.59);c.save();c.translate(this.X(x),this.Y(y));c.scale(u,u);
+    // Backpack, boots and scarf are visually distinct from the tools and the world tiles.
+    A.rounded(c,-f*.3-.26,-1.08,.52,.72,.13,'#ddaa70',INK,.038);
+    A.rounded(c,-.38,-.35-pose.leg,.31,.32,.09,'#366e75',INK,.03);A.rounded(c,.08,-.35+pose.leg,.31,.32,.09,'#366e75',INK,.03);
+    A.rounded(c,-.43,-.12-pose.leg,.38,.13,.06,'#e0b779');A.rounded(c,.07,-.12+pose.leg,.38,.13,.06,'#e0b779');
+    A.rounded(c,-.38,-1.12+pose.bob,.76,.82,.21,A.gradient(c,0,-1.12,0,.82,'#9ed3c5','#4f9293'),INK,.035);
+    A.rounded(c,-.18,-.83+pose.bob,.36,.33,.08,'#ffedc5');A.ellipse(c,0,-.67+pose.bob,.065,.065,'#e9b775');
+    A.polygon(c,[[-.18,-1.1],[-f*.68,-.9+pose.scarf],[-f*.7,-1.07+pose.scarf],[f*.11,-1.19]],CORAL,INK,.02);
+    A.rounded(c,-.4,-1.16,.8,.16,.07,CORAL);
+    const hy=-1.76+pose.bob;A.rounded(c,-.53,hy,1.06,.71,.25,A.gradient(c,0,hy,0,.71,'#fff6df','#decfad'),INK,.04);
+    A.ellipse(c,-.53,hy+.38,.13,.16,TEAL,INK,.035);A.ellipse(c,.53,hy+.38,.13,.16,TEAL,INK,.035);
+    A.rounded(c,-.41,hy+.2,.82,.34,.14,A.gradient(c,0,hy+.2,0,.34,'#2b5966','#387b83'));
+    A.ellipse(c,-.19+f*.025,hy+.35,.065,.084*pose.blink,'#dbffed');A.ellipse(c,.19+f*.025,hy+.35,.065,.084*pose.blink,'#dbffed');
+    A.line(c,[[-.3,hy+.24],[.03,hy+.24]],'#a4d4ca66',.033);A.rounded(c,-.1,hy+.58,.2,.035,.017,'#9b7656');
+    A.rounded(c,-.27,hy-.11,.54,.14,.065,TEAL,INK,.025);A.ellipse(c,.19,hy-.06,.035,.035,'#fbd88b');
+    A.rounded(c,-.54,-.97+pose.bob,.2,.46,.09,'#f5dab0',INK,.025);A.rounded(c,.34,-.97+pose.bob,.2,.46,.09,'#f5dab0',INK,.025);
+    c.restore();
+    const selected=a?.tool??st.selectedHotbar;
+    if(C.tool(s,selected)){const swing=a&&!this.options.reducedMotion?Math.sin((st.clock-a.started)*19)*.72:0;
+      this.tool(selected,this.X(x+f*.62),this.Y(y+.85+pose.bob),u*.77,f*(.3+swing));}
+    if(a&&['mine','repair'].includes(a.kind)){this.sparks(a.x,a.y+1,st.clock-a.started);}
+    if(C.tool(s,2)&&!st.grounded&&st.vy>0){for(const dx of [-.23,.22]){A.polygon(c,[[this.X(x+dx-.10),this.Y(y)],[this.X(x+dx+.1),this.Y(y)],[this.X(x+dx),this.Y(y-.45)]],'#f0a755');A.polygon(c,[[this.X(x+dx-.055),this.Y(y)],[this.X(x+dx+.055),this.Y(y)],[this.X(x+dx),this.Y(y-.28)]],'#fff1ac');}}
+    if(C.tool(s,3)&&(st.selectedHotbar===3||a?.kind==='shield')){this.ellipse(x,y+.92,.81,1.04,'#99e4e025','#d6fcf499',.055);}
+    if(a?.kind==='scan'){const progress=this.options.reducedMotion?1:Math.min(1,(st.clock-a.started)/.65);this.ellipse(x,y+.95,.8+progress*2,.55+progress*1.45,null,'#74d7d3aa',.045);this.ellipse(x,y+.95,.5+progress*1.5,.35+progress,null,'#cefff26b',.025);}
+    this.companion(x-f*1.03,y+2.12,pose,time);
+  }
+  companion(x,y,pose,time){
+    const bob=this.options.reducedMotion?0:Math.sin(time*3)*.07;this.ellipse(x,y+bob,.33,.32,'#f5d994',INK,.03);
+    this.ellipse(x,y+.02+bob,.25,.22,'#fff1c5');this.round(x-.2,y-.06+bob,.4,.17,.065,'#497c7f');
+    this.ellipse(x-.09,y+.027+bob,.032,.035,'#e3fff0');this.ellipse(x+.09,y+.027+bob,.032,.035,'#e3fff0');
+    this.line([[x-.04,y+.32+bob],[x+.05,y+.47+bob],[x+.16,y+.48+bob]],INK,.035);
+    this.ellipse(x+.16,y+.48+bob,.055,.055,CORAL);
+    this.ellipse(x-.38,y+.01+bob,.14,.08,'#fffcdeab');this.ellipse(x+.38,y+.01+bob,.14,.08,'#fffcdeab');
+  }
+  sparks(x,y,phase){
+    const count=this.options.liteEffects?3:7,c=this.ctx;if(this.options.reducedMotion){A.star(c,this.X(x),this.Y(y),this.u*.17,'#fff0ab');return;}
+    for(let i=0;i<count;i++){const angle=i*2.399,r=(phase*2+i*.11)%1;
+      A.star(c,this.X(x+Math.cos(angle)*r*.68),this.Y(y+Math.sin(angle)*r*.58),2+(1-r)*2.8,i%2?'#efb562':'#fff2b5',angle);}
+  }
+  generator(t,s,time){
+    const C=root.MM,st=C.session(s),x=t.x,y=t.floor*8,c=this.ctx,u=this.u,on=C.has(s,t.id),working=st.action?.id===t.id&&st.clock<st.action.until;
+    this.shadow(x,y,1.4);
+    this.round(x-1.27,y,2.54,.23,.08,'#35525b');this.round(x-1.13,y+.21,2.26,1.52,.18,A.gradient(c,0,this.Y(y+1.73),0,u*1.52,'#83b2ab','#4e7b81'),INK);
+    this.round(x-1.16,y+1.58,2.32,.22,.07,'#e8cda0',INK);this.round(x-.95,y+.41,1.2,1.02,.13,'#305964');
+    const rx=x-.36,ry=y+.94;this.ellipse(rx,ry,.45,.45,'#dde1c8','#2d565c',.06);
+    c.save();c.translate(this.X(rx),this.Y(ry));c.rotate(this.options.reducedMotion?0:on?time*2.4:working?Math.sin(time*15)*.13:0);
+    for(let i=0;i<6;i++){c.rotate(Math.PI/3);A.rounded(c,-u*.07,-u*.37,u*.14,u*.32,u*.05,TEAL);}
+    A.ellipse(c,0,0,u*.115,u*.115,'#e9b771',INK,u*.025);c.restore();
+    this.round(x+.3,y+.49,.45,.78,.12,'#694c3e');for(let i=0;i<5;i++)this.round(x+.25,y+.55+i*.145,.54,.07,.025,on?'#edbc7d':'#bf916f');
+    this.round(x+.3,y+1.32,.47,.15,.05,INK);this.ellipse(x+.535,y+1.4,.038,.038,on?'#d6f2ad':'#e6ad7c');
+    this.round(x+.8,y+1.7,.22,.72,.075,'#5e7b7e',INK);this.round(x+.69,y+2.38,.45,.13,.05,'#aec3b9',INK,.025);
+    this.round(x-.96,y+1.82,.93,.29,.075,'#416573',INK);for(let i=0;i<3;i++){const lit=on||(st.toolHits[t.id]||0)>i;this.ellipse(x-.77+i*.25,y+1.97,.068,.055,lit?'#cff3a8':'#947c6f');}
+    this.line([[x+1.11,y+.66],[x+1.48,y+.66],[x+1.48,y+.12],[x+1.98,y+.12]],INK,.13);
+    this.line([[x+1.11,y+.66],[x+1.48,y+.66],[x+1.48,y+.12],[x+1.98,y+.12]],on?'#f1c174':'#8ca8a0',.065);
+    for(const bx of [-.99,1])for(const by of [.33,1.46])this.ellipse(x+bx,y+by,.034,.034,'#ffedc3');
+    if(on&&!this.options.liteEffects&&!this.options.reducedMotion){c.save();for(let i=0;i<3;i++){const q=(time*.46+i/3)%1;c.globalAlpha=(1-q)*.47;this.ellipse(x+.92+Math.sin(q*3+i)*.08,y+2.63+q*.73,.07+q*.15,.10+q*.11,'#fff5df');}c.restore();}
+    this.pill(t.label+' · '+(on?'● 가동 중':`수리 ${st.toolHits[t.id]||0}/${t.hits||3}`),x,y+2.95,13,on?'#e3f2d9':'#fff0d5');
+    if(working)this.sparks(x+.6,y+.9,st.clock-st.action.started);
+  }
+  golem(t,s,time,mode){
+    const C=root.MM,b=C.bossInfo(s),x=t.x,y=t.floor*8,c=this.ctx,u=this.u,p=this.palette;
+    const talking=mode==='boss'||mode==='boss-question',bob=this.options.reducedMotion?0:Math.sin(time*(talking?4:1.4))*.025;
+    this.shadow(x,y,1.2);this.round(x-.9,y,.62,.58,.16,'#6d9190',INK);this.round(x+.27,y,.62,.58,.16,'#6d9190',INK);
+    this.round(x-.97,y+.47,1.94,1.72,.42,A.gradient(c,0,this.Y(y+2.19),0,u*1.72,'#b5c6af','#7ea39a'),INK,.055);
+    this.round(x-1.32,y+.81,.5,1.13,.23,'#adc0a9',INK,.045);this.round(x+.83,y+.89,.49,1.03,.23,'#adc0a9',INK,.045);
+    this.round(x-.84,y+2.12+bob,1.68,1.04,.31,A.gradient(c,0,this.Y(y+3.16),0,u*1.04,'#e8dec1','#b0c3ad'),INK,.055);
+    this.round(x-.66,y+2.58+bob,1.32,.33,.14,'#315c62');
+    this.ellipse(x-.37,y+2.74+bob,.065,.079,'#d6ffdd');this.ellipse(x+.35,y+2.74+bob,.065,.079,'#d6ffdd');
+    this.line([[x-.12,y+2.41+bob],[x,y+2.36+bob],[x+.13,y+2.41+bob]],'#6e8979',.05);
+    this.ellipse(x-.63,y+3.16,.35,.16,'#77a47b');this.ellipse(x-.31,y+3.23,.23,.14,'#99ba85');
+    for(let i=0;i<3;i++)this.ellipse(x-.64+i*.19,y+3.26+(i%2)*.09,.05,.052,i===1?CORAL:'#f3d89e');
+    const diamond=[[x,y+1.8],[x+.3,y+1.47],[x,y+1.17],[x-.3,y+1.47]].map(([a,b])=>[this.X(a),this.Y(b)]);
+    A.polygon(c,diamond,b.cleared?'#bde3bd':p.light,INK,.035*u);this.line([[x-.42,y+.78],[x-.1,y+.66]],'#edf0d74c',.04);
+    // Open book remains the golem's focus, with separate pages and a small clasp.
+    this.round(x+.88,y+1.4,1.02,.75,.05,'#a77553',INK,.04);
+    A.polygon(c,[[x+.91,y+2.05],[x+1.37,y+2.09],[x+1.39,y+1.48],[x+.93,y+1.43]].map(([a,b])=>[this.X(a),this.Y(b)]),'#fff1d5');
+    A.polygon(c,[[x+1.39,y+2.09],[x+1.83,y+2.02],[x+1.87,y+1.4],[x+1.4,y+1.48]].map(([a,b])=>[this.X(a),this.Y(b)]),'#eadbb5');
+    this.line([[x+1.38,y+2.05],[x+1.39,y+1.47]],'#c3a378',.03);this.text('?',x+1.61,y+1.76,17,INK);
+    for(let i=0;i<b.total;i++){const bx=x+(i-(b.total-1)/2)*.4;this.ellipse(bx,y+3.65,.125,.125,i<b.done?'#7ab8a0':'#f4d58f',INK,.025);if(i<b.done)this.text('✓',bx,y+3.66,10,'#f6fff3');}
+    this.pill(b.cleared?'고마워, 탐험가!':`골렘의 문제 ${Math.min(b.done+1,b.total)} / ${b.total}`,x,y+4.09,14);
+  }
+  monster(t,s,time){
+    const C=root.MM,x=t.x,y=t.floor*8,calm=C.has(s,t.id),bob=this.options.reducedMotion?0:Math.sin(time*3+(t.phase||0))*.045,c=this.ctx,u=this.u;
+    this.shadow(x,y,.66);
+    if(t.species==='gear'){
+      c.save();c.translate(this.X(x),this.Y(y+.63));c.rotate(this.options.reducedMotion?0:Math.sin(time*.8)*.05);
+      for(let i=0;i<10;i++){c.rotate(Math.PI/5);A.rounded(c,-.085*u,-.61*u,.17*u,.21*u,.04*u,'#daaf7a',INK,.02*u);}c.restore();
+      this.ellipse(x,y+.63,.51,.51,'#e3bf89',INK,.04);this.ellipse(x,y+.66,.36,.33,'#f9e7c2');this.round(x-.36,y+.52,.72,.24,.1,'#427078');
+      this.ellipse(x-.13,y+.65,.052,.063,CREAM);this.ellipse(x+.14,y+.65,.052,.063,CREAM);
+      this.round(x-.31,y+.01,.23,.19,.07,TEAL);this.round(x+.07,y+.01,.23,.19,.07,TEAL);
+    }else{
+      c.save();c.translate(this.X(x),this.Y(y));c.scale(u,u);
+      c.beginPath();c.moveTo(-.63,-.10);c.bezierCurveTo(-.68,-.45,-.45,-.84-bob,-.21,-.98-bob);c.bezierCurveTo(.2,-1.18-bob,.65,-.59,.62,-.11);c.quadraticCurveTo(.1,.06,-.63,-.1);c.closePath();
+      c.fillStyle=A.gradient(c,0,-1.1,0,1.2,'#d3eab1',calm?'#6aa89a':'#6eb198');c.fill();c.strokeStyle=INK;c.lineWidth=.035;c.stroke();
+      A.ellipse(c,-.27,-.67,.15,.10,'#ffffff66');A.ellipse(c,-.2,-.45,.06,.075,INK);A.ellipse(c,.23,-.45,.06,.075,INK);
+      A.ellipse(c,-.35,-.33,.075,.03,'#e4af8899');A.ellipse(c,.38,-.33,.075,.03,'#e4af8899');
+      A.line(c,[[-.07,-.28],[.025,-.24],[.12,-.29]],INK,.03);c.restore();
+    }
+    this.pill(calm?'♥ 친구가 됐어요':'? 같이 풀어 볼까?',x,y+1.6,13,calm?'#e5f3dc':'#fff4d9');
+  }
+  crate(x,y,size=.78,weight=null){
+    this.round(x-size/2,y,size,size*.83,.06,A.gradient(this.ctx,0,this.Y(y+size),0,size*this.u,'#d9b781','#bb8e5f'),INK,.03);
+    this.line([[x-size*.34,y+.08],[x+size*.34,y+size*.70]],'#a37c5480',.055);this.line([[x+size*.34,y+.08],[x-size*.34,y+size*.70]],'#a37c5480',.055);
+    this.round(x-size*.13,y+size*.26,size*.26,size*.27,.025,'#f5deb6');
+    if(weight!==null)this.text(weight,x,y+size*.44,14,INK);
+  }
+  mechanism(t,s,near){
+    const M=root.MMMechanics,p=this.readPuzzle(s,t),x=t.x,y=t.floor*8,c=this.ctx,cv=([a,b])=>[x-3.6+a*.6,y+.2+b*.5];
+    this.round(x-3.5,y+.08,7,3.28,.15,'#f4edce14');
+    if(p.type==='platform'){
+      p.docks.forEach(d=>d.forEach(a=>{const [dx,dy]=cv(a);this.round(dx-.09,y,.18,Math.max(.1,dy-y),.04,'#8aa2a0');this.ellipse(dx,dy,.17,.15,'#b4ddb0','#447e67');this.ellipse(dx,dy,.055,.055,'#e7f5c8');}));
+    }else if(p.type==='pulley'){
+      const left=cv([3.5,p.height]),right=cv([9,5.5-p.height]),top=cv([3.5,5.55]),other=cv([9,5.55]);
+      this.line([left,top,other,right],'#8a7454',.075);this.line([left,top,other,right],'#e8cda0',.035);
+      for(const a of [top,other]){this.ellipse(a[0],a[1],.28,.28,'#deb982',INK,.03);this.ellipse(a[0],a[1],.12,.12,'#6b9c9a');}
+      this.crate(left[0],left[1],.75,p.load+'kg');this.round(right[0]-.37,right[1]-.42,.74,.46,.09,TEAL,INK);this.text(p.mass+'kg',right[0],right[1]-.19,12);
+      const [tx,ty]=cv([3.5,p.targetHeight]);this.line([[tx-.75,ty],[tx+.85,ty]],'#83b89e',.055);
+    }else{
+      const center=cv([6,2.6]);this.round(center[0]-.18,y,.36,center[1]-y,.06,'#779597');this.ellipse(center[0],center[1],.43,.43,'#d4b67f',INK,.035);this.ellipse(center[0],center[1],.22,.22,p.stopped?'#a9d6b1':'#6d999b');
+    }
+    // Do not approximate, snap or animate a different endpoint than the collision geometry.
+    for(const seg of M.surfaces(p)){const pts=seg.map(cv);this.line(pts,INK,.25);this.line(pts,M.solved(p)?'#98c6a3':'#dbb785',.17);this.line(pts,'#ffedc940',.055);}
+    if(near?.id===t.id)this.pill(t.label,x,y+3.91,13);
+  }
+  drawObject(t,s,time,near,mode){
+    const C=root.MM,x=t.x,y=t.floor*8,on=C.has(s,t.id),st=C.session(s),c=this.ctx;
+    if(t.kind==='monster'){this.monster(t,s,time);return;}
+    if(root.MMMechanics.isType(t.type)){this.mechanism(t,s,near);return;}
+    if(t.kind==='generator')this.generator(t,s,time);
+    else if(t.kind==='golem')this.golem(t,s,time,mode);
+    else if(t.kind==='bench'){
+      this.shadow(x,y,1);this.round(x-.8,y,.18,.8,.055,'#97734f',INK);this.round(x+.59,y,.18,.8,.055,'#97734f',INK);
+      this.round(x-.99,y+.65,1.98,.27,.075,'#d7af76',INK);this.round(x-.7,y+.96,1.4,.43,.07,'#9e794f',INK);
+      for(let a=0;a<3;a++)for(let b=0;b<3;b++)this.round(x-.54+a*.36,y+1.025+b*.10,.28,.067,.015,'#ead6ab');this.round(x+.67,y+.94,.24,.33,.03,TEAL,INK);this.pill('3 × 3 제작대',x,y+1.98,13);
+    }else if(t.kind==='ore'){
+      const hits=st.toolHits[t.id]||0;if(!on){this.shadow(x,y,.85);
+        A.polygon(c,[[x-.71,y],[x-.88,y+1.06],[x-.52,y+1.72],[x+.25,y+1.88],[x+.79,y+1.2],[x+.71,y]].map(([a,b])=>[this.X(a),this.Y(b)]),'#9aada7',INK,.045*this.u);
+        A.polygon(c,[[x-.52,y+1.72],[x-.04,y+1.1],[x+.79,y+1.2],[x+.25,y+1.88]].map(([a,b])=>[this.X(a),this.Y(b)]),'#c5cec0');
+        for(let i=0;i<5;i++){const px=x-.42+(i%2)*.55,py=y+.36+Math.floor(i/2)*.42;A.polygon(c,[[px,py],[px+.08,py+.26],[px+.29,py+.22],[px+.25,py-.02]].map(([a,b])=>[this.X(a),this.Y(b)]),this.palette.light,'#af936455',1);}
+        if(hits>0)this.line([[x-.1,y+1.71],[x-.2,y+1.2],[x+.09,y+.9]],'#465f62',.06);
+        if(hits>1)this.line([[x+.09,y+.9],[x-.2,y+.49],[x+.1,y+.11]],'#465f62',.085);
+        this.pill(`채굴 ${hits}/${t.hits||3}`,x,y+2.26,13);
+      }else{for(let i=0;i<3;i++)this.round(x-.48+i*.31,y,.25,.14+i%2*.12,.06,'#a8b9aa');}
+    }else if(t.kind==='chest'||t.type==='cache'){
+      const opened=on||C.has(s,'reward/'+t.id);this.shadow(x,y,.8);this.round(x-.65,y,1.3,.77,.10,'#ab7a50',INK);
+      this.round(x-.66,y+.62+(opened?.35:0),1.32,.36,.12,A.gradient(c,0,this.Y(y+1),0,this.u*.4,'#e4c293','#bd905c'),INK);
+      for(const dx of [-.4,.35])this.round(x+dx,y+.08,.10,.53,.025,'#edcea0');this.round(x-.12,y+.26,.24,.34,.05,'#e7bf67',INK,.025);this.ellipse(x,y+.43,.03,.04,INK);
+      if(opened&&!this.options.liteEffects)A.star(c,this.X(x+.28),this.Y(y+1.09),6,this.palette.light);
+    }else if(t.kind==='weightCrate')this.crate(x,y,.76,t.weight);
+    else if(t.kind==='scale'){
+      this.shadow(x,y,1);this.round(x-.88,y,1.76,.24,.1,TEAL,INK);this.round(x-.11,y+.2,.22,.91,.07,'#dabd88',INK);
+      this.round(x-.98,y+1.07,1.96,.21,.06,'#f2ddad',INK);const p=this.readPuzzle(s,t),kg=p.placed.reduce((n,i)=>n+p.numbers[i],0);
+      this.pill(`${kg} / ${p.target} kg`,x,y+1.91,14,on?'#e0efd2':'#fff3d5');p.placed.forEach((i,k)=>this.crate(x-.56+k*.5,y+1.29,.43,p.numbers[i]));
+    }else if(t.kind==='lift'){
+      this.shadow(x,y,1);this.round(x-.9,y,1.8,.27,.1,'#52858b',INK);this.round(x-.72,y+.21,1.44,.17,.07,on?'#c5dea4':'#f4d39c');
+      for(let i=0;i<3;i++)this.line([[x-.26,y+.54+i*.37],[x,y+.79+i*.37],[x+.26,y+.54+i*.37]],'#fff4d3',.075);
+    }else if(t.kind==='hazard'){
+      this.round(x-.97,y,1.94,.2,.07,'#4c717a',INK);for(const dx of [-.83,.72])this.round(x+dx,y+.18,.12,1.38,.045,'#99bdb5');
+      if(!on){this.ellipse(x,y+.8,.71,.65,'#eac96c26');for(let i=0;i<3;i++){const shift=this.options.reducedMotion?0:Math.sin(time*4+i)*.035;this.line([[x-.6+i*.49,y+.3],[x-.42+i*.49+shift,y+.8],[x-.6+i*.49,y+1.23]],'#f6d682',.055);}}
+    }else if(t.kind==='pipe'){
+      this.round(x-.8,y,1.6,.23,.075,TEAL,INK);this.round(x-.73,y+.23,1.46,1.35,.15,'#e0bd89',INK);
+      const path=[[x-.7,y+.66],[x-.23,y+.66],[x-.23,y+1.25],[x+.32,y+1.25],[x+.32,y+.66],[x+.83,y+.66]];this.line(path,'#887e66',.24);this.line(path,on?'#fff0ac':'#f0dcb9',.13);
+      this.round(x+.76,y+.34,.48,.66,.12,'#537f85',INK);this.ellipse(x+1,y+.68,.10,.10,on?'#f4d589':'#a2c8c1');
+    }else if(t.kind==='laser'){
+      this.round(x-.84,y,1.68,.2,.07,TEAL,INK);this.round(x-.58,y+.17,.15,1.35,.04,'#c3bf9b',INK);
+      this.round(x-.89,y+1.22,.86,.81,.13,'#60989e',INK);this.round(x-.79,y+1.32,.65,.59,.08,'#c9ece3');this.line([[x-.73,y+1.4],[x-.19,y+1.83]],'#fff7d8',.065);
+      A.polygon(c,[[x+.62,y+.31],[x+.46,y+.88],[x+.65,y+1.18],[x+.89,y+.83],[x+.76,y+.31]].map(([a,b])=>[this.X(a),this.Y(b)]),on?'#b2e7bf':'#81b2bf',INK,.025*this.u);
+      if(on)this.line([[x-.4,y+1.64],[x+.66,y+.94]],'#ffdf8c',.045);
+    }else if(t.kind!=='plates'){
+      const pcol=t.kind==='memory'?'#ac9fc5':t.kind==='scanner'?'#89c9c4':'#a3c9bd';
+      this.shadow(x,y,.7);this.round(x-.47,y,.94,.2,.07,'#63898a',INK);this.round(x-.57,y+.18,1.14,1.19,.23,'#ebd9ae',INK);
+      this.round(x-.43,y+.47,.86,.71,.15,'#346671');this.round(x-.35,y+.56,.7,.53,.10,on?'#acd4a4':pcol);
+      this.text(on?'✓':t.kind==='cratePuzzle'?'▣':t.kind==='memory'?'◆':t.kind==='toolGate'?'⚒':'?',x,y+.82,20,'#fff4d5');
+      this.ellipse(x-.22,y+.31,.038,.038,CORAL);this.ellipse(x,y+.31,.038,.038,'#f1c67f');this.ellipse(x+.22,y+.31,.038,.038,TEAL);
+    }
+    if(near?.id===t.id&&t.kind!=='golem'){
+      this.ellipse(x,y+.03,t.kind==='generator'?1.4:1,.12,null,'#fff0ad',.04);
+      if(!['generator','bench','ore'].includes(t.kind))this.pill(t.label,x,y+2.43,13);
+
+    }
+  }
+  plates(s,d,time){
+    const C=root.MM,st=C.session(s),c=this.ctx;
+    for(const t of d.tasks.filter(t=>t.type==='sequence')){
+      if(Math.abs(t.floor*8-this.cy)>this.h/this.u/2+2)continue;
+      const p=this.readPuzzle(s,t),active=C.currentTask(s)?.id===t.id,ev=st.plateEvent,completed=C.has(s,t.id);
+      for(const plate of this.plateLayout(s,t)){
+        const press=ev?.id===t.id&&ev.n===plate.n&&st.clock<ev.until,ok=completed||p.input.includes(plate.n),next=active&&p.sequence[p.input.length]===plate.n;
+        const down=press?(this.options.reducedMotion?.055:Math.max(0,1-(st.clock-ev.started)/.45)*.12):0;
+        this.round(plate.x-.66,plate.y-.04,1.32,.14,.04,'#557775');this.round(plate.x-.64,plate.y+.075-down,1.28,.17,.045,press&&!ev.ok?'#eaaa95':ok?'#acd4a4':next?'#f4d38f':'#c7bc9d',INK,.02);
+        this.pill(ok?'✓ '+plate.n:String(plate.n),plate.x,plate.y+.64-down,17,ok?'#e6f5d9':next?'#fff0bd':'#f7edda');
+        if(next){const pulse=this.options.reducedMotion?1:.8+Math.sin(time*4)*.2;c.save();c.globalAlpha=pulse;A.polygon(c,[[this.X(plate.x)-5,this.Y(plate.y+1.2)-4],[this.X(plate.x)+5,this.Y(plate.y+1.2)-4],[this.X(plate.x),this.Y(plate.y+1.2)+2]],'#f0bb66');c.restore();}
+      }
+      if(ev?.id===t.id&&st.clock<ev.until){this.pill(ev.ok?`${ev.n} ✓ · ${ev.progress}/${p.sequence.length}`:'순서가 달라요 · 다시!',ev.x,ev.y+1.55,14,ev.ok?'#e6f4d7':'#fae0d5');}
+    }
+  }
+  updateEffects(e,time){
+    if(this.options.reducedMotion){this.particles=[];return;}
+    this.particles=this.particles.filter(p=>time-p.started<p.life);
+    if(e&&time<e.until){const key=e.id??`${e.x}:${e.y}:${e.until}`;if(key!==this.effectKey){this.effectKey=key;
+      const count=this.options.liteEffects?6:15;for(let i=0;i<count;i++){const angle=i*2.399,scale=.4+A.hash(i+e.x)*.8;this.particles.push({x:e.x,y:e.y+1,dx:Math.cos(angle)*scale,dy:Math.sin(angle)*scale+.8,started:time,life:.75+A.hash(i+11)*.4,color:i%3?'#f4cb81':'#b7e2cf',size:2+A.hash(i)*3});}
+      if(this.particles.length>48)this.particles.splice(0,this.particles.length-48);
+    }}
+  }
+  drawEffects(e,time){
+    const c=this.ctx;c.save();for(const p of this.particles){const t=time-p.started;c.globalAlpha=Math.max(0,1-t/p.life);A.star(c,this.X(p.x+p.dx*t),this.Y(p.y+p.dy*t-t*t),p.size,p.color,t*1.5);}c.restore();
+    if(e&&time<e.until){const progress=Math.max(0,1-(e.until-time)/1.4);if(this.options.reducedMotion){this.pill('✓',e.x,e.y+2,20,'#e3f0cf');return;}
+      this.ellipse(e.x,e.y+1,.45+progress*1.3,.35+progress*.9,null,'#fff0b899',.04);}
+  }
+  render(s,near,ui={}){
+    this.resize();this.ui=ui;const C=root.MM,st=C.session(s),d=C.definition(s),c=this.ctx;
+    const realTime=ui.time??root.performance.now()/1000,dt=Math.max(0,Math.min(.08,realTime-this.last||.016));this.last=realTime;
+    const key=s.chapter+':'+st.seed;if(key!==this.cacheKey){this.puzzleCache.clear();this.particles=[];this.cacheKey=key;this.effectKey='';}
+    if(!ui.cameraLocked){const mix=this.options.reducedMotion?1:1-Math.exp(-dt*9);this.cx+=(st.x+st.face*.9-this.cx)*mix;this.cy+=(st.y+2.8-this.cy)*mix;}
+    const p=A.theme(d.theme);this.palette=p;const time=this.options.reducedMotion?0:st.clock;
+    this.background(d,p,time);
+    const left=Math.max(0,Math.floor(this.cx-this.w/this.u/2)-1),right=Math.min(d.width,Math.ceil(this.cx+this.w/this.u/2)+1);
+    for(let floor=0;floor<d.floors;floor++){const gy=floor*8;if(Math.abs(gy-this.cy)>this.h/this.u/2+1)continue;
+      for(let x=left;x<right;x++){this.block(x,gy-.62,p,x+floor*5);
+        if((x+floor*3)%13===3){this.line([[x+.4,gy+2.1],[x+.4,gy+2.55],[x+.73,gy+2.55]],p.near+'99',.055);
+          this.round(x+.54,gy+2.0,.39,.49,.1,'#bf9864',INK,.02);this.round(x+.61,gy+2.08,.25,.29,.055,p.light);}
+        if((x+floor)%9===1&&['forest','cave','aurora'].includes(p.kind)){
+          this.line([[x+.3,gy],[x+.25,gy+.20],[x+.08,gy+.25]],'#769c76',.055);this.line([[x+.3,gy],[x+.39,gy+.31],[x+.57,gy+.31]],'#85a884',.055);}
+      }
+    }
+    for(const l of C.ladders(s)){if(Math.abs(l[0]-this.cx)>this.w/this.u/2+2)continue;
+      this.round(l[0]-.3,l[1],.12,l[2]-l[1],.04,'#c49d6d',INK,.025);this.round(l[0]+.18,l[1],.12,l[2]-l[1],.04,'#c49d6d',INK,.025);
+      for(let y=l[1]+.3;y<l[2];y+=.48)this.round(l[0]-.23,y,.46,.12,.035,'#f0d3a0',INK,.015);}
+    for(const f of C.solids(s)){if(f[4]||f[0]<0||f[0]>=d.width||Math.abs(f[0]-this.cx)>this.w/this.u/2+2)continue;
+      this.round(f[0],f[1],f[2]-f[0],f[3]-f[1],.09,'#6d9090',INK,.025);
+      for(let y=f[1]+.1;y<f[3];y+=.68)this.round(f[0]+.05,y,Math.max(.1,f[2]-f[0]-.1),.31,.055,'#bfd0b8');
+      this.pill('잠김', (f[0]+f[2])/2,f[1]+2,12);}
+    this.plates(s,d,time);this.stats.drawnObjects=0;
+    for(const t of this.objects(s))if(Math.abs(t.x-this.cx)<this.w/this.u/2+4&&Math.abs(t.floor*8-this.cy)<this.h/this.u/2+5){this.drawObject(t,s,time,near,ui.mode);this.stats.drawnObjects++;}
+    this.robot(s,time,ui.moving&&!ui.modal);
+    if(st.carried){const desc=d.tasks.find(t=>t.id===st.carried.id);if(desc)this.crate(st.x,st.y+2.07,.76,this.readPuzzle(s,desc).numbers[st.carried.index]+'kg');}
+    this.updateEffects(ui.modal?null:ui.effect,realTime);this.drawEffects(ui.modal?null:ui.effect,realTime);this.stats.particles=this.particles.length;
+    if(!ui.modal){const o=ui.waypoint||this.readWaypoint(s),dx=o.x-st.x;if(Math.abs(dx)>2.5){const px=dx<0?22:this.w-22,py=this.h/2;
+      A.ellipse(c,px,py,16,19,'#fffae5d9','#47767d66',1);A.line(c,[[px+(dx<0?3:-3),py-5],[px+(dx<0?-3:3),py],[px+(dx<0?3:-3),py+5]],INK,2.5);}}
+  }
+}
+root.MMRenderer=Renderer;
+})(typeof globalThis!=='undefined'?globalThis:this);
+
+</script><script>
+/* Close-up controls and world art use MMMechanics geometry; no target-angle answer keys. */
+(function(root){'use strict';
+const M=root.MMMechanics,colors=['url(#mm-wood)','url(#mm-aqua)'],esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),X=x=>x*50,Y=y=>(6-y)*50;
+function instructions(p){if(p.type==='platform')return '발판 몸통을 끌어 옮기고, 둥근 손잡이를 끌어 돌려요. 길이도 바꿀 수 있어요. 발판 양 끝을 같은 색 초록 기둥에 연결하세요.';if(p.type==='pulley')return `왼쪽 화물은 ${p.load}kg이에요. 오른쪽 추를 더 무겁게 하고 운전하면 화물이 올라가요. 초록 높이에서 정지한 뒤 추를 ${p.load}kg으로 맞춰 균형을 잡으세요.`;return '회전 발판의 밝은 끝이 초록 구역에 닿을 때 기계 정지를 눌러요. 어긋나면 다시 움직이면 돼요. 천천히 모드도 쓸 수 있어요.';}
+function html(p){return `<p class="help mech-help">${esc(instructions(p))}</p><div class="mechanism-board"><svg id="mechanismBoard" viewBox="0 0 600 300" role="img" aria-label="${p.type==='platform'?'이동 회전 발판':p.type==='pulley'?'추와 도르래':'회전 기계'}"></svg></div><div id="machineStatus" class="feedback" aria-live="polite"></div>${p.type==='platform'?`<div class="mech-tools">${p.planks.map((_,i)=>`<button class="btn" id="plank${i}">발판 ${String.fromCharCode(65+i)}</button>`).join('')}</div><div class="mech-nudge"><button class="btn" id="moveLeft" aria-label="발판 왼쪽 이동">←</button><button class="btn" id="moveUp" aria-label="발판 위로 이동">↑</button><button class="btn" id="moveDown" aria-label="발판 아래로 이동">↓</button><button class="btn" id="moveRight" aria-label="발판 오른쪽 이동">→</button></div><label class="mech-slider">회전 <output id="angleValue"></output><input id="platformAngle" aria-label="발판 회전 각도" type="range" min="-180" max="180" step="1"></label><label class="mech-slider">길이 <output id="lengthValue"></output><input id="platformLength" aria-label="발판 길이" type="range" min="2" max="5" step="0.1"></label>`:p.type==='pulley'?'<div class="mech-tools"><button class="btn" id="weightMinus">추 −1kg</button><button class="btn" id="weightPlus">추 +1kg</button><button class="btn" id="weightTwo">추 +2kg</button></div><button class="btn primary wide" id="machineBrake">운전 시작</button>':'<button class="btn primary wide" id="machineBrake">기계 정지</button><button class="btn wide" id="machineSlow" aria-pressed="false">천천히 움직이기</button>'}<div class="problem-tools"><button class="btn" id="machineReset">처음 배치로</button><button class="btn" id="machineHint">조작 힌트</button></div><p class="sub" id="machineHelp">실수·정지·다시 시작에 재료나 경험치가 줄지 않아요.</p>`;}
+function board(p){let s='<defs><linearGradient id="mm-board" x2="0" y2="1"><stop stop-color="#f5f5e7"/><stop offset="1" stop-color="#dcebe0"/></linearGradient><linearGradient id="mm-wood" x2="0" y2="1"><stop stop-color="#efd3a2"/><stop offset="1" stop-color="#c99f6c"/></linearGradient><linearGradient id="mm-aqua" x2="0" y2="1"><stop stop-color="#b9e3d9"/><stop offset="1" stop-color="#72aaa9"/></linearGradient></defs><rect width="600" height="300" rx="12" fill="url(#mm-board)"/>';for(let i=1;i<12;i++)s+=`<path d="M${i*50} 0V300" stroke="#b9d0c445" stroke-width="1"/>`;for(let i=1;i<6;i++)s+=`<path d="M0 ${i*50}H600" stroke="#b9d0c445"/>`;
+ if(p.type==='platform'){
+  p.docks.forEach((d,i)=>{s+=`<path d="M${X(d[0][0])} ${Y(d[0][1])}L${X(d[1][0])} ${Y(d[1][1])}" stroke="#4b966b" stroke-width="8" stroke-dasharray="8 8" opacity=".5"/>`;d.forEach(([x,y])=>s+=`<circle cx="${X(x)}" cy="${Y(y)}" r="16" fill="#b9dfb8" stroke="#508a73" stroke-width="3"/><text x="${X(x)}" y="${Y(y)+5}" font-size="14" text-anchor="middle" fill="#21462e">${String.fromCharCode(65+i)}</text>`);});
+  p.planks.forEach((b,i)=>{const e=M.endpoints(b),on=M.docked(p,i),sel=p.selected===i;const path=`M${X(e[0][0])} ${Y(e[0][1])}L${X(e[1][0])} ${Y(e[1][1])}`;s+=`<path d="${path}" stroke="#456d73" stroke-width="25" stroke-linecap="round"/><path data-plank="${i}" d="${path}" stroke="${on?'#8cc57c':colors[i]}" stroke-width="19" stroke-linecap="round"/><circle data-plank="${i}" cx="${X(b.x)}" cy="${Y(b.y)}" r="15" fill="${sel?'#fff1af':'#d4c790'}" stroke="#536b4f" stroke-width="2"/><text pointer-events="none" x="${X(b.x)}" y="${Y(b.y)+5}" text-anchor="middle" font-size="15" fill="#254737">${String.fromCharCode(65+i)}</text><circle data-rotate="${i}" cx="${X(e[1][0])}" cy="${Y(e[1][1])}" r="15" fill="#f3dba8" stroke="#a7814c" stroke-width="3"/><text pointer-events="none" x="${X(e[1][0])}" y="${Y(e[1][1])+5}" font-size="19" text-anchor="middle" fill="#493d29">↻</text>`;});
+ }else if(p.type==='pulley'){
+  const y=Y(p.height),cy=Y(5.5-p.height),ty=Y(p.targetHeight);
+  s+=`<rect x="84" y="${ty-14}" width="194" height="28" fill="#9ed49b" opacity=".75"/><text x="12" y="${ty+5}" font-size="16" fill="#2b6240">초록 높이</text><path d="M175 ${y}V24H445V${cy}" fill="none" stroke="#52664a" stroke-width="5"/>`;
+  for(const x of [175,445])s+=`<circle cx="${x}" cy="24" r="20" fill="#e0bd86" stroke="#466e73" stroke-width="4"/><path d="M${x-15} 24H${x+15}M${x} 9V39" stroke="#6e7152" stroke-width="3"/>`;
+  s+=`<rect x="105" y="${y}" width="145" height="12" fill="#677e60"/><rect x="142" y="${y-47}" width="65" height="47" rx="7" fill="url(#mm-wood)" stroke="#6d7667" stroke-width="3"/><text x="175" y="${y-18}" text-anchor="middle" font-size="21" fill="#fff8d8">${p.load}kg</text><path d="M406 ${cy-45}V${cy}H484V${cy-45}" fill="none" stroke="#796449" stroke-width="8"/>`;
+  for(let i=0;i<p.mass;i++)s+=`<rect x="${414+i%4*17}" y="${cy-12-Math.floor(i/4)*13}" width="14" height="10" rx="3" fill="#76aaa8" stroke="#456d73"/>`;
+  s+=`<text x="445" y="${cy+24}" text-anchor="middle" font-size="20" fill="#244b36">추 ${p.mass}kg</text><text x="300" y="35" text-anchor="middle" font-size="16" fill="#34543c">${p.braked?'■ 정지':'↕ 운전 중'}</text>`;
+ }else{
+  const cx=300,cy=Y(2.6),r=100,angle=(p.phase-.5)*Math.PI*2,a=(p.targetPhase-.5-p.band)*Math.PI*2,b=(p.targetPhase-.5+p.band)*Math.PI*2;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#bdcfc2" stroke-width="16"/><path d="M${cx+Math.cos(a)*r} ${cy-Math.sin(a)*r} A${r} ${r} 0 0 0 ${cx+Math.cos(b)*r} ${cy-Math.sin(b)*r}" fill="none" stroke="#89bc94" stroke-width="32"/>`;
+  const seg=M.surfaces(p)[0];s+=`<path d="M${X(seg[0][0])} ${Y(seg[0][1])}L${X(seg[1][0])} ${Y(seg[1][1])}" stroke="#456d73" stroke-width="25"/><path d="M${cx} ${cy}L${cx+Math.cos(angle)*r} ${cy-Math.sin(angle)*r}" stroke="#e3bc7d" stroke-width="17"/><circle cx="${cx}" cy="${cy}" r="17" fill="#8dbfb3" stroke="#456d73" stroke-width="5"/><circle cx="${cx+Math.cos(angle)*r}" cy="${cy-Math.sin(angle)*r}" r="12" fill="#fff0b8" stroke="#a37c45" stroke-width="3"/><text x="300" y="25" text-anchor="middle" font-size="18" fill="#2f5740">${p.stopped?'■ 멈춘 위치':p.slow?'천천히 회전 중':'회전 중'}</text><text x="465" y="162" font-size="16" fill="#32653e">초록 연결 구역</text>`;
+ }
+ return s;
+}
+function mount(p,options){const $=id=>document.getElementById(id),svg=$('mechanismBoard');let disposed=false,finished=false,drag=null,raf=0,last=0,saved=0;
+ function render(){if(disposed||!svg.isConnected)return;svg.innerHTML=board(p);const ready=M.ready(p),status=$('machineStatus');
+  if(p.type==='platform'){const b=p.planks[p.selected],n=p.planks.filter((_,i)=>M.docked(p,i)).length;status.textContent=`연결 ${n} / ${p.planks.length} · 몸통 이동 / 둥근 손잡이 회전`;$('platformAngle').value=b.angle;$('angleValue').textContent=Math.round(b.angle)+'°';$('platformLength').value=b.length;$('lengthValue').textContent=b.length.toFixed(1);p.planks.forEach((_,i)=>$('plank'+i).setAttribute('aria-pressed',String(i===p.selected)));}
+  else if(p.type==='pulley'){status.textContent=M.solved(p)?'초록 높이 + 같은 무게 · 균형 성공!':`${p.braked?'정지':'운전'} · 화물 ${p.load}kg / 추 ${p.mass}kg · ${ready?(p.braked?(p.mass>p.load?'추 '+(p.mass-p.load)+'kg을 빼서 균형을 맞춰요':p.mass<p.load?'추 '+(p.load-p.mass)+'kg을 더해요':'균형 성공!'):'지금 정지 버튼을 눌러요!'):p.height<p.targetHeight?(p.braked?'추를 더 무겁게 하고 운전 시작':'더 올라가요'):(p.braked?'추를 가볍게 하고 운전 시작':'조금 내려가요')}`;$('machineBrake').textContent=p.braked?'운전 시작':'기계 정지';}
+  else{status.textContent=M.solved(p)?'초록 구역에서 정지 성공!':p.stopped?'다시 움직여 초록 구역에서 멈춰요.':ready?'지금 정지해요!':'밝은 끝이 초록 구역에 올 때 멈춰요.';$('machineBrake').textContent=p.stopped?'다시 움직이기':'기계 정지';$('machineSlow').textContent=p.slow?'보통 속도로':'천천히 움직이기';$('machineSlow').setAttribute('aria-pressed',String(p.slow));}
+  status.classList.toggle('ready',ready);
+ }
+ function check(){if(!finished&&M.solved(p)){finished=true;options.complete();}}
+ function apply(action){if(disposed||finished)return;options.apply(action);render();check();}
+ const bind=(id,fn)=>{const e=$(id);if(e)e.onclick=fn;};
+ if(p.type==='platform'){
+  p.planks.forEach((_,i)=>bind('plank'+i,()=>apply({kind:'select',index:i})));
+  for(const [id,dx,dy] of [['moveLeft',-.1,0],['moveRight',.1,0],['moveUp',0,.1],['moveDown',0,-.1]])bind(id,()=>{const b=p.planks[p.selected];apply({kind:'move',index:p.selected,x:b.x+dx,y:b.y+dy});});
+  $('platformAngle').oninput=e=>apply({kind:'rotate',index:p.selected,angle:Number(e.target.value)});$('platformLength').oninput=e=>apply({kind:'length',index:p.selected,length:Number(e.target.value)});
+  const point=e=>{const b=svg.getBoundingClientRect();return{x:(e.clientX-b.left)/b.width*12,y:6-(e.clientY-b.top)/b.height*6};};
+  svg.onpointerdown=e=>{if(finished||disposed)return;const el=e.target.closest('[data-plank],[data-rotate]');if(!el)return;e.preventDefault();const rotate=el.hasAttribute('data-rotate'),index=Number(el.getAttribute(rotate?'data-rotate':'data-plank')),pt=point(e),b=p.planks[index];drag={id:e.pointerId,index,rotate,dx:pt.x-b.x,dy:pt.y-b.y};apply({kind:'select',index});try{svg.setPointerCapture(e.pointerId);}catch{}};
+  svg.onpointermove=e=>{if(!drag||drag.id!==e.pointerId)return;e.preventDefault();const pt=point(e),b=p.planks[drag.index];apply(drag.rotate?{kind:'rotate',index:drag.index,angle:Math.atan2(pt.y-b.y,pt.x-b.x)*180/Math.PI}:{kind:'move',index:drag.index,x:pt.x-drag.dx,y:pt.y-drag.dy});};
+  const release=e=>{if(drag&&(!e||e.pointerId===drag.id)){try{if(svg.hasPointerCapture(drag.id))svg.releasePointerCapture(drag.id);}catch{}drag=null;}};svg.onpointerup=release;svg.onpointercancel=release;svg.onlostpointercapture=release;
+ }else{bind('machineBrake',()=>apply({kind:'brake'}));bind('weightMinus',()=>apply({kind:'weight',delta:-1}));bind('weightPlus',()=>apply({kind:'weight',delta:1}));bind('weightTwo',()=>apply({kind:'weight',delta:2}));bind('machineSlow',()=>apply({kind:'slow'}));}
+ bind('machineReset',()=>apply({kind:'reset'}));bind('machineHint',()=>{$('machineHelp').textContent=p.type==='platform'?'양 끝의 둥근 표시를 기둥에 대어 보세요. 화살표로 조금씩 움직이고 회전·길이를 맞춰요.':p.type==='pulley'?`추를 ${p.load+1}kg으로 → 운전 → 초록 띠에서 정지 → 추 1kg 빼기. 너무 높으면 더 가볍게 해서 내려와요.`:'초록 구역은 넓게 열려 있어요. 천천히 움직이기를 켜고, 밝은 끝이 초록색 위에 있을 때 정지해요.';});
+ function tick(dt){if(disposed||finished)return;M.tick(p,dt);saved+=dt;if(saved>.4){saved=0;options.changed();}render();check();}
+ function loop(ts){if(disposed)return;const dt=Math.min(.05,(ts-last)/1000||0);last=ts;if(!options.testMode)tick(dt);raf=requestAnimationFrame(loop);}
+ render();raf=requestAnimationFrame(loop);
+ return{tick,dispose(){disposed=true;cancelAnimationFrame(raf);drag=null;svg.onpointerdown=svg.onpointermove=svg.onpointerup=svg.onpointercancel=svg.onlostpointercapture=null;}};
+}
+function world(r,t,s,near){const C=root.MM,st=C.session(s),y=t.floor*8,x=t.x,c=r.ctx;
+ if(t.type==='monster'){
+  const calm=C.has(s,t.id),bob=Math.sin(st.clock*3+t.phase)*.05;
+  if(t.species==='gear'){r.rect(x-.5,y+.2+bob,1,.85,'#778b88');for(const k of [-1,1]){r.rect(x+k*.52-.1,y+.42+bob,.2,.35,'#b8c2a3');r.rect(x-.16,y+1.05+bob,.32,.16,'#b8c2a3');}}
+  else{r.rect(x-.6,y+.04+bob,1.2,.76,'#559c78');r.rect(x-.46,y+.8+bob,.92,.23,'#89c987');r.rect(x-.48,y+.12+bob,.96,.65,'#a1d59b');}
+  r.rect(x-.26,y+.54+bob,.13,.13,'#2f5748');r.rect(x+.16,y+.54+bob,.13,.13,'#2f5748');r.text(calm?'고마워!':'? 문제 대결',x,y+1.48,14,calm?'#d2ed9f':'#fff1be');return;
+ }
+ const p=C.puzzle(s,t.id);if(!p)return;const cv=([a,b])=>[x-3.6+a*.6,y+.2+b*.5];r.rect(x-.6,y,1.2,.22,'#4d685b');r.text(p.type==='platform'?'이동 · 회전':p.type==='pulley'?'추 · 도르래':'정지 · 운전',x,y+.52,13,'#e9edc0');
+ if(p.type==='platform'){p.docks.forEach(d=>d.forEach(a=>{const [dx,dy]=cv(a);r.rect(dx-.08,y,.16,dy-y,'#6a7d61');r.rect(dx-.15,dy-.07,.3,.14,'#a4de95');}));}
+ if(p.type==='pulley'){const left=cv([3.5,p.height]),right=cv([9,5.5-p.height]),top=cv([3.5,5.55]),other=cv([9,5.55]);r.line([left,top,other,right],'#d4c497',.05);for(const a of [top,other]){c.fillStyle='#cbb273';c.beginPath();c.arc(r.X(a[0]),r.Y(a[1]),r.u*.23,0,Math.PI*2);c.fill();}r.rect(left[0]-.35,left[1],.7,.55,'#bda174');r.text(p.load+'kg',left[0],left[1]+.28,12);r.rect(right[0]-.35,right[1]-.4,.7,.45,'#7fa3a3');r.text(p.mass+'kg',right[0],right[1]-.14,12);const [tx,ty]=cv([3.5,p.targetHeight]);r.line([[tx-1,ty],[tx+1,ty]],'#a8d785',.04);}
+ if(p.type==='stop'){const ctr=cv([6,2.6]);r.rect(ctr[0]-.2,y,.4,ctr[1]-y,'#71826b');c.strokeStyle=p.stopped?'#a8d78a':'#e8ce87';c.lineWidth=3;c.beginPath();c.arc(r.X(ctr[0]),r.Y(ctr[1]),r.u*.48,0,Math.PI*2);c.stroke();r.text(p.stopped?'■':'↻',ctr[0],ctr[1],19);}
+ for(const seg of M.surfaces(p)){r.line(seg.map(cv),'#3c5445',.25);r.line(seg.map(cv),M.solved(p)?'#a7d38b':'#d4b571',.15);}
+ if(near?.id===t.id)r.text('조사해서 조작',x,y+3.7,14,'#fff3a9');
+}
+root.MMMechanicView={html,mount,world,board};
+})(typeof globalThis!=='undefined'?globalThis:this);
+
+</script><script>
+/* Mobile UI for the fifteen-chapter campaign. Visual settings never modify the campaign save. */
+(()=>{'use strict';
+const C=window.MM,P=window.MMPuzzles,D=window.MMChapters,$=id=>document.getElementById(id);
+const KEY='mazemath.instant.v1',BACKUP='mazemath.instant.before-v3',VERSION='15.1';
+const renderer=new MMRenderer($('world')),veil=$('veil'),sheet=$('sheet');
+const materialNames=['철 조각','철판','기어','에너지석','코어'],materialIcons=[0,1,2,3,4].map(materialSvg);
+const effects=[['메아리 · 장치 표식','행운 · 보물 힌트'],['빠른 수리','회로 감지'],['착지 보호','높은 길 안내'],['퍼즐로 실드 충전','보호막 표시'],['기억 경로 표시','다음 목표 안내']];
+let s=C.fresh(Date.now()>>>0),running=false,mode='title',modalSerial=0,timers=new Set(),keys=new Set(),held=new Map(),jumpQueued=false,near=null,keyboard=null,toastTimer=0,effectTimer=0,worldEffect=null,lastSaved=0,lastFrame=0,acc=0,storageOK=true,lastPlateTime=-1,actionLock=false,machineView=null;
+const testMode=new URLSearchParams(location.search).get('test')==='1'||window.__MM_TEST__===true;
+const esc=x=>String(x).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const visualKey='mazemath.visual.v1';
+const motionQuery=window.matchMedia?window.matchMedia('(prefers-reduced-motion: reduce)'):null;
+let visualPreferences={motion:'system',liteEffects:false};
+try{const v=JSON.parse(localStorage.getItem(visualKey)||'null');if(v&&['system','reduced','full'].includes(v.motion))visualPreferences.motion=v.motion;if(v&&typeof v.liteEffects==='boolean')visualPreferences.liteEffects=v.liteEffects;}catch{}
+function applyVisualPreferences(){
+ const reduced=visualPreferences.motion==='reduced'||(visualPreferences.motion==='system'&&!!motionQuery?.matches);
+ renderer.setOptions({reducedMotion:reduced,liteEffects:visualPreferences.liteEffects});
+ document.documentElement.dataset.motion=reduced?'reduced':'full';document.documentElement.dataset.effects=visualPreferences.liteEffects?'lite':'full';
+}
+function saveVisualPreferences(){try{localStorage.setItem(visualKey,JSON.stringify(visualPreferences));}catch{}applyVisualPreferences();}
+if(motionQuery?.addEventListener)motionQuery.addEventListener('change',applyVisualPreferences);
+applyVisualPreferences();
+function portrait(kind='explorer'){
+ const golem=kind==='golem';
+ return `<svg class="portrait-art" viewBox="0 0 240 170" role="img" aria-label="${golem?'책을 든 친근한 수호 골렘':'모모와 로봇 탐험가'}"><ellipse cx="120" cy="150" rx="68" ry="9" fill="#325d6420"/><circle cx="120" cy="83" r="73" fill="${golem?'#e2ebd7':'#dcece3'}"/><path d="M44 124Q70 98 97 114T192 107V139H44Z" fill="#abc9b330"/><path d="M34 75h24m139 11h15" stroke="#fff5dd" stroke-width="5" stroke-linecap="round"/><path d="m51 34 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z" fill="#e5bb73"/>
+ ${golem?`<rect x="77" y="123" width="34" height="30" rx="10" fill="#729f98" stroke="#2e5962" stroke-width="3"/><rect x="133" y="123" width="34" height="30" rx="10" fill="#729f98" stroke="#2e5962" stroke-width="3"/><rect x="62" y="66" width="114" height="76" rx="28" fill="#a8c0ab" stroke="#2e5962" stroke-width="3"/><rect x="81" y="22" width="80" height="64" rx="19" fill="#e4ddbd" stroke="#2e5962" stroke-width="3"/><rect x="87" y="45" width="68" height="22" rx="10" fill="#315d65"/><path d="M103 53v6m36-6v6" stroke="#d5ffdd" stroke-width="5" stroke-linecap="round"/><path d="M115 74q7 7 14 0" fill="none" stroke="#728d75" stroke-width="3"/><ellipse cx="91" cy="24" rx="26" ry="10" fill="#7daa80"/><circle cx="85" cy="15" r="4" fill="#e59b7a"/><path d="m120 96 14 14-14 14-14-14Z" fill="#f6d991"/><rect x="158" y="85" width="55" height="47" rx="5" fill="#ad7b55" stroke="#2e5962" stroke-width="3"/><path d="m162 88 23 3 23-3v37l-23 4-23-4Z" fill="#fff0d1"/><path d="M185 91v38" stroke="#c6a775" stroke-width="2"/><text x="196" y="113" fill="#567f78" font-size="20">?</text>`:`<rect x="86" y="119" width="28" height="31" rx="9" fill="#3e7c86" stroke="#2e5962" stroke-width="3"/><rect x="131" y="119" width="28" height="31" rx="9" fill="#3e7c86" stroke="#2e5962" stroke-width="3"/><rect x="80" y="66" width="87" height="66" rx="20" fill="#79b5ad" stroke="#2e5962" stroke-width="3"/><rect x="106" y="86" width="32" height="26" rx="7" fill="#fff0cf"/><circle cx="122" cy="99" r="6" fill="#e5b877"/><path d="M103 66 65 85 70 65 125 60" fill="#e99377" stroke="#2e5962" stroke-width="2"/><rect x="71" y="20" width="103" height="57" rx="21" fill="#fff0cf" stroke="#2e5962" stroke-width="3"/><circle cx="71" cy="52" r="10" fill="#629d9c" stroke="#2e5962" stroke-width="3"/><circle cx="174" cy="52" r="10" fill="#629d9c" stroke="#2e5962" stroke-width="3"/><rect x="86" y="41" width="74" height="26" rx="12" fill="#315f6a"/><path d="M104 50v6m37-6v6" stroke="#dbfff0" stroke-width="6" stroke-linecap="round"/><rect x="102" y="11" width="43" height="16" rx="8" fill="#5b9e9c" stroke="#2e5962" stroke-width="3"/><circle cx="136" cy="18" r="3" fill="#f4d180"/><rect x="69" y="79" width="15" height="36" rx="7" fill="#f0d9b2" stroke="#2e5962" stroke-width="2"/><rect x="163" y="79" width="15" height="36" rx="7" fill="#f0d9b2" stroke="#2e5962" stroke-width="2"/><circle cx="194" cy="27" r="17" fill="#f4d88f" stroke="#2e5962" stroke-width="2"/><rect x="183" y="25" width="22" height="10" rx="4" fill="#507d7e"/><path d="M190 29h1m8 0h1" stroke="#e3fff0" stroke-width="3"/><path d="M194 10V4h8" fill="none" stroke="#2e5962" stroke-width="2"/>`}</svg>`;
+}
+function materialSvg(i){
+ const shapes=[
+ '<path d="m4 20 7-13 11 3-7 15Z" fill="#a6bbc2" stroke="#436571" stroke-width="1.5"/><path d="m15 19 7-10 9 9-5 10Z" fill="#d1dad2" stroke="#436571" stroke-width="1.5"/>',
+ '<path d="m3 23 5-13h18l5 13-4 5H6Z" fill="#bacbd0" stroke="#436571" stroke-width="1.5"/><path d="m8 10 18 0-1 7H7Z" fill="#edf3e3"/><path d="m7 17 18 0 6 6H3Z" fill="#d5dfd7"/>',
+ '<path d="m13 3 6 0 1 4 4 2 4-1 3 5-3 3 0 4 3 3-3 5-4-1-4 2-1 4h-6l-1-4-4-2-4 1-3-5 3-3v-4l-3-3 3-5 4 1 4-2Z" fill="#deaf6f" stroke="#7a674f" stroke-width="1.4"/><circle cx="16" cy="18" r="5" fill="#fff5de" stroke="#7a674f"/>',
+ '<path d="m16 2 10 9-3 17-7 4-9-7-3-12Z" fill="#84c7c8" stroke="#356e79" stroke-width="1.5"/><path d="m16 2-2 16 9 10 3-17Z" fill="#b8e8db"/><path d="m16 2-2 16-10-5Z" fill="#e0fff0"/>',
+ '<circle cx="16" cy="17" r="13" fill="#e6b873" stroke="#8d734d" stroke-width="1.5"/><path d="m16 6 4 7 7 4-7 4-4 7-4-7-7-4 7-4Z" fill="#fff3be"/>'
+ ];return `<svg class="material-art" viewBox="0 0 34 36" aria-hidden="true">${shapes[i]||''}</svg>`;
+}
+function icon(i){const shapes=[`<path d="M16 9v20" stroke="#a67b43" stroke-width="5"/><path d="M4 12V6h24v6" fill="none" stroke="#bfcfbd" stroke-width="5"/>`,`<path d="M16 12v17M8 2v11h16V2" fill="none" stroke="#bfcfcd" stroke-width="6"/>`,`<path d="M9 2h14v20H9z" fill="#789ba0"/><path d="M6 22h21v6H6z" fill="#e7c778"/><path d="M11 29v3m10-3v3" stroke="#e8954d" stroke-width="4"/>`,`<path d="M5 3h22v14L16 30 5 17z" fill="#9bccb9" stroke="#eae4b1" stroke-width="2"/><path d="M16 7v14" stroke="#e7bb61" stroke-width="5"/>`,`<path d="M7 8h18v23H7z" fill="#e2d49d"/><path d="M11 12h10v9H11z" fill="#578e89"/><path d="M16 0v8M10 2h12" stroke="#d8b15d" stroke-width="3"/>`];return`<svg viewBox="0 0 32 34" aria-hidden="true" stroke-linejoin="round" stroke-linecap="round">${shapes[i]||''}</svg>`;}
+function current(){return C.session(s);}
+function clearInput(){held.clear();keys.clear();jumpQueued=false;}
+function cancelTimers(){if(machineView){machineView.dispose();machineView=null;}timers.forEach(clearTimeout);timers.clear();keyboard=null;actionLock=false;}
+function later(fn,ms){const serial=modalSerial,chapter=s.chapter;const t=setTimeout(()=>{timers.delete(t);if(serial===modalSerial&&chapter===s.chapter)fn();},ms);timers.add(t);return t;}
+function save(){if(!running)return;try{localStorage.setItem(KEY,C.serialize(s));storageOK=true;}catch{storageOK=false;}lastSaved=current().clock;}
+function readSave(){try{const raw=localStorage.getItem(KEY);const state=C.restore(raw);if(state&&!localStorage.getItem('mazemath.instant.before-15'))localStorage.setItem('mazemath.instant.before-15',raw);if(state&&JSON.parse(raw).v<3&&!localStorage.getItem(BACKUP))localStorage.setItem(BACKUP,raw);return state;}catch{storageOK=false;return null;}}
+function notify(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,2400);}
+function effect(id,text='장치가 작동했어요!'){
+ const t=C.objects(s).find(t=>t.id===id)||(id.startsWith('boss.')?C.definition(s).boss:null),st=current();worldEffect={x:t?.x??st.x,y:(t?.floor??Math.floor(st.y/8))*8,until:performance.now()/1000+1.4};
+ const el=$('worldfx');el.innerHTML='✓ '+esc(text)+'<small>'+esc(C.objective(s).text)+'</small>';el.hidden=false;clearTimeout(effectTimer);effectTimer=setTimeout(()=>el.hidden=true,1600);
+}
+function open(kind,title,body){clearInput();cancelTimers();modalSerial++;mode=kind;veil.dataset.kind=kind;sheet.dataset.feedback='';veil.classList.add('open');sheet.innerHTML=`<div class="dialog-head"><h2 id="dialogTitle">${esc(title)}</h2><button class="btn" id="close" aria-label="닫기">×</button></div><div class="dialog-body">${body}</div>`;$('close').onclick=close;sheet.scrollTop=0;}
+function close(){cancelTimers();modalSerial++;if(!running){title();return;}mode='';veil.dataset.kind='';veil.classList.remove('open');clearInput();save();refresh();}
+function bind(id,fn){const el=$(id);if(el)el.onclick=fn;}
+function install(state){s=state;for(const task of C.definition(s).tasks)if(MMMechanics.isType(task.type))C.puzzle(s,task.id);near=null;current().action=null;renderer.cx=current().x;renderer.cy=current().y+2.8;worldEffect=null;$('worldfx').hidden=true;lastPlateTime=-1;refresh();}
+function title(){const old=readSave();open('title','모모의 공방 모험',`<div class="center"><span class="tag">모모의 공방 모험 ${VERSION} · 15개의 세계</span><div class="hero">${portrait()}</div><h1>작은 도구로 여는<br><span class="title-accent">커다란 모험</span></h1><p>재료를 모아 도구를 만들고,<br>모모와 골렘 친구들의 세계를 탐험해요.</p></div><div class="stack">${old?'<button class="btn primary wide" id="continue">이어하기</button><button class="btn wide" id="chaptersTitle">챕터 선택</button>':''}<button class="btn wide ${old?'':'primary'}" id="new">새 탐험 시작</button></div><p class="sub center">설치 없는 모바일 웹판 · Unity 본편과 별도 저장<br>같은 브라우저에서 기록이 이어집니다.</p>`);
+ bind('continue',()=>{install(old);running=true;close();});bind('chaptersTitle',()=>{install(old);running=false;chapterSelect();});bind('new',()=>{if(old){open('confirm','새 탐험','<p>이어하기 기록은 백업하고 새 모험을 시작할까요?</p><button class="btn primary wide" id="newConfirm">새로 시작</button>');bind('newConfirm',()=>{try{localStorage.setItem(BACKUP,C.serialize(old));}catch{}newRun();});}else newRun();});
+}
+function newRun(){install(C.fresh((Date.now()^(Math.random()*0xffffffff))>>>0));running=true;close();save();notify('오른쪽 숫자 장치로 가서 조사해요.');}
+function chapterSelect(){open('chapters','열다섯 세계',`<div class="chapter-grid">${D.list().map(d=>{const unlocked=s.unlockedChapters.includes(d.id),done=s.completedChapters.includes(d.id);return`<article class="chapter-card" id="${d.id}" style="--scene-top:${MMArt.theme(d.theme).sky};--scene-bottom:${MMArt.theme(d.theme).horizon};--scene-accent:${MMArt.theme(d.theme).accent}"><div class="chapter-swatch" aria-hidden="true"><i></i><b>${d.order}</b></div><span class="tag">${d.order}장</span><h3>${esc(d.title)}</h3><p>${done?'완료 · 다시 둘러보기':unlocked?'도전 가능':`${d.order-1}장 완료 후 열려요`}</p><button class="btn ${unlocked&&!done?'primary':''}" id="go-${d.id}" ${unlocked?'':'disabled'}>${done?'둘러보기':unlocked?'탐험 시작':'잠김'}</button></article>`;}).join('')}</div>`);D.list().forEach(d=>bind('go-'+d.id,()=>switchChapter(d.id)));}
+function switchChapter(id){if(running)save();if(!C.startChapter(s,id)){notify('이전 챕터를 먼저 완료해요.');return;}install(s);running=true;close();save();notify(D.get(id).title+' · 모모와 출발!');}
+function pause(){if(!running){title();return;}save();open('pause','잠깐 쉬어 가요',`<p>진행 기록을 저장했어요.</p><div class="stack"><button class="btn primary" id="resume">계속 탐험</button><button class="btn" id="selectChapters">챕터 선택</button><button class="btn" id="bagOpen">탐험 가방</button><button class="btn" id="checkpoint">안전한 사다리로 돌아가기</button><button class="btn" id="help">조작 방법</button><button class="btn" id="home">처음 화면</button></div><fieldset class="display-settings"><legend>화면 연출</legend><button class="btn wide" id="motionToggle" aria-pressed="${renderer.options.reducedMotion}">움직임 줄이기: ${renderer.options.reducedMotion?'켜짐':'꺼짐'}</button><button class="btn wide" id="effectsToggle" aria-pressed="${visualPreferences.liteEffects}">가벼운 효과: ${visualPreferences.liteEffects?'켜짐':'꺼짐'}</button><small>문제의 순서와 기계 속도는 바뀌지 않아요.</small></fieldset><p class="sub">${storageOK?'자동 저장 중':'저장이 제한된 브라우저예요. 창을 닫지 마세요.'}<br>Block Quest ${VERSION} · 15장 모바일 웹판</p>`);bind('resume',close);bind('selectChapters',chapterSelect);bind('bagOpen',bag);bind('checkpoint',()=>{const st=current();[st.x,st.y]=st.checkpoint;st.vy=0;st.climb=null;close();});bind('help',help);bind('motionToggle',()=>{visualPreferences.motion=renderer.options.reducedMotion?'full':'reduced';saveVisualPreferences();pause();});bind('effectsToggle',()=>{visualPreferences.liteEffects=!visualPreferences.liteEffects;saveVisualPreferences();pause();});bind('home',()=>{save();running=false;title();});}
+function help(){open('help','모모의 탐험 안내','<div class="help"><b>← →</b> 이동 · <b>↑ ↓</b> 사다리<br><b>점프</b>로 발판을 넘어요.<br><b>아래 도구 슬롯</b>을 선택하고 <b>캐기 / 수리 / 조사</b>를 눌러요.</div><p>모든 도구는 작업대에서 <b>3×3 조합</b>으로 만들어요. 조합법 보기를 눌러도 벌점은 없어요.</p><p>상자는 가까이서 들어 저울에 놓아요.<br>숫자 발판은 직접 밟아요. 눌린 발판과 다음 숫자를 확인하세요.</p><p>골렘에게 말을 걸면 문제를 줘요. 마지막 문제를 맞히면 다음 챕터가 열려요.</p>');}
+function resources(){return`<div class="resources">${materialNames.map((n,i)=>`${materialIcons[i]} ${n} <b>${s.inventory.items[i]}</b>`).join(' · ')}<br>지식 경험치 <b>${s.xp} XP</b></div>`;}
+function bag(){open('bag','탐험 가방',resources()+`<div class="inventory-list">${D.tools.map((t,i)=>`<div class="inventory-row">${icon(i)}<div class="body"><b>${esc(t)}</b><small>${s.inventory.owned[i]?(s.inventory.equipped[i]?'장착 중':'가방에 있어요'):'작업대에서 제작해요'}</small></div><button class="btn" id="equip${i}" ${C.owned(s,i)?'':'disabled'}>선택</button></div>`).join('')}</div>`);D.tools.forEach((_,i)=>bind('equip'+i,()=>{C.equip(s,i);save();bag();refresh();}));}
+function atBench(){return Math.abs(current().x-18)<2&&Math.abs(current().y)<1;}
+function recommendedTool(){const missing=C.definition(s).requiredTools.find(i=>!C.owned(s,i));return missing??current().selectedHotbar??0;}
+function workshop(selected=recommendedTool()){
+ if(!atBench()){notify('제작은 1층 작업대 앞에서 해요.');return;}
+ let grid=Array(9).fill(-1),pick=0,showHint=selected===0&&!C.owned(s,0);const isOwned=C.owned(s,selected);
+ open('workshop','3×3 제작대',`<div class="tabs craft-tabs"><button class="btn primary" id="craftTab">조합 제작</button><button class="btn" id="enchantTab">인챈트</button></div><div class="workshop-content"><section class="craft-station" aria-label="직접 조합하기"><div class="help center"><b id="craftTarget">${esc(D.tools[selected])}</b><br>${isOwned?'이미 가지고 있어요. 다시 만들 필요가 없어요.':C.costs[selected].map((v,i)=>v?`${materialNames[i]} ${v}`:'').filter(Boolean).join(' + ')}</div><div class="craft-layout"><div class="recipe" id="craftGrid">${grid.map((_,i)=>`<button class="btn" id="cell${i}" aria-label="제작 칸 ${i+1}">·</button>`).join('')}</div><span class="craft-arrow">→</span><div class="result-slot"><div id="resultIcon">?</div><small id="craftResult">결과</small></div></div><div class="pickers">${[0,1,2,3].map(i=>`<button class="btn" id="pick${i}">${materialIcons[i]} ${materialNames[i]} (${s.inventory.items[i]})</button>`).join('')}</div><div class="tabs"><button class="btn" id="recipeHint">조합법 보기</button><button class="btn" id="clearGrid">칸 비우기</button></div><button class="btn primary wide" id="makeCraft" disabled>${isOwned?'이미 보유 중':esc(D.tools[selected])+' 제작하기'}</button><div class="feedback" id="craftFeedback">${showHint?'반투명 모양을 따라 재료를 놓아보세요.':'재료를 고른 뒤 놓을 칸을 눌러요.'}</div></section><aside class="craft-book" aria-label="장비 조합법 책"><h3>조합법 책</h3><p class="sub">다른 장비를 만들 때 골라요.</p><div class="recipe-list">${D.tools.map((n,i)=>`<button class="btn ${i===selected?'primary':''}" id="recipe${i}" aria-pressed="${i===selected}">${icon(i)} ${esc(n)}${C.owned(s,i)?' ✓':''}</button>`).join('')}</div>${resources()}<p class="sub">틀린 조합은 재료가 줄지 않아요.<br>같은 재료가 놓인 칸을 다시 누르면 비워져요.</p></aside></div>`);
+ function render(){for(let i=0;i<9;i++){const v=grid[i],hint=C.recipes[selected][i];$('cell'+i).innerHTML=v>=0?materialIcons[v]:showHint&&hint>=0?`<span class="ghost">${materialIcons[hint]}</span>`:'·';$('cell'+i).setAttribute('aria-label',`제작 칸 ${i+1}: ${v<0?'빈칸':materialNames[v]}`);}const matched=grid.every((v,i)=>v===C.recipes[selected][i]);$('makeCraft').disabled=!matched||isOwned;sheet.querySelector('.result-slot').classList.toggle('ready',matched&&!isOwned);$('resultIcon').innerHTML=matched?icon(selected):'?';$('craftResult').textContent=matched?D.tools[selected]:'결과';$('recipeHint').textContent=showHint?'조합법 숨기기':'조합법 보기';[0,1,2,3].forEach(i=>$('pick'+i).classList.toggle('chosen',i===pick));}
+ D.tools.forEach((_,i)=>bind('recipe'+i,()=>workshop(i)));[0,1,2,3].forEach(i=>bind('pick'+i,()=>{pick=i;render();}));grid.forEach((_,i)=>bind('cell'+i,()=>{grid[i]=grid[i]===pick?-1:pick;render();}));bind('recipeHint',()=>{showHint=!showHint;render();});bind('clearGrid',()=>{grid.fill(-1);render();});bind('enchantTab',enchantMenu);bind('craftTab',()=>workshop(selected));
+ bind('makeCraft',()=>{const result=C.craft(s,selected,grid);if(result.ok){save();close();effect('workshop',D.tools[selected]+' 제작 · 장착 완료!');refresh();}else{$('craftFeedback').textContent=result.code==='first-tool'?'먼저 곡괭이 팔을 만들어 주세요.':result.code==='materials'?'재료가 모자라요. 준비 상자나 퍼즐을 확인해요.':result.code==='owned'?'이미 가지고 있는 도구예요.':'조합법을 한 번 더 확인해요.';}});render();
+}
+function enchantMenu(){if(!atBench()){notify('작업대에서 인챈트해요.');return;}open('enchant','도구 인챈트',resources()+`<p class="sub">처음 해금할 때 10 XP · 해금한 효과로 다시 바꾸는 것은 무료예요.</p><div class="inventory-list">${D.tools.map((name,i)=>`<div class="help"><b>${esc(name)}</b><div class="tabs">${[0,1].map(v=>`<button class="btn ${s.inventory.ench[i]===v?'primary':''}" id="enchant${i}-${v}" ${C.owned(s,i)?'':'disabled'}>${esc(effects[i][v])}${s.inventory.unlocked.includes(i*2+v)?' ✓':' · 10 XP'}</button>`).join('')}</div></div>`).join('')}</div><button class="btn wide" id="backCraft">3×3 제작대로</button>`);D.tools.forEach((_,i)=>[0,1].forEach(v=>bind(`enchant${i}-${v}`,()=>{if(C.enchant(s,i,v)){save();enchantMenu();notify('인챈트를 장착했어요.');}else notify('해금하려면 10 XP가 필요해요.');})));bind('backCraft',()=>workshop());}
+function mapUI(){const st=current(),room=Math.floor((st.y+.2)/8)*5+Math.floor(st.x/12);open('map',C.definition(s).title+' 지도',`<p>내가 지나간 방은 밝게 보여요.</p><div class="map-grid">${Array.from({length:15},(_,j)=>{const i=(2-Math.floor(j/5))*5+j%5;return`<div class="map-room ${st.visited.includes(i)?'visited':''} ${i===room?'here':''}">${i===room?'나':st.visited.includes(i)?'발견':'?'}</div>`;}).join('')}</div><div class="help">${esc(C.objective(s).text)}</div>`);}
+function chooseTool(i){if(!C.equip(s,i)){notify(D.tools[i]+'은 작업대에서 먼저 만들어요.');return;}save();refresh();}
+function showBoss(){const result=C.interact(s,'golem'),d=C.definition(s),b=C.bossInfo(s);if(result.code==='clear'){chapterClear();return;}if(!result.ok){open('boss',d.boss.label,`<div class="hero golem">${portrait('golem')}</div><div class="boss-line">먼저 이 장치를 도와줄래?<br>${esc(C.objective(s).text)}</div><div class="stack"><button class="btn primary" id="bossBack">장치로 돌아가기</button></div>`);bind('bossBack',close);return;}
+ const q=result.question;open('boss',d.boss.label,`<div class="hero golem">${portrait('golem')}</div><div class="boss-progress">${Array.from({length:b.total},(_,i)=>`<span class="rune ${i<b.done?'done':''}">${i<b.done?'✓':i+1}</span>`).join('')}</div><div class="boss-line">“${esc(q.prompt)}”</div><p class="center">${b.done+1} / ${b.total}번째 문제</p><button class="btn primary wide" id="acceptQuestion">골렘의 문제 받기</button><p class="sub center">틀려도 괜찮아요. 힌트나 다시 보기를 써도 돼요.</p>`);bind('acceptQuestion',()=>openPuzzle(q.id,true));
+}
+function completeUI(id){save();sheet.dataset.feedback='success';const el=$('feedback');if(el){el.textContent='정답이에요! 잘했어요.';el.classList.remove('bad');}sheet.querySelectorAll('.dialog-body button').forEach(b=>b.disabled=true);later(()=>{close();effect(id,id.startsWith('boss.')?'골렘: 정답이야! 잘했어.':id.startsWith('friend.')?'몬스터: 고마워! 이제 친구야.':'장치가 작동했어요!');if(id.startsWith('boss.')&&C.has(s,'clear'))later(chapterClear,800);},650);}
+function chapterClear(){const d=C.definition(s),next=D.list().find(x=>x.order===d.order+1);open('clear',s.completedChapters.length===D.list().length?'열다섯 세계 탐험 성공!':d.title+' 완료',`<div class="hero golem">${portrait('golem')}</div><h1 class="center">잘했어요, 탐험가!</h1><p class="center">${s.completedChapters.length===D.list().length?'모모와 모든 세계의 코어를 되찾았어요.':'골렘의 문제를 모두 해결했어요.'}</p><div class="help center">완료한 챕터 ${s.completedChapters.length} / ${D.list().length}<br>지식 경험치 ${s.xp} XP</div><div class="stack">${next?`<button class="btn primary" id="nextChapter">${next.order}장 · ${esc(next.title)}으로</button>`:''}<button class="btn" id="chapters">챕터 선택</button><button class="btn" id="keep">남은 보물 찾아보기</button></div>`);if(next)bind('nextChapter',()=>switchChapter(next.id));bind('chapters',chapterSelect);bind('keep',close);}
+function openPuzzle(id,boss=false){
+ const desc=C.descriptor(s,id),p=C.puzzle(s,id);if(!p||C.has(s,id))return;const titleText=boss?C.definition(s).boss.label+'의 문제':desc.label;
+ if(window.MMMechanics.isType(p.type))mechanismUI(id,titleText,boss);
+ else if(p.type==='number')numberUI(id,titleText,boss);
+ else if(p.type==='rule')ruleUI(id,titleText,boss);
+ else if(['memory','order','equipment'].includes(p.type))sequenceUI(id,titleText,boss);
+ else if(p.type==='pipe')pipeUI(id,titleText,boss);
+ else if(p.type==='laser')laserUI(id,titleText,boss);
+ else if(p.type==='sokoban')sokobanUI(id,titleText,boss);
+}
+function mechanismUI(id,titleText,boss){const p=C.puzzle(s,id);let finishing=false;open(boss?'boss-question':'machine',titleText,MMMechanicView.html(p));
+ machineView=MMMechanicView.mount(p,{testMode,changed:save,apply:a=>{C.submit(s,id,a);save();},complete:()=>{if(finishing)return;if(C.has(s,id)||C.completeProblem(s,id)){finishing=true;save();completeUI(id);}}});save();}
+function numberUI(id,titleText,boss){const p=C.puzzle(s,id);let answer='',locked=false;open(boss?'boss-question':'question',titleText,`<div class="quizrow"><div>${boss?'<span class="tag" id="questionSpeaker">골렘이 낸 문제</span>':''}<div class="equation" id="questionPrompt">${esc(p.prompt)}</div><div class="answer" id="answer" aria-live="polite">?</div><div class="feedback" id="feedback">숫자를 입력해 주세요.</div><button class="btn small" id="hint">모모의 힌트</button></div><div class="keys">${['1','2','3','4','5','6','7','8','9','⌫','0','확인'].map((v,i)=>`<button class="btn ${i===11?'primary':''}" id="key${i}">${v}</button>`).join('')}</div></div>`);save();
+ const render=()=>{$('answer').textContent=answer||'?';};function submit(){if(locked||!answer)return;const r=C.submit(s,id,answer);if(r.solved){locked=true;completeUI(id);}else{$('feedback').textContent='괜찮아요. 한 번 더 생각해요.';$('feedback').classList.add('bad');answer='';render();save();}}
+ for(let i=0;i<12;i++)bind('key'+i,()=>{if(locked)return;if(i<9&&answer.length<3)answer+=i+1;else if(i===9)answer=answer.slice(0,-1);else if(i===10&&answer.length<3)answer+='0';else if(i===11)submit();render();});let hints=0;bind('hint',()=>{$('feedback').textContent=++hints>1?'함께 확인해요: '+p.answer:p.hint;});keyboard=e=>{if(locked)return;if(/^\d$/.test(e.key)&&answer.length<3){answer+=e.key;render();}else if(e.key==='Backspace'){answer=answer.slice(0,-1);render();}else if(e.key==='Enter')submit();};
+}
+function ruleUI(id,titleText,boss){const p=C.puzzle(s,id);open(boss?'boss-question':'rule',titleText,`<p class="help" id="questionPrompt">${esc(p.prompt)}</p><div class="stack">${p.options.map((n,i)=>`<button class="btn wide" id="rule${i}">${n}</button>`).join('')}</div><div class="feedback" id="feedback">두 조건을 하나씩 확인해요.</div><button class="btn" id="hint">모모의 힌트</button>`);save();p.options.forEach((n,i)=>bind('rule'+i,()=>{const r=C.submit(s,id,n);if(r.solved)completeUI(id);else{$('feedback').textContent='조건과 다른 답이에요. 다시 골라요.';$('feedback').classList.add('bad');save();}}));bind('hint',()=>{$('feedback').textContent=p.hint;});}
+function sequenceUI(id,titleText,boss){const p=C.puzzle(s,id),memory=p.type==='memory',equipment=p.type==='equipment';let previewSerial=0,locked=memory;const symbols=['▲','■','●','◆'];const choices=equipment?[0,1,2,3,4]:memory?[0,1,2,3]:p.sequence.slice();
+ const clues=['균열벽을 열려면 어떤 도구가 필요할까?','고장 난 발전기를 고치려면?','높은 리프트에 오르려면?','전기장을 안전하게 지나려면?','숨은 규칙 단서를 찾으려면?'];
+ open(boss?'boss-question':memory?'memory':'order',titleText,`<p>${equipment?'상황에 맞는 도구를 선택해요.':memory?'빛나는 순서를 보고, 같은 순서로 눌러요.':'표시된 순서대로 눌러 주세요.'}</p><div class="help center" id="sequencePrompt"></div><div class="equation" id="memoryShow"></div><div class="${equipment?'stack':'memory-keys'}">${choices.map((v,i)=>`<button class="btn" id="seq${i}" data-value="${v}">${equipment?esc(D.tools[v]):memory?symbols[v]:v}</button>`).join('')}</div><div class="feedback" id="feedback"></div>${memory?'<button class="btn wide" id="replay">순서 다시 보기</button>':''}`);save();
+ function render(){const n=p.input.length;$('sequencePrompt').textContent=equipment?clues[p.sequence[n]]||'도구 선택 성공!':memory?`${p.sequence.length}개를 기억해요. 다시 보아도 괜찮아요.`:p.sequence.join(' → ');if(!memory)$('memoryShow').textContent=equipment?`${n} / 5`:p.sequence.map((v,i)=>i<n?v+' ✓':v).join('  ');$('feedback').textContent=`${n} / ${p.sequence.length}`;choices.forEach((_,i)=>$('seq'+i).disabled=locked);}
+ function preview(){const serial=++previewSerial;locked=true;p.input=[];render();$('memoryShow').textContent=p.sequence.map(i=>symbols[i]).join('  ');$('feedback').textContent='지금 순서를 보세요.';later(()=>{if(serial!==previewSerial)return;locked=false;$('memoryShow').textContent='?  '.repeat(p.sequence.length);render();$('feedback').textContent='같은 순서로 눌러요.';},900+p.sequence.length*150);}
+ choices.forEach((value,i)=>bind('seq'+i,()=>{if(locked)return;const r=C.submit(s,id,value);if(r.solved){locked=true;completeUI(id);}else if(!r.ok){if(equipment&&r.code==='craft'){$('feedback').textContent='이 도구를 작업대에서 먼저 만들어 주세요.';return;}render();$('feedback').textContent='괜찮아요. 처음부터 다시 해요.';if(memory)later(preview,400);}else render();save();}));if(memory){bind('replay',preview);preview();}else{locked=false;render();}
+}
+function pipeSvg(mask,flow){let paths='';const ends=[[30,0],[60,30],[30,60],[0,30]];for(let d=0;d<4;d++)if(mask&(1<<d))paths+=`M30 30 L${ends[d][0]} ${ends[d][1]} `;return`<svg viewBox="0 0 60 60"><path d="${paths}" fill="none" stroke="#536958" stroke-width="15"/><path d="${paths}" fill="none" stroke="${flow?'#f5c86e':'#d5d7b7'}" stroke-width="8"/><circle cx="30" cy="30" r="7" fill="${flow?'#ffebb0':'#bbc6a0'}"/></svg>`;}
+function pipeUI(id,titleText,boss){const p=C.puzzle(s,id);let locked=false;open(boss?'boss-question':'pipe',titleText,`<p class="help">왼쪽 입구에서 오른쪽 용광로까지 <b>끊김 없이 연결</b>해요. 칸을 누르면 90° 돌아가요.<br>실제로 흐르는 관만 노랗게 켜져요.</p><div class="pipe-layout"><div class="pipe-end">🔥<br>입구 →</div><div class="pipe-grid">${p.cells.map((cell,i)=>`<button class="pipe-cell" id="pipe${i}" aria-label="배관 ${Math.floor(i/3)+1}행 ${i%3+1}열" ${cell?'':'disabled'}></button>`).join('')}</div><div class="pipe-end">→ 🏭<br>도착</div></div><div class="feedback" id="pipeProgress"></div><div class="feedback" id="feedback"></div><button class="btn small" id="hint">연결 힌트</button>`);
+ function render(){const tr=P.pipeTrace(p);p.cells.forEach((cell,i)=>{const e=$('pipe'+i);e.innerHTML=cell?pipeSvg(P.ports(cell,p.rotations[i]),tr.reached.includes(i)):'';e.classList.toggle('flowing',tr.reached.includes(i));});$('pipeProgress').textContent=tr.solved?'용광로에 도착했어요!':`불꽃이 흐르는 관 ${tr.reached.length} / ${p.cells.filter(Boolean).length}`;}
+ p.cells.forEach((cell,i)=>{if(cell)bind('pipe'+i,()=>{if(locked)return;P.rotate(p,i);render();save();if(P.solved(p)&&C.completeProblem(s,id)){locked=true;completeUI(id);}});});bind('hint',()=>{$('feedback').textContent='입구에 닿는 관부터 살펴봐요. 두 관의 열린 끝이 서로 마주 봐야 해요.';});render();save();
+}
+function laserUI(id,titleText,boss){const p=C.puzzle(s,id);let locked=false;open(boss?'boss-question':'laser',titleText,'<p class="help">빛이 수정 <b>◆</b>에 닿도록 거울을 돌려요. 지금 보이는 빛의 경로가 실제 판정이에요.</p><div id="laserBoard" class="laser-board"></div><div class="feedback" id="feedback"></div><button class="btn small" id="hint">반사 힌트</button>');
+ function render(){const tr=P.laserTrace(p),pos=([x,y])=>[(x+1)*50+25,y*50+25],points=tr.path.map(v=>pos(v).join(',')).join(' '),[tx,ty]=pos(p.target);let lines='';for(let i=0;i<6;i++)lines+=`<path d="M50 ${i*50}H300 M${50+i*50} 0V250" stroke="#aac3b5" stroke-width="1"/>`;
+ $('laserBoard').innerHTML=`<svg viewBox="0 0 350 250" aria-label="레이저 경로">${lines}<text x="8" y="${pos(p.source)[1]+6}" font-size="24" fill="#b47738">→</text><polyline points="${points}" fill="none" stroke="#b48a3d" stroke-width="8"/><polyline points="${points}" fill="none" stroke="#ffe29a" stroke-width="4"/><text x="${tx}" y="${ty+10}" text-anchor="middle" font-size="31" fill="${tr.solved?'#67a780':'#548789'}">◆</text></svg>${p.mirrors.map((m,i)=>{const [x,y]=pos(m);return`<button class="mirror-button" id="mirror${i}" style="left:${x/350*100}%;top:${y/250*100}%" aria-label="거울 ${i+1} 회전">${p.rotations[i]===0?'╱':'╲'}</button>`;}).join('')}`;
+ p.mirrors.forEach((_,i)=>bind('mirror'+i,()=>{if(locked)return;P.rotate(p,i);render();save();if(P.solved(p)&&C.completeProblem(s,id)){locked=true;completeUI(id);}}));}
+ bind('hint',()=>{$('feedback').textContent='빛이 거울에 닿으면 방향이 꺾여요. 먼저 빛이 닿은 거울부터 돌려 보세요.';});render();save();
+}
+function sokobanUI(id,titleText,boss){const p=C.puzzle(s,id);let locked=false;open(boss?'boss-question':'sokoban',titleText,'<p>● 탐험가로 ▣ 상자를 밀어 <b>★ 목표 칸</b>에 놓아요. 당기기는 안 돼요.</p><div class="soko-grid" id="sokoGrid"></div><div class="soko-pad"><button class="btn" id="sLeft">←</button><button class="btn" id="sUp">↑</button><button class="btn" id="sDown">↓</button><button class="btn" id="sRight">→</button></div><div class="problem-tools"><button class="btn" id="sUndo">한 칸 되돌리기</button><button class="btn" id="sReset">퍼즐 다시 시작</button></div><div class="feedback" id="feedback"></div>');
+ function render(){const g=$('sokoGrid');g.style.gridTemplateColumns=`repeat(${p.width},1fr)`;let html='';for(let y=0;y<p.height;y++)for(let x=0;x<p.width;x++){const is=(v)=>v[0]===x&&v[1]===y,wall=p.walls.some(is),goal=p.goals.some(is),box=p.boxes.some(is),player=is(p.player);html+=`<div class="soko-cell ${wall?'wall':''} ${goal?'goal':''}" aria-label="${box?'상자':player?'탐험가':goal?'목표':'바닥'}">${wall?'':box?(goal?'▣✓':'▣'):player?'●':goal?'★':''}</div>`;}g.innerHTML=html;$('sUndo').disabled=!p.history.length;}
+ const move=d=>{if(locked)return;P.sokobanMove(p,d);render();save();if(P.solved(p)&&C.completeProblem(s,id)){locked=true;completeUI(id);}};bind('sUp',()=>move(0));bind('sRight',()=>move(1));bind('sDown',()=>move(2));bind('sLeft',()=>move(3));bind('sUndo',()=>{if(locked)return;P.undo(p);render();save();});bind('sReset',()=>{if(locked)return;P.reset(p);render();save();});render();save();
+}
+function act(){if(!running||mode||actionLock)return;if(current().carried&&near?.kind!=='scale'){C.interact(s,'drop');save();refresh();notify('상자를 내려놓았어요.');return;}if(!near)return;const t=near;
+ if(t.id==='golem'){showBoss();return;}
+ const r=C.interact(s,t.id);if(!r.ok){const msg={busy:'도구가 움직이는 중이에요.',far:'조금 더 가까이 가요.',complete:'이미 해결한 장치예요.',owned:'이미 가지고 있어요.',carrying:'먼저 들고 있는 상자를 저울에 놓아요.'};if(['select','equip'].includes(r.code))notify(`아래에서 ${D.tools[r.tool]}을 선택해 주세요.`);else if(r.code==='craft')notify(`작업대에서 ${D.tools[r.tool]}을 3×3으로 만들어요.`);else notify(r.text||msg[r.code]||'현재 목표부터 해결해요.');return;}
+ if(r.code==='workshop')workshop();
+ else if(r.code==='puzzle'){if(r.delay){clearInput();actionLock=true;later(()=>{actionLock=false;openPuzzle(r.id);},r.delay);}else openPuzzle(r.id);}
+ else if(r.code==='sequence')notify('발판을 직접 밟아요. 눌린 숫자는 초록색 ✓, 다음 숫자는 노란색이에요.');
+ else if(r.code==='weight')notify('옆의 상자를 조사해 들고, 저울에서 다시 조사해 내려놓아요.');
+ else if(r.code==='carried')notify('상자를 들었어요. 저울 앞으로 가서 놓아요.');
+ else if(r.code==='placed'){const p=C.puzzle(s,t.id);notify(`현재 ${p.placed.reduce((n,i)=>n+p.numbers[i],0)}kg / 목표 ${p.target}kg`);}
+ else if(r.code==='jump'){jumpQueued=true;notify('부스터 점프!');}
+ else if(r.code==='working')notify(`${t.label} · ${r.hits}/${r.total}`);
+ else if(r.code==='supply'){const g=C.objective(s);notify(g.kind==='craft'?`재료가 준비됐어요. ${D.tools[g.tool]}을 만들어요.`:'이미 만든 도구를 그대로 사용해요.');effect(t.id,'탐험 준비 완료');}
+ else if(['done','cache'].includes(r.code))effect(t.id,r.code==='done'?'장치가 작동했어요!':'보물을 찾았어요!');
+ save();refresh();
+}
+function refresh(){const st=current(),d=C.definition(s),o=C.objective(s);if(document.documentElement.dataset.chapter!==d.id){document.documentElement.dataset.chapter=d.id;document.documentElement.style.setProperty('--scene-accent',MMArt.theme(d.theme).accent);} $('goal').textContent=running?o.text:'모모와 열다섯 세계로 떠나요.';$('status').textContent=`${d.order}장 ${d.title} · ${Math.max(1,Math.min(3,Math.floor((st.y+.2)/8)+1))}층 · ${s.xp} XP`;
+ const t=C.currentTask(s);if(t?.type==='sequence'){const p=C.puzzle(s,t.id);$('sequenceInfo').textContent=p.sequence.map((v,i)=>i<p.input.length?v+' ✓':v).join(' → ');}else if(st.plateEvent&&st.clock<st.plateEvent.until){$('sequenceInfo').textContent=st.plateEvent.ok?'발판 성공! 다음 목표로 가요.':'다시 첫 숫자부터 시작해요.';}else $('sequenceInfo').textContent='';
+ const old=near;near=C.objects(s).filter(t=>Math.abs(st.x-t.x)<=2&&(Math.abs(st.y-t.floor*8)<2.1)).sort((a,b)=>Math.abs(st.x-a.x)-Math.abs(st.x-b.x))[0]||null;
+ $('near').textContent=near?near.label+' · '+(near.kind==='golem'?'말 걸기':near.kind==='generator'?'렌치로 수리':near.kind==='ore'?'곡괭이로 캐기':'조사'):o.kind==='clear'?'메뉴에서 다음 챕터를 선택할 수 있어요.':'← → 이동 · ↑ ↓ 사다리';
+ $('use').textContent=st.carried&&near?.kind!=='scale'?'내려놓기':(near?.kind==='golem'||near?.kind==='monster')?'말 걸기':near?.kind==='generator'?'수리':near?.kind==='ore'?'캐기':near?.kind==='weightCrate'?'들기':near?.kind==='scale'&&st.carried?'놓기':'조사';
+ for(let i=0;i<5;i++){const b=$('hot'+i);b.classList.toggle('on',st.selectedHotbar===i&&C.owned(s,i));b.classList.toggle('dim',!C.owned(s,i));b.setAttribute('aria-pressed',st.selectedHotbar===i&&C.owned(s,i)?'true':'false');}
+}
+function step(dt){if(!running||mode||actionLock){if(actionLock){C.move(s,0,0,false,dt);refresh();}return;}const before=C.currentTask(s)?.id,h=(keys.has('right')||[...held.values()].includes('right')?1:0)-(keys.has('left')||[...held.values()].includes('left')?1:0),v=(keys.has('up')||[...held.values()].includes('up')?1:0)-(keys.has('down')||[...held.values()].includes('down')?1:0);C.move(s,h,v,jumpQueued,dt);jumpQueued=false;
+ const st=current();if(before&&C.has(s,before)){save();effect(before,'목표를 해결했어요!');}if(st.plateEvent&&st.plateEvent.started!==lastPlateTime){lastPlateTime=st.plateEvent.started;if(!st.plateEvent.ok)notify('순서가 달라요. 다시 첫 숫자부터 시작해요.');}if(st.clock-lastSaved>4)save();refresh();}
+function loop(ts){const dt=Math.min(.06,(ts-lastFrame)/1000||0);lastFrame=ts;if(!testMode){acc+=dt;for(let i=0;acc>=1/60&&i<5;i++){step(1/60);acc-=1/60;}}renderer.render(s,near,{mode,modal:!!mode,moving:held.size>0||keys.size>0,effect:worldEffect});requestAnimationFrame(loop);}
+$('hotbar').innerHTML=D.tools.map((t,i)=>`<button class="slot dim" id="hot${i}" data-tool="${i}" aria-label="${t} 선택">${icon(i)}<span class="num">${i+1}</span></button>`).join('')+'<button class="slot" id="bagbtn" aria-label="가방">▣</button>';
+D.tools.forEach((_,i)=>bind('hot'+i,()=>chooseTool(i)));bind('bagbtn',()=>{if(running)bag();});bind('mapbtn',()=>running?mapUI():title());bind('pausebtn',pause);bind('use',act);
+$('jump').addEventListener('pointerdown',e=>{e.preventDefault();if(running&&!mode&&!actionLock)jumpQueued=true;});
+document.querySelectorAll('[data-hold]').forEach(b=>{b.addEventListener('pointerdown',e=>{e.preventDefault();if(!running||mode||actionLock)return;held.set(e.pointerId,b.dataset.hold);try{b.setPointerCapture(e.pointerId);}catch{}});for(const event of ['pointerup','pointercancel','lostpointercapture'])b.addEventListener(event,e=>held.delete(e.pointerId));});
+const keyMap={ArrowLeft:'left',a:'left',ArrowRight:'right',d:'right',ArrowUp:'up',w:'up',ArrowDown:'down',s:'down'};
+window.addEventListener('keydown',e=>{if(mode){if(e.key==='Escape')close();else if(keyboard){e.preventDefault();keyboard(e);}return;}if(keyMap[e.key]){e.preventDefault();keys.add(keyMap[e.key]);}if(e.code==='Space'){e.preventDefault();if(!e.repeat)jumpQueued=true;}if(e.key.toLowerCase()==='e'&&!e.repeat)act();if(/^[1-5]$/.test(e.key))chooseTool(Number(e.key)-1);if(e.key.toLowerCase()==='i')bag();if(e.key==='Escape')pause();});window.addEventListener('keyup',e=>{if(keyMap[e.key])keys.delete(keyMap[e.key]);});window.addEventListener('blur',()=>{clearInput();save();});document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInput();save();if(running)pause();}});window.addEventListener('pagehide',()=>{clearInput();save();});
+window.MMApp={version:VERSION,visualOptions:()=>({...renderer.options}),get modal(){return mode;},inspect:()=>({campaign:JSON.parse(C.serialize(s)),state:JSON.parse(JSON.stringify(current())),objective:C.objective(s),waypoint:C.waypoint(s),boss:C.bossInfo(s),near:near?.id||null}),save};
+// A deterministic clock for Playwright. It advances the exact normal input/physics loop, never teleports or changes flags.
+if(testMode)window.MMApp.testFrames=n=>{if(!Number.isInteger(n)||n<0||n>2000)throw new Error('Invalid frame count');for(let i=0;i<n;i++)step(1/60);renderer.render(s,near,{mode,modal:!!mode,effect:worldEffect});};
+if(testMode)window.MMApp.testMachineFrames=n=>{if(!Number.isInteger(n)||n<0||n>2000)throw Error('Invalid machine frame count');for(let i=0;i<n;i++)machineView?.tick(1/60);};
+title();refresh();requestAnimationFrame(loop);
+})();
+
+</script></body></html>

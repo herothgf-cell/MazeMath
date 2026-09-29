@@ -25,14 +25,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Verify instant-play game rules
+      - name: Legacy modular rule regression
         run: node --test Web/Instant/core.test.cjs
       - name: Install browser test tools
         run: |
           npm install --no-save --ignore-scripts playwright@1.63.0
           npx playwright install --with-deps chromium webkit
-      - name: Verify ten chapter mobile campaign and persistence
-        run: node Web/Instant/browser.test.cjs
+      - name: Verify exact bundled 15.1 mobile release
+        run: node Web/Instant/standalone.test.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
