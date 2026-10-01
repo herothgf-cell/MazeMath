@@ -19,7 +19,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,22 +27,26 @@ jobs:
           node-version: '22'
       - name: Legacy modular rule regression
         run: node --test Web/Instant/core.test.cjs
+      - name: Build exact 15.2 mobile release
+        run: node Web/Instant/quiz/build.cjs
+      - name: Verify generated quiz rules, migration and all chapter routes
+        run: node --test Web/Instant/quiz/*.test.cjs
       - name: Install browser test tools
         run: |
           npm install --no-save --ignore-scripts playwright@1.63.0
           npx playwright install --with-deps chromium webkit
-      - name: Verify exact bundled 15.1 mobile release
-        run: node Web/Instant/standalone.test.cjs
+      - name: Verify continuous quizzes and HTTP saves in Chromium and WebKit
+        run: node Web/Instant/quiz/browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: pages-mobile-verification
-          path: TestResults/instant
+          path: TestResults/quiz
           if-no-files-found: ignore
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: Web/Instant
+          path: _site
 
   deploy:
     environment:

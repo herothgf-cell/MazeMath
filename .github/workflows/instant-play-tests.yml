@@ -10,7 +10,7 @@ permissions:
 jobs:
   mobile-browser-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -18,15 +18,19 @@ jobs:
           node-version: '22'
       - name: Legacy modular rule regression
         run: node --test Web/Instant/core.test.cjs
+      - name: Build exact 15.2 mobile release
+        run: node Web/Instant/quiz/build.cjs
+      - name: Quiz rules and shipped chapter route tests
+        run: node --test Web/Instant/quiz/*.test.cjs
       - name: Install isolated browser test tools
         run: |
           npm install --no-save --ignore-scripts playwright@1.63.0
           npx playwright install --with-deps chromium webkit
-      - name: Verify exact bundled 15.1 mobile release
-        run: node Web/Instant/standalone.test.cjs
+      - name: Continuous golem and visual reasoning HTTP browser tests
+        run: node Web/Instant/quiz/browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: instant-play-browser-screenshots
-          path: TestResults/instant
+          path: TestResults/quiz
           if-no-files-found: ignore
